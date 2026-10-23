@@ -36,6 +36,27 @@ jobs:
             rm -f new_token.txt
           fi
 
+      - name: Check SECRETS_PAT expiry
+        env:
+          PAT: ${{ secrets.SECRETS_PAT }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$PAT" ]; then echo "SECRETS_PAT not set; skipping"; exit 0; fi
+          EXP=$(curl -sI -H "Authorization: Bearer $PAT" "https://api.github.com/repos/$GITHUB_REPOSITORY" \
+                | tr -d '\r' | awk -F': ' 'tolower($1)=="github-authentication-token-expiration"{print $2}')
+          if [ -z "$EXP" ]; then echo "SECRETS_PAT has no expiry (or it's already invalid)"; exit 0; fi
+          DAYS=$(( ( $(date -d "$EXP" +%s) - $(date +%s) ) / 86400 ))
+          echo "SECRETS_PAT expires $EXP (~$DAYS days)"
+          if [ "$DAYS" -le 14 ]; then
+            OPEN=$(gh issue list --repo "$GITHUB_REPOSITORY" --label pat-expiring --state open --json number -q 'length')
+            if [ "$OPEN" = "0" ]; then
+              gh label create pat-expiring --repo "$GITHUB_REPOSITORY" --color D93F0B 2>/dev/null || true
+              gh issue create --repo "$GITHUB_REPOSITORY" --label pat-expiring \
+                --title "🔑 SECRETS_PAT expires in $DAYS days — replace it (5 min)" \
+                --body "Generate a new fine-grained token (repo: content-engine, permission: Secrets read & write) at https://github.com/settings/personal-access-tokens/new and paste it into the SECRETS_PAT repo secret. Without it, the weekly Instagram token renewal can't save, and Instagram posting stops about 60 days later. Close this issue when done."
+            fi
+          fi
+
       - name: Check LinkedIn token
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
