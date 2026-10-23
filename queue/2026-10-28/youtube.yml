@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-10-28T17:45:00+05:30'
+app: setalytix
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram
+youtube:
+  title: I kept forgetting my lifts, so I built an app
+  description: |
+    Why I built Setalytix, a workout logger that tells you when to go heavier. Free: https://app.setalytix.in
+    #Shorts #progressiveoverload #gym
+  tags:
+  - setalytix
+  - progressive overload
+  - gym tracker
+  - workout log
+  - strength training
+  - gym app

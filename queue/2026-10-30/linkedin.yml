@@ -1,0 +1,55 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-10-30T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  On day 1 of building Slipnote, I didn't build the app. I built a throwaway test of the one thing that could kill it.
+
+  Slipnote's whole idea is that a note lands on a friend's home-screen widget. If the widget couldn't update while the app was closed, there was no product.
+
+  Two problems:
+  • Android widgets can't use custom fonts or draw custom shapes. So the Flutter app paints the entire widget as a PNG, even in a background engine with no screen, and the native Kotlin widget just displays the picture. It's written to a temp file and renamed, so the widget never shows half an image.
+  • Phones kill background apps, and my test phone is from a brand known for doing exactly that.
+
+  Results on the real phone:
+  → App swiped away: note sent, widget updated in about 6.5 seconds. I repeated it unplugged, because charging can relax background limits.
+  → After a restart, without ever opening the app: about 35 seconds.
+
+  Only then did I start the real app. It's now in phase 5 of 10.
+
+  #flutter #androiddev #kotlin
+first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'
+slides:
+- type: cover
+  kicker: Slipnote build log
+  title: 'Day 1: test the thing that could *kill the idea*'
+- type: point
+  number: 1
+  title: The risk
+  body: Can a widget update while the app is closed?
+- type: point
+  number: 2
+  title: Widgets can't use custom fonts
+  body: So the app paints the whole widget as a picture, even with no screen.
+- type: code
+  title: Write it, then swap it in
+  code: 'final tmp = File(''${dir.path}/widget.png.tmp'');
+
+    await tmp.writeAsBytes(bytes, flush: true);
+
+    // rename is atomic: no half-drawn widget
+
+    await tmp.rename(''${dir.path}/widget.png'');
+
+    '
+- type: point
+  number: 3
+  title: '*6.5 s* with the app swiped away'
+  body: Repeated unplugged, to rule out charging.
+- type: point
+  number: 4
+  title: '*35 s* after a restart'
+  body: Without ever opening the app.
+- type: cta
+  title: Follow the *Slipnote* build
