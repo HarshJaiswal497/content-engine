@@ -1,0 +1,11 @@
+# Shown in the footer of every slide and in captions. Update once your accounts exist.
+name: Harsh Jaiswal
+handle: "@harshbuilds"        # TODO: your Instagram/YouTube handle (used on slides)
+links:
+  setalytix: https://app.setalytix.in
+  setalytix_guide: https://app.setalytix.in/#/guide
+  # The waitlist page in docs/slipnote/ is served by GitHub Pages at this address once Pages is on (SETUP.md step 1).
+  slipnote: https://harshjaiswal497.github.io/content-engine/slipnote/
+  linkedin: TODO
+  instagram: TODO
+  youtube: TODO

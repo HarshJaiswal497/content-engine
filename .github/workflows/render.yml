@@ -1,0 +1,92 @@
+name: Render & review drafts
+
+# Runs when drafts are pushed to a drafts/* branch (the weekly Claude run does this) and when
+# anything relevant lands on main (e.g. you upload a talking-head clip to inbox/).
+on:
+  push:
+    branches: ["drafts/**", "main"]
+    paths: ["queue/**", "inbox/**", "brand/**", "engine/render/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.ref == 'refs/heads/main' && 'main-writer' || format('render-{0}', github.ref) }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ffmpeg
+        uses: AnimMouse/setup-ffmpeg@v1
+        timeout-minutes: 5
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt -r requirements-video.txt
+
+      - name: Cache Whisper model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: whisper-${{ vars.WHISPER_MODEL || 'small' }}
+
+      - name: Render slides and videos
+        env:
+          BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'small' }}
+        run: python -m engine.render --upload
+
+      - name: Commit rendered media
+        run: |
+          git config user.name "content-engine[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add queue
+          if ! git diff --cached --quiet; then
+            git commit -m "Render media [skip render]"
+            for i in 1 2 3; do git pull --rebase -q && git push -q && break || sleep 5; done
+          fi
+
+      - name: Open or update the review pull request
+        if: startsWith(github.ref_name, 'drafts/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          CHANGED=$(git diff --name-only origin/main...HEAD -- 'queue/*/*.yml' | grep -v '/_' || true)
+          if [ -z "$CHANGED" ]; then echo "No post files changed"; exit 0; fi
+          python -m engine.preview --ref "$SHA" --out preview.md $CHANGED || echo "HAS_ERRORS=1" >> "$GITHUB_ENV"
+          if ! PR=$(gh pr list --head "$GITHUB_REF_NAME" --state open --json number -q '.[0].number' 2>err.txt); then
+            echo "::error::Listing PRs failed: $(tr '\n' ' ' < err.txt)"; exit 1
+          fi
+          if [ -z "$PR" ]; then
+            if ! gh pr create --base main --head "$GITHUB_REF_NAME" \
+                 --title "📅 Drafts: ${GITHUB_REF_NAME#drafts/}" --body-file preview.md 2>err.txt; then
+              echo "::error::Creating the PR failed: $(tr '\n' ' ' < err.txt)"; exit 1
+            fi
+          else
+            if ! gh pr edit "$PR" --body-file preview.md 2>err.txt; then
+              echo "::error::Updating PR #$PR failed: $(tr '\n' ' ' < err.txt)"; exit 1
+            fi
+          fi
+
+      - name: Fail the check if a post is invalid
+        if: env.HAS_ERRORS == '1'
+        run: |
+          echo "::error::Some posts have errors — see the PR description."
+          exit 1

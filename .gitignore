@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.cache/
+.venv/
+preview.md
+new_token.txt
+# Rendered videos live in the 'media' GitHub release, not in git
+queue/**/video.mp4

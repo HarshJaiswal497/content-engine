@@ -1,0 +1,2 @@
+# Only needed for captioning recordings/talking-head clips (installed in CI).
+faster-whisper>=1.0

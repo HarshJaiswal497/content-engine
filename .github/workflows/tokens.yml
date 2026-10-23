@@ -1,0 +1,45 @@
+name: Keep tokens fresh
+
+# Weekly: refresh the Instagram token (valid 60 days) and warn before the LinkedIn one expires.
+on:
+  schedule:
+    - cron: "30 3 * * 1"   # Mondays 09:00 IST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q -r requirements.txt
+
+      - name: Refresh Instagram token
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+        run: |
+          python -m engine.tokens ig-refresh --out new_token.txt
+          if [ -s new_token.txt ]; then
+            if [ -n "$GH_TOKEN" ]; then
+              gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" < new_token.txt
+              echo "Saved refreshed token to the IG_ACCESS_TOKEN secret"
+            else
+              echo "::warning::SECRETS_PAT not set, so the refreshed Instagram token couldn't be saved. See SETUP.md step 7."
+            fi
+            rm -f new_token.txt
+          fi
+
+      - name: Check LinkedIn token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+        run: python -m engine.tokens linkedin-check

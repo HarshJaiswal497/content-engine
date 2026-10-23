@@ -1,0 +1,53 @@
+# Post file schema. Files starting with "_" are ignored by the engine.
+# Save as queue/YYYY-MM-DD/<platform>.yml
+
+platform: linkedin            # linkedin | instagram | youtube
+format: carousel              # linkedin: text|image|carousel|video · instagram: image|carousel|reel · youtube: short
+scheduled_at: 2026-10-27T09:15:00+05:30
+app: slipnote                 # slipnote | setalytix | personal  (picks the visual theme)
+pillar: engineering-deep-dive # see brand/pillars.md
+
+text: |                       # LinkedIn post / Instagram caption / YouTube description fallback
+  First two lines are the hook.
+
+  Body…
+
+first_comment: "Optional. Links go here on LinkedIn."
+
+slides:                       # for image, carousel, and video.kind: slides
+  - type: cover               # cover | point | big | code | image | cta
+    kicker: Build log
+    title: "Widgets refresh every *30 minutes*"
+    subtitle: Optional subtitle
+  - type: point
+    number: 1
+    title: Short title
+    body: One or two sentences.
+    alt: Alt text (optional; defaults to the title)
+  - type: code
+    title: What the code looks like
+    code: |
+      const x = 1;
+  - type: image
+    image: inbox/screenshot.png   # a file you uploaded to inbox/
+    title: Optional title
+    body: Optional caption
+  - type: cta
+    title: "Follow the *build*"
+    body: Optional line
+
+video:                        # for linkedin video, instagram reel, youtube short
+  kind: slides                # slides | recording | talking_head | same_as
+  seconds_per_slide: 3.2      # slides only (per-slide `seconds:` overrides)
+  source: inbox/2026-10-28-why-slipnote.mp4   # recording / talking_head
+  hook: "I built this in 7 days"              # on-screen text for the first ~3 s
+  captions: true              # burn in auto-captions (recording / talking_head)
+  script: |                   # talking_head: what Harsh should say
+    …
+  post: instagram             # same_as: reuse this sibling post's video
+
+youtube:                      # youtube only
+  title: "Under 60 characters"
+  description: |
+    One to three lines. #Shorts
+  tags: [flutter, android, indie dev]

@@ -1,0 +1,17 @@
+# Posting slots (Asia/Kolkata). The weekly drafting run uses these times.
+timezone: Asia/Kolkata
+
+slots:
+  linkedin:  "09:15"   # Indian working professionals check LinkedIn before work
+  instagram: "19:30"   # evening scroll
+  youtube:   "17:45"   # Shorts do well late afternoon/evening
+
+# One post per platform per day. Set a day to [] to skip it.
+days:
+  linkedin:  [mon, tue, wed, thu, fri, sat, sun]
+  instagram: [mon, tue, wed, thu, fri, sat, sun]
+  youtube:   [mon, tue, wed, thu, fri, sat, sun]
+
+# Posts approved late are still published if they're less than this many hours overdue;
+# older ones are skipped and reported.
+max_late_hours: 36
