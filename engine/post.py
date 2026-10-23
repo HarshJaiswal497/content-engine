@@ -130,6 +130,9 @@ class Post:
     def render_hash(self) -> str:
         """Changes when anything that affects rendered media changes."""
         relevant = {k: self.data.get(k) for k in ("format", "app", "slides", "video", "theme")}
+        handles = ROOT / "brand" / "handles.yml"
+        if handles.exists():  # the handle is printed on every slide
+            relevant["_handles"] = hashlib.sha256(handles.read_bytes()).hexdigest()[:8]
         src = self.video_source()
         if src and src.exists():
             relevant["_src"] = [src.name, src.stat().st_size]
