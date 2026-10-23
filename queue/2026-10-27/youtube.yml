@@ -1,0 +1,38 @@
+platform: youtube
+format: short
+scheduled_at: '2026-10-27T17:45:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+slides:
+- type: cover
+  title: I swiped my app away. *The note still landed.*
+- type: point
+  title: The scary part
+  body: Can the widget update while the app is closed?
+- type: point
+  title: So I tested that *first*
+  body: Day 1, on a real phone, before building anything else.
+- type: point
+  title: '*6.5 seconds*'
+  body: App swiped away, note sent, widget updated.
+- type: point
+  title: '*35 seconds*'
+  body: After a restart, without ever opening the app.
+- type: cta
+  title: Join the *Slipnote* waitlist
+  body: Link in bio
+video:
+  kind: slides
+  seconds_per_slide: 3.0
+youtube:
+  title: I swiped my app away. The note still arrived.
+  description: |
+    Testing Slipnote's home-screen widget with the app closed, on day 1. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #androiddev #flutter
+  tags:
+  - slipnote
+  - android widget
+  - handwritten notes
+  - build in public
+  - indie developer
+  - flutter

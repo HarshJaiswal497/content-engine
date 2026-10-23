@@ -1,0 +1,33 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-01T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Everything you can slip onto their home screen, all drawn by hand ✍️
+
+  Slipnote is coming to Android. Join the waitlist (link in bio) to be there on day one.
+
+  #slipnote #handwrittennotes #doodles #widgets #androidapp #bestfriends #buildinpublic
+slides:
+- type: cover
+  kicker: Slipnote
+  title: What you can *slip* onto their screen
+- type: point
+  title: Handwritten notes
+  body: Pen, marker, pencil, highlighter. A stabiliser keeps it neat.
+- type: point
+  title: Doodles
+  body: Draw on a colour, add stickers.
+- type: point
+  title: Photos you *draw on*
+  body: Snap one, scribble on top, send.
+- type: point
+  title: A widget per circle
+  body: Partner, friend group, family. Small, medium or large.
+- type: point
+  title: Nothing covers their note
+  body: No streaks, no guilt. Notes are never deleted.
+- type: cta
+  title: Join the *waitlist*
+  body: Android · link in bio

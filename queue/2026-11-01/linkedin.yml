@@ -1,0 +1,20 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-01T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  My Android build failed because of a folder I'd forgotten existed.
+
+  "NDK at …\ndk\28.2.13676358 did not have a source.properties file"
+
+  It was an empty stub from a failed install back in July, months before Slipnote. I deleted it, and the next build downloaded a fresh NDK on its own.
+
+  The next build ran for 6 minutes 30 seconds and died with "this and base files have different roots". My project lives on the D: drive and Flutter's package cache on C:. Kotlin's incremental build cache can't relate files across two Windows drives. The fix was one line in gradle.properties: kotlin.incremental=false
+
+  Later, notes were saving but no push arrived. The Cloudflare Worker log said "Illegal invocation". Workers only let fetch run with its own "this", and the code had stored it as a property. A two-line wrapper fixed it, plus a test so it can't come back.
+
+  None of these was about the product, but every one stood between me and it. Building Android on Windows means collecting fixes like these, so each one now lives in the project's notes.
+
+  #androiddev #flutter #debugging
+first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'

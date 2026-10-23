@@ -1,0 +1,29 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-10-30T19:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  The first version of Setalytix only showed volume per day, and it didn't really show progressive overload.
+
+  So I added a session-by-session chart for the same split day, plus a chart for every exercise. Now you can see whether you're actually getting stronger.
+
+  #setalytix #progressiveoverload #gymprogress #strengthtraining #gymtracker #fitnessindia #buildinpublic
+slides:
+- type: cover
+  kicker: Setalytix
+  title: My progress chart wasn't showing my *progress*
+  subtitle: Volume per day doesn't show progressive overload.
+- type: point
+  title: Volume per day
+  body: Leg day and push day make the line jump. It says little about getting stronger.
+- type: point
+  title: Same workout, *session by session*
+  body: Compare this push day with your last push day. Now the trend shows.
+- type: point
+  title: Every exercise
+  body: Your estimated best for each lift, over time.
+- type: cta
+  title: See your *real* progress
+  body: Free at app.setalytix.in · link in bio
+review_note: Check the 'leg day vs push day' explanation matches why you changed the chart.

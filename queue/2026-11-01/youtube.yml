@@ -1,0 +1,35 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-01T17:45:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+slides:
+- type: cover
+  title: No signal in the gym? *Still logging.*
+- type: point
+  title: Tap the tick
+  body: The set saves on your phone first.
+- type: point
+  title: '"Offline. 3 waiting to sync"'
+  body: It tells you what hasn't reached the server yet.
+- type: point
+  title: Back online
+  body: It syncs on its own. "All saved."
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+video:
+  kind: slides
+  seconds_per_slide: 3.2
+youtube:
+  title: No signal in the gym? My app still logs every set
+  description: |
+    Setalytix saves every set on your phone first and syncs later. Free: https://app.setalytix.in
+    #Shorts #gym #workoutapp
+  tags:
+  - setalytix
+  - progressive overload
+  - gym tracker
+  - workout log
+  - strength training
+  - gym app

@@ -1,0 +1,24 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-10-31T09:15:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  AI writes a lot of the code in my workout app. Here are five calls it couldn't make for me.
+
+  1. "Newest wins" was wrong. Adding a second workout plan quietly took over the Today screen. Now exactly one plan is Active, and the database itself guarantees it, with a unique index and one function that switches plans in a single transaction.
+
+  2. Not everyone wants to lift. Someone who only wants cardio shouldn't be forced to set up a lifting plan, so new users can skip it.
+
+  3. Estimates should look like estimates. Calories you type always win; otherwise there's a rough estimate marked "~", and you can hide it.
+
+  4. Some features should be cut. A web app can't read the phone's step sensor, so step counting is out rather than half-working.
+
+  5. Confusion is a product bug. When friends asked where their entries went, the fix wasn't a better explanation in chat. It was an in-app guide and a History tab.
+
+  None of these is hard to code once it's decided. Deciding is the job, and it's the part of AI-native engineering I enjoy most.
+
+  Setalytix has 15+ users now. I'm also open to software developer, backend and AI-native engineering roles. If your team builds like this, I'd love to talk.
+
+  #ainative #productthinking
+first_comment: 'Setalytix: https://app.setalytix.in'

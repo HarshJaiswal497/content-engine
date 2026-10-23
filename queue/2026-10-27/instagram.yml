@@ -1,0 +1,32 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-10-27T19:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  I was sitting at home thinking about everyone I love: family, friends, my best friend. Everyone's busy, schedules don't match, and we rarely tell people we're thinking of them.
+
+  So I'm building Slipnote: handwritten notes that land right on their home screen.
+
+  Waitlist link in bio ✍️
+
+  #slipnote #buildinpublic #thinkingofyou #bestfriends #familylove #handwrittennotes #androidapp #longdistancefriends
+slides:
+- type: cover
+  kicker: Slipnote
+  title: They cross your mind *all the time*.
+  subtitle: Do they know?
+- type: big
+  title: Schedules never match. *One-on-one chats* get rare.
+- type: point
+  title: So I'm building Slipnote
+  body: A handwritten note, doodle or photo that lands on their home screen.
+- type: point
+  title: It doesn't interrupt them
+  body: No chat to catch up on. It just sits on their widget until they look.
+- type: point
+  title: The gesture is what matters
+  body: 'A few taps to say: I thought of you.'
+- type: cta
+  title: Join the *waitlist*
+  body: Android · link in bio
