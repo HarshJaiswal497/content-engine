@@ -74,8 +74,10 @@ days and is refreshed every Monday automatically once step 6 is done.
 2. developers.facebook.com → your app → **Add use cases** → **"Manage everything on your Page"** → Add.
    No review needed: you're the app's admin and the Page's admin.
 3. Open the **Graph API Explorer** (developers.facebook.com/tools/explorer): pick your app, then
-   **Generate Access Token** with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`,
-   and allow your Page. Copy the token.
+   **Generate Access Token** with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`
+   **and `business_management`** (linking Instagram puts the Page in a business portfolio; without this
+   permission the Page is invisible to the app). Choose *Opt in to all current and future Pages*.
+   Check with `me/accounts` in the Explorer that your Page is listed. Copy the token.
 4. App settings → Basic: note the **App ID** and **App secret** (the main ones, not the Instagram ones).
 5. On your laptop: `python tools/facebook_page_token.py` and paste the three values when asked.
 6. Add repo secrets `FB_PAGE_ID` and `FB_PAGE_TOKEN`. The Page token doesn't expire; a weekly
