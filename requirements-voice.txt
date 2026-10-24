@@ -1,4 +1,2 @@
-# Voiceover engines (CPU). Torch comes from the CPU index in the render workflow.
-chatterbox-tts
-kokoro>=0.9
-soundfile
+# Voiceover engines (CPU). The render workflow installs torch from the CPU index, then only the engine
+# named in brand/voice.yml:  chatterbox → chatterbox-tts soundfile · kokoro → kokoro>=0.9 soundfile

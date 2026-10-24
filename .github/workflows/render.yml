@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"   # chatterbox-tts installs cleanly on 3.11
           cache: pip
 
       - name: Install ffmpeg
@@ -40,8 +40,9 @@ jobs:
       - name: Install voiceover engines (CPU)
         run: |
           sudo apt-get install -y -q espeak-ng >/dev/null
+          ENGINE=$(python -c "import yaml;print((yaml.safe_load(open('brand/voice.yml')) or {}).get('engine','chatterbox'))")
           pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-          pip install -q -r requirements-voice.txt
+          if [ "$ENGINE" = kokoro ]; then pip install -q "kokoro>=0.9" soundfile; else pip install -q chatterbox-tts soundfile; fi
 
       - name: Cache Whisper model
         uses: actions/cache@v4
