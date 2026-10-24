@@ -1,5 +1,7 @@
 name: Voice test (one-off)
 on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
   voice:
     runs-on: ubuntu-latest
@@ -17,6 +19,15 @@ jobs:
         run: |
           pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
           if [ "${{ matrix.engine }}" = chatterbox ]; then pip install -q chatterbox-tts soundfile; else pip install -q kokoro soundfile; fi
-      - run: python tools/voice_test.py ${{ matrix.engine }}
+      - run: python tools/voice_test.py ${{ matrix.engine }} | tee samples/timings-${{ matrix.engine }}.txt
+      - name: Save samples to the voice-samples branch
+        run: |
+          for f in samples/*.wav; do ffmpeg -loglevel error -i "$f" -b:a 96k "${f%.wav}.mp3" && rm "$f"; done
+          git config user.name "content-engine[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3 4 5; do
+            git fetch -q origin voice-samples && git checkout -q -B voice-samples origin/voice-samples || git checkout -q --orphan voice-samples
+            git rm -rq --cached . >/dev/null 2>&1 || true
+            git add -f samples && git commit -qm "voice samples ${{ matrix.engine }}" && git push -q origin voice-samples && break || sleep $((RANDOM % 10 + 3))
+          done
       - uses: actions/upload-artifact@v4
         with: { name: "samples-${{ matrix.engine }}", path: samples/ }
