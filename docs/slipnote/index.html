@@ -5,7 +5,7 @@
 <meta name="google-site-verification" content="TzWln6Nq3ipqIh_kIt1Q58VSAIRlNnuxseexEzJNH5k" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Slipnote — slip a thought onto their screen</title>
-<meta name="description" content="Handwritten notes, doodles and photos that land on the home screen of the people you love. Android app, coming soon. Join the waitlist.">
+<meta name="description" content="Handwritten notes, doodles and photos that land on the home screen of the people you love. Coming to Android first, with iOS planned. Join the waitlist.">
 <meta property="og:title" content="Slipnote — slip a thought onto their screen">
 <meta property="og:description" content="Handwritten notes and doodles that land on their home-screen widget. Join the waitlist.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,9 +45,25 @@
   .w-note.pink { background:#FFE3EC; color:#B0245A; font-size:22px; }
   .w-foot { display:flex; justify-content:space-between; align-items:center; padding:8px 4px 0; font-size:11px; color:var(--muted); }
   .pen { width:26px; height:26px; border-radius:50%; border:1.5px solid var(--navy); display:grid; place-items:center; color:var(--navy); font-size:13px; }
-  .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
   .row .w-note { min-height:70px; font-size:20px; }
   .doodle { width:100%; height:56px; }
+  /* photo widgets: the photo fills the widget, soft shade top and bottom */
+  .widget.photo { padding:0; overflow:hidden; background:#1f2a4a; }
+  .widget.photo::before { display:none; }
+  .widget.photo > svg { display:block; width:100%; height:auto; }
+  .row .widget.photo > svg { position:absolute; inset:0; height:100%; }
+  .row .widget.photo { min-height:170px; }
+  .widget.photo::after { content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(to bottom, rgba(0,0,0,.28), transparent 30%, transparent 62%, rgba(0,0,0,.45)); }
+  .p-top, .p-foot { position:absolute; left:0; right:0; display:flex; justify-content:space-between; align-items:center; z-index:1; color:#fff; }
+  .p-top { top:0; padding:10px 12px; font-size:11px; font-weight:700; }
+  .p-foot { bottom:0; padding:10px 12px; font-size:11px; }
+  .p-foot b { font-weight:700; }
+  .av { width:22px; height:22px; border-radius:50%; background:#B3261E; border:2px solid #fff; display:grid; place-items:center; font-size:10px; font-weight:800; }
+  .bars { display:flex; gap:3px; flex:1; margin:0 10px; } .bars i { flex:1; height:2px; background:rgba(255,255,255,.45); border-radius:2px; } .bars i:first-child { background:#fff; }
+  .back { background:var(--note); color:var(--ink); font-size:10.5px; font-weight:600; padding:6px 10px; border-radius:999px; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+  .pen-w { width:26px; height:26px; border-radius:50%; background:var(--note); color:var(--ink); display:grid; place-items:center; font-size:12px; box-shadow:0 2px 6px rgba(0,0,0,.2); }
 
   section { padding:64px 0; }
   h2 { font:800 clamp(28px,4vw,40px)/1.15 Inter; letter-spacing:-.02em; margin-bottom:14px; }
@@ -77,7 +93,7 @@
 <div class="wrap">
   <header>
     <a class="logo" href="#">Slipnote</a>
-    <span class="tag">Android · in development</span>
+    <span class="tag">Android in development · iOS planned</span>
   </header>
 
   <div class="hero">
@@ -88,22 +104,46 @@
       <p class="small">Free to join. One email when it launches, nothing else.</p>
     </div>
 
-    <div class="phone" aria-label="Slipnote widgets on an Android home screen">
+    <div class="phone" aria-label="Slipnote widgets on a phone home screen">
       <div class="screen">
         <div class="clock">9:41</div>
-        <div class="widget">
-          <div class="w-name">Chai crew</div>
-          <div class="w-note">miss our 2am talks,<br>call this weekend?</div>
-          <div class="w-foot"><span>from a friend · 9:12 am</span><span class="pen">✎</span></div>
+        <div class="widget photo">
+          <svg viewBox="0 -60 300 260" role="img" aria-label="A sunset photo with beach day!! written on it">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9785A"/><stop offset=".55" stop-color="#EE8B72"/><stop offset="1" stop-color="#F6A47C"/></linearGradient>
+              <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C4C7E"/><stop offset="1" stop-color="#1D2747"/></linearGradient>
+            </defs>
+            <rect y="-60" width="300" height="260" fill="url(#sky)"/>
+            <circle cx="190" cy="112" r="40" fill="#FFE29A"/>
+            <rect y="112" width="300" height="88" fill="url(#sea)"/>
+            <rect y="111" width="300" height="3" fill="#8FA3A8"/>
+            <path d="M0 150q40-12 80 0t90 4 130-8V200H0z" fill="#18203B" opacity=".7"/>
+            <path d="M18 200q6-70 2-106" stroke="#1C2236" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M20 96q-22-10-36 4M20 96q-14-22-34-18M20 96q16-20 38-12M20 96q22-4 32 14M20 96q4-22-6-34" stroke="#1C2236" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M232 70c-10-14-30-4-22 12l22 20 22-20c8-16-12-26-22-12z" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round" opacity=".92"/>
+            <text x="40" y="132" font-family="Caveat, cursive" font-weight="700" font-size="40" fill="#F4F1EA" transform="rotate(-4 40 132)">beach day!!</text>
+            <path d="M44 142q30 6 62-2" stroke="#F4F1EA" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="p-top"><span>Chai crew</span><span class="bars"><i></i><i></i><i></i><i></i></span><span class="av">R</span></div>
+          <div class="p-foot"><span>from <b>Riya</b> · 9:05</span><span class="back">✎ Doodle back</span></div>
         </div>
         <div class="row">
           <div class="widget">
             <div class="w-name">Family</div>
             <div class="w-note pink">eat properly!! ♡</div>
           </div>
-          <div class="widget">
-            <div class="w-name">Bestie</div>
-            <div class="w-note"><svg class="doodle" viewBox="0 0 120 56" fill="none" stroke="#1F3A93" stroke-width="3" stroke-linecap="round"><circle cx="30" cy="28" r="16"/><path d="M24 24h.1M36 24h.1M23 33q7 7 14 0"/><path d="M62 30q8-14 16 0t16 0" /><path d="M100 18l4 8 8 1-6 6 2 8-8-4-8 4 2-8-6-6 8-1z"/></svg></div>
+          <div class="widget photo">
+            <svg viewBox="0 0 140 140" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A mountain photo with a doodled smiley">
+              <defs><linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FB4E8"/><stop offset="1" stop-color="#F7C7B4"/></linearGradient></defs>
+              <rect width="140" height="140" fill="url(#dawn)"/>
+              <circle cx="100" cy="46" r="14" fill="#FFF1C9"/>
+              <path d="M0 104l34-40 22 22 26-34 58 52V140H0z" fill="#5A6C9E"/>
+              <path d="M0 116l40-26 30 18 26-14 44 22V140H0z" fill="#33406B"/>
+              <path d="M76 56l6-4 6 4" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <text x="70" y="100" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="21" fill="#fff" transform="rotate(-5 70 100)">hike soon?</text>
+            </svg>
+            <div class="p-top"><span>Bestie</span><span class="av">A</span></div>
+            <div class="p-foot"><span></span><span class="pen-w">✎</span></div>
           </div>
         </div>
       </div>
@@ -147,7 +187,7 @@
 
 <div class="wrap end">
   <h2>Be there on day one.</h2>
-  <p class="sub" style="margin:10px auto 28px">Slipnote is being built in public by one developer. Join the waitlist and you'll hear the moment it's on the Play Store.</p>
+  <p class="sub" style="margin:10px auto 28px">Slipnote is being built in public by one developer. Join the waitlist and you'll hear the moment it launches. Android comes first, and I'm working on a way to bring it to iOS too.</p>
   <a class="cta join" href="#" target="_blank" rel="noopener">Join the waitlist →</a>
 </div>
 
