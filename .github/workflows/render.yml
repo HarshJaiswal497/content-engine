@@ -55,7 +55,7 @@ jobs:
           BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'small' }}
-          VOICE_KEY: ${{ secrets.VOICE_KEY }}
+          VOICE_PRIVATE_KEY: ${{ secrets.VOICE_PRIVATE_KEY }}
         run: python -m engine.render --upload
 
       - name: Commit rendered media

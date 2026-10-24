@@ -2,7 +2,7 @@
 
 Engines (set in brand/voice.yml):
   chatterbox  open-source (MIT). With a voice sample it speaks in YOUR voice: the sample is kept
-              encrypted in assets/voice/reference.enc and unlocked with the VOICE_KEY secret.
+              encrypted in assets/voice/ and unlocked with the VOICE_PRIVATE_KEY secret.
               Without a sample it uses its default narrator.
   kokoro      open-source (Apache 2.0), fast preset narrators; `narrator:` picks one (e.g. am_michael).
 
@@ -23,6 +23,7 @@ import yaml
 from ..config import ROOT
 
 REFERENCE = ROOT / "assets" / "voice" / "reference.enc"
+REFERENCE_KEY = ROOT / "assets" / "voice" / "reference.key.enc"
 CONFIG = ROOT / "brand" / "voice.yml"
 # How expressive the delivery is, per post tone (Chatterbox "exaggeration").
 TONES = {"calm": 0.4, "story": 0.5, "upbeat": 0.65}
@@ -37,12 +38,20 @@ def engine() -> str:
 
 
 def _decrypt_reference(tmp: Path) -> Path | None:
-    key = os.environ.get("VOICE_KEY")
-    if not (key and REFERENCE.exists()):
+    """Unlock the voice sample. reference.enc is AES-encrypted; its AES key (reference.key.enc) is locked
+    with assets/voice/public.pem, whose private half exists only in the VOICE_PRIVATE_KEY secret."""
+    priv = os.environ.get("VOICE_PRIVATE_KEY")
+    if not (priv and REFERENCE.exists() and REFERENCE_KEY.exists()):
         return None
+    pem = tmp / "voice.pem"
+    pem.write_text(priv)
+    pem.chmod(0o600)
+    aes = subprocess.run(["openssl", "pkeyutl", "-decrypt", "-inkey", str(pem), "-pkeyopt", "rsa_padding_mode:oaep",
+                          "-in", str(REFERENCE_KEY)], check=True, capture_output=True).stdout.decode().strip()
+    pem.unlink()
     out = tmp / "reference.wav"
-    subprocess.run(["openssl", "enc", "-d", "-aes-256-cbc", "-pbkdf2", "-iter", "200000", "-pass", "env:VOICE_KEY",
-                    "-in", str(REFERENCE), "-out", str(out)], check=True, env={**os.environ, "VOICE_KEY": key})
+    subprocess.run(["openssl", "enc", "-d", "-aes-256-cbc", "-pbkdf2", "-iter", "200000", "-pass", "env:VOICE_AES",
+                    "-in", str(REFERENCE), "-out", str(out)], check=True, env={**os.environ, "VOICE_AES": aes})
     return out
 
 
@@ -65,6 +74,7 @@ def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Pat
     paths: list[Path | None] = []
     with tempfile.TemporaryDirectory() as tmp:
         ref = _decrypt_reference(Path(tmp)) if engine() == "chatterbox" else None
+        print(f"voiceover: {engine()}, {'Harsh’s voice sample' if ref else 'default narrator'}", flush=True)
         for i, line in enumerate(lines):
             line = (line or "").strip()
             if not line:
