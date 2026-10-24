@@ -1,0 +1,22 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-10-26T09:15:00+05:30'
+app: personal
+pillar: build-in-public
+text: |
+  I build apps with AI. My job is deciding what they should do, and proving that they work.
+
+  Right now that's two apps.
+
+  Setalytix is live. It's a workout logger that fills in today's weights and reps for you and tells you when to go heavier. I built it because I kept forgetting what I lifted last session, and my progress went in circles: one good day, then a slip, nothing tracked. 15+ people use it now.
+
+  Slipnote is in development. It puts handwritten notes, doodles and photos you draw on onto the home screens of the people you love. It's for everyone who crosses your mind more often than you tell them.
+
+  AI writes a lot of my code. The parts it can't do are the parts I care about most: what to build and what to cut, how a feature should behave when things go wrong, which phone to test on, and when something is actually ready.
+
+  I'll share both builds here, decisions and bugs included.
+
+  I'm also open to software developer, backend and AI-native engineering roles. If your team builds like this, I'd love to talk.
+
+  #buildinpublic #ainative
+first_comment: 'Try Setalytix (free, runs in your browser): https://app.setalytix.in'

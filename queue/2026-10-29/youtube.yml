@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-10-29T17:45:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram
+youtube:
+  title: A minute inside my workout app
+  description: |
+    Setalytix: auto-filled sets, rest timer, and it tells you when to go heavier. Free: https://app.setalytix.in
+    #Shorts #gym #workoutapp
+  tags:
+  - setalytix
+  - progressive overload
+  - gym tracker
+  - workout log
+  - strength training
+  - gym app

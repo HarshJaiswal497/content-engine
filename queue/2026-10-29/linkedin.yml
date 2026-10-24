@@ -1,0 +1,44 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-10-29T09:15:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: |
+  Gyms are terrible places for internet. Basements, thick walls, phones in airplane mode between sets.
+
+  So Setalytix has one rule: logging a set never waits for the network.
+
+  How a set travels:
+  1. Tap ✓ and the set is written to IndexedDB on the phone, marked as not yet synced. The screen updates instantly.
+  2. A sync loop pushes unsynced rows to Supabase: on start, when the connection returns, after every save, and every 30 seconds.
+  3. IDs are created on the phone, so a retried upload overwrites instead of duplicating.
+  4. A row is marked synced only if it wasn't edited while its upload was in flight. Otherwise the newer edit would be silently lost.
+
+  Step 4 is my favourite. It's three lines of code, and it's the difference between "works in a demo" and "never loses a set".
+
+  The gap that mattered most, I found by testing on my own phone in airplane mode. Cardio saved fine offline, but the screen didn't say so. Workouts showed "Offline. 2 waiting to sync"; cardio showed nothing. People judge by what they see, so it was fixed the same night.
+
+  #react #supabase #offlinefirst
+first_comment: 'Try it in airplane mode yourself: https://app.setalytix.in'
+slides:
+- type: cover
+  kicker: Setalytix engineering
+  title: No signal in the gym. *No lost sets.*
+- type: point
+  number: 1
+  title: Phone first
+  body: Every set is written to IndexedDB. The screen never waits.
+- type: point
+  number: 2
+  title: Sync when you can
+  body: On start, on reconnect, after each save, every 30 seconds.
+- type: point
+  number: 3
+  title: IDs made on the phone
+  body: A retried upload overwrites. It never duplicates.
+- type: code
+  title: Don't mark it synced if it changed mid-upload
+  code: "const current = await get(k)\nif (current?.updated_at === row.updated_at) {\n  await set(k, { ...current, _dirty: false })\n}\n"
+- type: cta
+  title: Try it *free*
+  body: app.setalytix.in

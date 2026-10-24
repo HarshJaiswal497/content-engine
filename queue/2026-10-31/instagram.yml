@@ -1,0 +1,25 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-10-31T19:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  They cross your mind more than they know. Slipnote is how you tell them, without interrupting their day ✍️
+
+  Waitlist link in bio.
+
+  #slipnote #thinkingofyou #buildinpublic #handwrittennotes #bestfriends #familylove #androidapp
+video:
+  kind: talking_head
+  source: inbox/2026-10-31-why-slipnote.mp4
+  hook: Why I'm building Slipnote
+  captions: true
+  script: |
+    There are so many people I think about all the time. My family, my friends, my best friend.
+
+    But everyone's busy, schedules never match, and you can't have a one-on-one chat every day. So most of the time, they never know they crossed your mind.
+
+    That's why I'm building Slipnote. You write a note by hand, draw something, or doodle on a photo, and it lands right on their home screen as a widget. It doesn't interrupt their day. It just tells them you thought of them.
+
+    It's coming to Android first, with iOS planned, and the waitlist link is in my bio.
+review_note: 'Talking-head: record this (reword freely) and upload as inbox/2026-10-31-why-slipnote.mp4.'
