@@ -4,6 +4,7 @@
 #                       (unlocked by the VOICE_KEY secret); until then, Chatterbox's default narrator.
 # engine: kokoro      → a preset narrator, picked with `narrator:` (am_michael, am_fenrir, bm_george, …)
 engine: chatterbox
+exaggeration: 0.45   # how expressive the delivery is (0.3 flat … 0.8 animated); picked 24 Oct 2026
 narrator: am_michael
 
 # How to say names the voice might get wrong (written form → spoken form).

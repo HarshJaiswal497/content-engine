@@ -82,7 +82,8 @@ def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Pat
             else:
                 import torchaudio
                 model = _chatterbox()
-                kw = {"exaggeration": TONES.get(tone, 0.5), "cfg_weight": 0.4}
+                ex = config().get("exaggeration")  # a fixed delivery for every video, if set
+                kw = {"exaggeration": float(ex) if ex is not None else TONES.get(tone, 0.5), "cfg_weight": 0.4}
                 if ref:
                     kw["audio_prompt_path"] = str(ref)
                 torchaudio.save(str(out), model.generate(line, **kw), model.sr)
