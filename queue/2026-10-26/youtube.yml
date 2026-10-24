@@ -6,20 +6,26 @@ pillar: feature-spotlight
 slides:
 - type: cover
   title: My app tells me *what to lift* today
+  say: I built an app that tells me exactly what to lift today.
 - type: point
   title: Same weight, *one more rep*
   body: Did 8, 8, 7 last time? Today's target is 9, 9, 8.
+  say: Last time I did eight, eight and seven. So today it asks for nine, nine and eight. Same weight, one more rep.
 - type: point
   title: Hit every set? *Go heavier*
   body: 'It adds one step: 2.5 kg by default.'
+  say: Hit every set, and it moves you up one small step. Two and a half kilos by default.
 - type: point
   title: Warm-ups don't count
   body: Only working sets decide.
+  say: Warm-ups don't count. Only your working sets decide.
 - type: cta
   title: Try *Setalytix*
   body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free. Try it at app.setalytix.in.
 video:
   kind: slides
+  tone: upbeat
   seconds_per_slide: 3.4
 youtube:
   title: My app tells me what to lift today

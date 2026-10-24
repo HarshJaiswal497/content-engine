@@ -6,23 +6,30 @@ pillar: engineering-deep-dive
 slides:
 - type: cover
   title: I swiped my app away. *The note still landed.*
+  say: I swiped my app away, and the note still landed.
 - type: point
   title: The scary part
   body: Can the widget update while the app is closed?
+  say: The scariest question for Slipnote was simple. Can the widget update while the app is closed?
 - type: point
   title: So I tested that *first*
   body: Day 1, on a real phone, before building anything else.
+  say: So I tested that first. Day one, on a real phone, before building anything else.
 - type: point
   title: '*6.5 seconds*'
   body: App swiped away, note sent, widget updated.
+  say: App swiped away, note sent, and the widget updated in six and a half seconds.
 - type: point
   title: '*35 seconds*'
   body: After a restart, without ever opening the app.
+  say: Even after a restart, the note arrived in thirty-five seconds, without ever opening the app.
 - type: cta
   title: Join the *Slipnote* waitlist
   body: Link in bio
+  say: Slipnote is coming to Android first. The waitlist link is on my profile.
 video:
   kind: slides
+  tone: story
   seconds_per_slide: 3.0
 youtube:
   title: I swiped my app away. The note still arrived.

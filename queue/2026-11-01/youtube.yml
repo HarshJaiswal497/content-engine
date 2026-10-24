@@ -6,20 +6,26 @@ pillar: engineering-deep-dive
 slides:
 - type: cover
   title: No signal in the gym? *Still logging.*
+  say: No signal in the gym? My app still logs every set.
 - type: point
   title: Tap the tick
   body: The set saves on your phone first.
+  say: Tap the tick, and the set saves on your phone first.
 - type: point
   title: '"Offline. 3 waiting to sync"'
   body: It tells you what hasn't reached the server yet.
+  say: If you're offline, it tells you exactly how many sets are still waiting to sync.
 - type: point
   title: Back online
   body: It syncs on its own. "All saved."
+  say: When you're back online, it syncs on its own. All saved.
 - type: cta
   title: Try *Setalytix*
   body: Free at app.setalytix.in
+  say: That's Setalytix. Try it free at app.setalytix.in.
 video:
   kind: slides
+  tone: upbeat
   seconds_per_slide: 3.2
 youtube:
   title: No signal in the gym? My app still logs every set
