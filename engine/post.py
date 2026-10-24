@@ -133,6 +133,10 @@ class Post:
         handles = ROOT / "brand" / "handles.yml"
         if handles.exists():  # the handle is printed on every slide
             relevant["_handles"] = hashlib.sha256(handles.read_bytes()).hexdigest()[:8]
+i        if self.needs_video:  # adding/removing music re-renders videos
+            music = ROOT / "assets" / "music"
+            relevant["_music"] = sorted(f"{p.name}:{p.stat().st_size}" for p in music.glob("*")
+                                        if p.suffix.lower() in (".mp3", ".m4a", ".wav", ".ogg")) if music.is_dir() else []
         src = self.video_source()
         if src and src.exists():
             relevant["_src"] = [src.name, src.stat().st_size]

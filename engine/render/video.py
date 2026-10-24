@@ -8,12 +8,35 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from ..config import FONTS
+from ..config import FONTS, ROOT
 
 W, H, FPS = 1080, 1920, 30
 ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-r", str(FPS),
        "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart"]
 MAX_SECONDS = 180
+MUSIC_DIR = ROOT / "assets" / "music"
+MUSIC_VOLUME = 0.6
+
+
+def pick_music(key: str) -> Path | None:
+    """A background track from assets/music/, chosen by `key` so each video keeps the same track on re-renders."""
+    d = Path(os.environ.get("MUSIC_DIR") or MUSIC_DIR)
+    tracks = sorted(p for p in d.glob("*") if p.suffix.lower() in (".mp3", ".m4a", ".wav", ".ogg")) if d.is_dir() else []
+    if not tracks:
+        return None
+    import hashlib
+    return tracks[int(hashlib.sha1(key.encode()).hexdigest(), 16) % len(tracks)]
+
+
+def _music_input(key: str, total: float, index: int) -> tuple[list[str], str]:
+    """ffmpeg inputs + filter for the audio track: quiet looped music with fades, or silence if there's none."""
+    track = pick_music(key)
+    if not track:
+        return ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"], f"[{index}:a]anull[aout]"
+    fade_out = max(total - 1.5, 0)
+    return (["-stream_loop", "-1", "-i", str(track)],
+            f"[{index}:a]aresample=44100,volume={MUSIC_VOLUME},afade=t=in:d=0.8,"
+            f"afade=t=out:st={fade_out:.3f}:d=1.5[aout]")
 
 
 def _run(cmd: list[str]) -> None:
@@ -45,8 +68,10 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
     cmd = ["ffmpeg", "-y", "-hide_banner"]
     for img, d in zip(images, seconds):
         cmd += ["-loop", "1", "-framerate", str(FPS), "-t", f"{d:.3f}", "-i", str(img)]
-    cmd += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"]
-    parts = []
+    total = sum(seconds) - fade * (len(seconds) - 1)
+    audio_in, audio_f = _music_input(out.parent.name, total, len(images))
+    cmd += audio_in
+    parts = [audio_f]
     for i, d in enumerate(seconds):
         frames = int(d * FPS)
         # slow push-in; upscale first so the zoom doesn't jitter
@@ -58,8 +83,7 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
         offset += seconds[i - 1] - fade
         parts.append(f"[{last}][v{i}]xfade=transition=fade:duration={fade}:offset={offset:.3f}[x{i}]")
         last = f"x{i}"
-    total = sum(seconds) - fade * (len(seconds) - 1)
-    cmd += ["-filter_complex", ";".join(parts), "-map", f"[{last}]", "-map", f"{len(images)}:a",
+    cmd += ["-filter_complex", ";".join(parts), "-map", f"[{last}]", "-map", "[aout]",
             "-t", f"{total:.3f}", *ENC, str(out)]
     _run(cmd)
     return out
@@ -148,8 +172,8 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
         if info["has_audio"]:
             cmd += ["-filter_complex", graph, "-map", "[v]", "-map", "0:a:0"]
         else:
-            cmd += ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
-                    "-filter_complex", graph, "-map", "[v]", "-map", "1:a"]
+            audio_in, audio_f = _music_input(out.parent.name, duration, 1)
+            cmd += [*audio_in, "-filter_complex", f"{graph};{audio_f}", "-map", "[v]", "-map", "[aout]"]
         cmd += ["-t", f"{duration:.3f}", *ENC, str(out)]
         _run(cmd)
     return out
