@@ -15,23 +15,41 @@ ENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420
        "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart"]
 MAX_SECONDS = 180
 MUSIC_DIR = ROOT / "assets" / "music"
-MUSIC_VOLUME = 0.6
+MUSIC_CONFIG = ROOT / "brand" / "music.yml"
+MUSIC_VOLUME = 0.6          # music alone (no voice)
+MUSIC_WITH_VOICE = 0.45     # music bed before ducking; it ducks hard while the voice speaks
+APP_MOOD = {"setalytix": "upbeat", "slipnote": "story"}
 
 
-def pick_music(key: str) -> Path | None:
-    """A background track from assets/music/, chosen by `key` so each video keeps the same track on re-renders."""
+def mood_for(tone: str | None, app: str | None) -> str:
+    return tone or APP_MOOD.get(app or "", "calm")
+
+
+def pick_music(key: str, mood: str | None = None) -> Path | None:
+    """A track from assets/music/ matching `mood` (see brand/music.yml), chosen by `key` so a video
+    keeps the same track on re-renders. Falls back to any track."""
     d = Path(os.environ.get("MUSIC_DIR") or MUSIC_DIR)
     tracks = sorted(p for p in d.glob("*") if p.suffix.lower() in (".mp3", ".m4a", ".wav", ".ogg")) if d.is_dir() else []
     if not tracks:
         return None
+    if mood and MUSIC_CONFIG.exists() and not os.environ.get("MUSIC_DIR"):
+        import yaml
+        moods = {t["file"]: t.get("mood") for t in (yaml.safe_load(MUSIC_CONFIG.read_text()) or {}).get("tracks", [])}
+        matching = [t for t in tracks if moods.get(t.name) == mood]
+        tracks = matching or tracks
     import hashlib
-    return tracks[int(hashlib.sha1(key.encode()).hexdigest(), 16) % len(tracks)]
+    from datetime import date
+    try:  # rotate by day, so videos on nearby days get different tracks
+        n = date.fromisoformat(key[:10]).toordinal() + int(hashlib.sha1(key[10:].encode()).hexdigest(), 16) % 2
+    except ValueError:
+        n = int(hashlib.sha1(key.encode()).hexdigest(), 16)
+    return tracks[n % len(tracks)]
 
 
 def _music_input(key: str, total: float, index: int, label: str = "aout",
-                 volume: float = MUSIC_VOLUME) -> tuple[list[str], str]:
+                 volume: float = MUSIC_VOLUME, mood: str | None = None) -> tuple[list[str], str]:
     """ffmpeg inputs + filter for the music bed: quiet looped music with fades, or silence if there's none."""
-    track = pick_music(key)
+    track = pick_music(key, mood)
     if not track:
         return (["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"],
                 f"[{index}:a]atrim=0:{total:.3f}[{label}]")
@@ -68,11 +86,10 @@ def probe(path: Path) -> dict:
 
 # ---- slides → motion video ---------------------------------------------------
 VOICE_LEAD, VOICE_TAIL = 0.25, 0.45   # pause before / after each spoken line
-MUSIC_UNDER_VOICE = 0.12             # music volume while someone is talking
 
 
 def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float = 3.2, fade: float = 0.45,
-                    voice: list[Path | None] | None = None) -> Path:
+                    voice: list[Path | None] | None = None, mood: str | None = None) -> Path:
     """Slides → vertical video. With `voice` (one clip or None per slide) each slide lasts as long as its
     line, the lines play over their slides, and the music sits quietly underneath."""
     if isinstance(seconds, (int, float)):
@@ -89,9 +106,9 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
     total = sum(seconds) - fade * (len(seconds) - 1)
     n = len(images)
     if any(clips):
-        audio_in, music_f = _music_input(out.parent.name, total, n, "music", MUSIC_UNDER_VOICE)
+        audio_in, music_f = _music_input("/".join(out.parts[-4:-1]), total, n, "music", MUSIC_WITH_VOICE, mood)
         cmd += audio_in
-        parts, labels, start, idx = [music_f], ["[music]"], 0.0, n + 1
+        parts, labels, start, idx = [music_f], [], 0.0, n + 1
         for i, c in enumerate(clips):
             if c:
                 cmd += ["-i", str(c)]
@@ -101,10 +118,13 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
                 labels.append(f"[vo{i}]")
                 idx += 1
             start += seconds[i] - fade
-        parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=first:normalize=0,"
-                     f"alimiter=limit=0.95[aout]")
+        # all lines on one voice track; the music ducks under it (sidechain) and swells in the pauses
+        parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0,"
+                     f"apad=whole_dur={total:.3f},atrim=0:{total:.3f},asplit=2[voice][key]")
+        parts.append("[music][key]sidechaincompress=threshold=0.015:ratio=12:attack=15:release=450:makeup=1[bed]")
+        parts.append("[bed][voice]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[aout]")
     else:
-        audio_in, audio_f = _music_input(out.parent.name, total, n)
+        audio_in, audio_f = _music_input("/".join(out.parts[-4:-1]), total, n, mood=mood)
         cmd += audio_in
         parts = [audio_f]
     for i, d in enumerate(seconds):
@@ -183,7 +203,7 @@ def build_ass(chunks: list[dict], hook: str | None, accent_hex: str) -> str:
 
 
 def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "#7DD3FC",
-                  captions: bool = True, words: list[dict] | None = None) -> Path:
+                  captions: bool = True, words: list[dict] | None = None, mood: str | None = None) -> Path:
     info = probe(src)
     duration = min(info["duration"], MAX_SECONDS)
     if captions and info["has_audio"] and words is None:
@@ -207,7 +227,7 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
         if info["has_audio"]:
             cmd += ["-filter_complex", graph, "-map", "[v]", "-map", "0:a:0"]
         else:
-            audio_in, audio_f = _music_input(out.parent.name, duration, 1)
+            audio_in, audio_f = _music_input("/".join(out.parts[-4:-1]), duration, 1, mood=mood)
             cmd += [*audio_in, "-filter_complex", f"{graph};{audio_f}", "-map", "[v]", "-map", "[aout]"]
         cmd += ["-t", f"{duration:.3f}", *ENC, str(out)]
         _run(cmd)

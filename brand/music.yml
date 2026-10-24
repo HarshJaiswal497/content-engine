@@ -1,0 +1,15 @@
+# Background music: 45-second excerpts in assets/music/, cut from the best steady part of each track.
+# Each video picks a track whose mood matches its `video.tone` (slide videos) or its app
+# (Setalytix → upbeat, Slipnote → story, other → calm). The music ducks under the voiceover
+# and rises a little in the pauses. Change a mood here to move a track to another kind of video.
+#
+# Source: YouTube Audio Library. Moods were judged from tempo, beat and brightness; listen and adjust.
+tracks:
+  - {file: shadowstep.mp3,       mood: upbeat, title: Shadowstep,        artist: The Mini Vandals}
+  - {file: sizzr.mp3,            mood: upbeat, title: Sizzr,             artist: Schwartzy}
+  - {file: frame-dragging.mp3,   mood: upbeat, title: Frame-Dragging,    artist: The Grey Room / Density & Time}
+  - {file: a-starry-message.mp3, mood: story,  title: A Starry Message,  artist: Dan "Lebo" Lebowitz, Tone Seeker}
+  - {file: inner-outer.mp3,      mood: story,  title: inner_outer,       artist: Lish Grooves}
+  - {file: tiburtina.mp3,        mood: story,  title: Tiburtina,         artist: Schwartzy}
+  - {file: sleep-music-no-1.mp3, mood: calm,   title: Sleep Music No. 1, artist: Chris Haugen}
+  - {file: pulsar.mp3,           mood: calm,   title: Pulsar,            artist: The Grey Room / Density & Time}

@@ -15,7 +15,7 @@ from pathlib import Path
 from .. import github, state
 from ..post import Post, all_posts, load
 from .slides import THEMES, render_post_slides
-from .video import caption_video, slides_to_video
+from .video import caption_video, mood_for, slides_to_video
 
 
 def _clean(asset_dir: Path) -> None:
@@ -66,12 +66,12 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                 if any(lines) and spec.get("voice", True):
                     from .tts import synthesize
                     voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
-                slides_to_video(imgs, mp4, secs, voice=voice)
+                slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
             caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
-                          captions=spec.get("captions", True))
+                          captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
         elif kind == "same_as":
             sib_path = post.path.parent / f"{spec['post']}.yml"

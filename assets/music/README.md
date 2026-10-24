@@ -1,12 +1,12 @@
 # Background music
 
-Videos made from slides (and screen recordings with no sound) get a quiet music bed from this folder.
-Talking-head clips keep your own voice and get no music.
+45-second excerpts of tracks from the YouTube Audio Library, cut from the best steady part of each
+and loudness-matched. `brand/music.yml` gives each track a mood (upbeat / story / calm).
 
-Add 3–6 calm, instrumental tracks (.mp3 or .m4a). Each video picks one and keeps it on re-renders.
-If this folder has no tracks, videos stay silent.
+- Slide videos with a voiceover: a track matching the video's `tone` plays under the voice; it ducks
+  while you talk and swells a little in the pauses.
+- Slide videos without a voiceover, and silent screen recordings: the track plays on its own.
+- Talking-head clips keep only your voice.
 
-Only use music you're allowed to use on Instagram, YouTube and Facebook. The safest free source is the
-YouTube Audio Library (studio.youtube.com → Audio library) with the "Attribution not required" filter on.
-
-Upload: GitHub → assets/music → Add file → Upload files. The next render rebuilds the week's videos.
+Tracks rotate by day, so nearby videos don't repeat the same song. To add a track, put a 45 s
+excerpt here and add a line to brand/music.yml.
