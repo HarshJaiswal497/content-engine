@@ -14,7 +14,7 @@ from datetime import datetime, timedelta, timezone
 from . import state
 from .config import calendar
 from .github import close_issue, create_issue
-from .platforms import instagram, linkedin, youtube
+from .platforms import facebook, instagram, linkedin, youtube
 from .post import all_posts
 
 PUBLISHERS = {"linkedin": linkedin, "instagram": instagram, "youtube": youtube}
@@ -33,6 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     max_late = timedelta(hours=calendar().get("max_late_hours", 36))
     log = state.load()
     lines, failures = [], 0
+    ig_published_now: set[str] = set()
 
     for post in all_posts():
         if args.only and post.id != args.only:
@@ -87,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
                                  "post's last lines from `published/log.jsonl` to retry.", ["publish-failed"])
             continue
 
+        if post.platform == "instagram" and result.status == "published":
+            ig_published_now.add(post.id)
         icon = "✅" if result.status == "published" else "📲"
         lines.append(f"{icon} {post.id}: {result.status} {result.url or ''} {result.note or ''}".rstrip())
         if not args.dry_run:
@@ -94,6 +97,45 @@ def main(argv: list[str] | None = None) -> int:
                          note=result.note, attempts=(entry or {}).get("attempts", 0) + 1)
             if (entry or {}).get("reminder_issue"):
                 close_issue(entry["reminder_issue"])
+
+    # Mirror published Instagram posts to the Facebook Page (separate log entries, so a Facebook
+    # failure never re-posts to Instagram).
+    if facebook.configured() or args.dry_run:
+        log = state.load()
+        for post in all_posts():
+            if post.platform != "instagram" or (args.only and post.id != args.only):
+                continue
+            ig = log.get(post.id) or {}
+            if ig.get("status") != "published" and post.id not in ig_published_now:
+                continue
+            fb_id = post.id + "#facebook"
+            fb_entry = log.get(fb_id)
+            if state.is_done(fb_entry):
+                continue
+            if not args.dry_run and post.scheduled_at and now - post.scheduled_at > max_late:
+                state.record(fb_id, "expired")
+                continue
+            try:
+                result = facebook.publish(post, dry_run=args.dry_run or not facebook.configured())
+            except Exception as exc:
+                failures += 1
+                attempts = (fb_entry or {}).get("attempts", 0) + 1
+                msg = f"{type(exc).__name__}: {exc}"
+                lines.append(f"❌ {fb_id}: attempt {attempts}/{state.MAX_ATTEMPTS} — {msg}")
+                traceback.print_exc()
+                if not args.dry_run:
+                    state.record(fb_id, "failed", attempts=attempts, error=msg[:800])
+                    if attempts >= state.MAX_ATTEMPTS:
+                        create_issue(f"❌ Couldn't share {post.id} to the Facebook Page",
+                                     f"The Instagram post went out; the Facebook copy failed {attempts} times."
+                                     f"\n\n```\n{msg}\n```\n\nUsually an expired or revoked Page token: re-run "
+                                     "`python tools/facebook_page_token.py` and update FB_PAGE_TOKEN.",
+                                     ["publish-failed"])
+                continue
+            lines.append(f"✅ {fb_id}: {result.status} {result.url or ''} {result.note or ''}".rstrip())
+            if not args.dry_run:
+                state.record(fb_id, result.status, remote_id=result.remote_id, url=result.url,
+                             attempts=(fb_entry or {}).get("attempts", 0) + 1)
 
     report = "\n".join(lines) or "Nothing due."
     print(report)

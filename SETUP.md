@@ -69,6 +69,18 @@ The token lasts ~60 days. A GitHub issue reminds you 10 days before; re-run step
 The app can stay in *Development* mode: it only posts to your own account. The token lasts 60
 days and is refreshed every Monday automatically once step 6 is done.
 
+## 4b. Facebook Page (optional, 10 min): every Instagram post is also posted to your Page
+1. Your Page must be linked to the Instagram account (Page → Settings → Linked accounts → Instagram).
+2. developers.facebook.com → your app → **Add use cases** → **"Manage everything on your Page"** → Add.
+   No review needed: you're the app's admin and the Page's admin.
+3. Open the **Graph API Explorer** (developers.facebook.com/tools/explorer): pick your app, then
+   **Generate Access Token** with `pages_show_list`, `pages_read_engagement`, `pages_manage_posts`,
+   and allow your Page. Copy the token.
+4. App settings → Basic: note the **App ID** and **App secret** (the main ones, not the Instagram ones).
+5. On your laptop: `python tools/facebook_page_token.py` and paste the three values when asked.
+6. Add repo secrets `FB_PAGE_ID` and `FB_PAGE_TOKEN`. The Page token doesn't expire; a weekly
+   check opens an issue if it ever stops working.
+
 ## 5. YouTube (5 min now, optional audit later)
 1. Create the channel: youtube.com → profile icon → **Create a channel** (same name/handle as
    Instagram). Add a picture and description.

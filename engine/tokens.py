@@ -69,13 +69,29 @@ def linkedin_check() -> int:
     return 0
 
 
+def facebook_check() -> int:
+    from .platforms import facebook
+    ok, msg = facebook.check_token()
+    print(f"Facebook Page token: {msg}")
+    if not ok:
+        _open_issue_once("🔑 Facebook Page token stopped working — re-create it (5 min)",
+                         f"Mirroring Instagram posts to your Facebook Page is failing:\n\n`{msg}`\n\n"
+                         "This happens if you changed your Facebook password or removed the app. Re-run "
+                         "`python tools/facebook_page_token.py` and update the FB_PAGE_TOKEN secret, then close this issue.",
+                         "token-expiring")
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     a = sub.add_parser("ig-refresh"); a.add_argument("--out", required=True)
     sub.add_parser("linkedin-check")
+    sub.add_parser("facebook-check")
     args = ap.parse_args(argv)
-    return ig_refresh(args.out) if args.cmd == "ig-refresh" else linkedin_check()
+    if args.cmd == "ig-refresh":
+        return ig_refresh(args.out)
+    return facebook_check() if args.cmd == "facebook-check" else linkedin_check()
 
 
 if __name__ == "__main__":

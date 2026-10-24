@@ -145,3 +145,41 @@ def test_hard_limits(tmp_path, monkeypatch):
         assert load(f).errors, bad
     f.write_text(base + "'Illegal invocation, a ₹0 stack'\n")
     assert not load(f).errors
+
+
+def test_facebook_caption_drops_link_in_bio():
+    from engine.platforms.facebook import caption_for_facebook
+    out = caption_for_facebook("Free in your browser. Link in bio.\n\n#gym")
+    assert "bio" not in out.lower() and out.startswith("Free in your browser.") and "#gym" in out
+
+
+def test_facebook_carousel_and_mirror_after_instagram(monkeypatch, tmp_path):
+    from engine.platforms import facebook
+    p = load(ROOT / "queue/2026-10-27/instagram.yml")
+    calls = []
+
+    def fake_post(url, data=None, **kw):
+        calls.append((url, data))
+        if url.endswith("/feed"):
+            return FakeResp(data={"id": "123_456"})
+        return FakeResp(data={"id": f"P{len(calls)}"})
+
+    monkeypatch.setenv("FB_PAGE_ID", "123"); monkeypatch.setenv("FB_PAGE_TOKEN", "t")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "owner/content-engine"); monkeypatch.setenv("GITHUB_SHA", "abc")
+    monkeypatch.setattr(facebook.requests, "post", fake_post)
+    r = facebook.publish(p)
+    uploads = [c for c in calls if c[0].endswith("/photos")]
+    assert len(uploads) == len(p.images()) and all(c[1]["published"] == "false" for c in uploads)
+    feed = calls[-1][1]
+    assert "attached_media[0]" in feed and "link in bio" not in feed["message"].lower()
+    assert r.url == "https://www.facebook.com/123_456"
+
+    # publish loop: Facebook copy only after Instagram is published, logged separately
+    monkeypatch.setattr(state, "LOG", tmp_path / "log.jsonl")
+    monkeypatch.setattr(instagram, "publish", lambda post, dry_run=False: __import__("engine.platforms", fromlist=["Result"]).Result("published", "IG1", "u"))
+    for mod in (linkedin, youtube):
+        monkeypatch.setattr(mod, "publish", lambda post, dry_run=False: __import__("engine.platforms", fromlist=["Result"]).Result("published"))
+    publish.main(["--now", "2026-10-27T19:40:00+05:30", "--only", "queue/2026-10-27/instagram"])
+    log = state.load()
+    assert log["queue/2026-10-27/instagram"]["status"] == "published"
+    assert log["queue/2026-10-27/instagram#facebook"]["status"] == "published"
