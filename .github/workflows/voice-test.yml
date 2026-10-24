@@ -1,0 +1,22 @@
+name: Voice test (one-off)
+on: workflow_dispatch
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chatterbox, a-kokoro, b-kokoro]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: sudo apt-get install -y -q espeak-ng
+      - name: Install
+        run: |
+          pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          if [ "${{ matrix.engine }}" = chatterbox ]; then pip install -q chatterbox-tts soundfile; else pip install -q kokoro soundfile; fi
+      - run: python tools/voice_test.py ${{ matrix.engine }}
+      - uses: actions/upload-artifact@v4
+        with: { name: "samples-${{ matrix.engine }}", path: samples/ }
