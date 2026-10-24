@@ -25,6 +25,12 @@ Next Monday → Sunday. One post per platform per day at the slot times in `cale
 - Instagram: 4 carousels, 3 Reels (2–3 of the Reels talking-head, rest faceless).
 - YouTube: 7 Shorts. Reuse the day's Instagram Reel with `video.kind: same_as` when there is
   one; otherwise make a slide Short (`video.kind: slides`, 4–7 slides, 18–30 s total).
+- Every slide video gets a voiceover: give each slide a `say:` line (one or two short spoken
+  sentences, first person as Harsh, conversational, numbers written as words, no hashtags or
+  emoji). Line one is the hook. The last line is a platform-neutral CTA ("try it free at
+  app.setalytix.in" / "the waitlist link is on my profile"), never "link in description" or
+  "link in bio", because Reels reuse the Short. Set `video.tone`: upbeat (Setalytix tips),
+  story (Slipnote build moments) or calm. Same rules as captions: no pricing, legal or competitors.
 
 ## 3. Write the files
 Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram.yml`, `youtube.yml`.
