@@ -28,15 +28,21 @@ def pick_music(key: str) -> Path | None:
     return tracks[int(hashlib.sha1(key.encode()).hexdigest(), 16) % len(tracks)]
 
 
-def _music_input(key: str, total: float, index: int) -> tuple[list[str], str]:
-    """ffmpeg inputs + filter for the audio track: quiet looped music with fades, or silence if there's none."""
+def _music_input(key: str, total: float, index: int, label: str = "aout",
+                 volume: float = MUSIC_VOLUME) -> tuple[list[str], str]:
+    """ffmpeg inputs + filter for the music bed: quiet looped music with fades, or silence if there's none."""
     track = pick_music(key)
     if not track:
-        return ["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"], f"[{index}:a]anull[aout]"
+        return (["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo"],
+                f"[{index}:a]atrim=0:{total:.3f}[{label}]")
     fade_out = max(total - 1.5, 0)
     return (["-stream_loop", "-1", "-i", str(track)],
-            f"[{index}:a]aresample=44100,volume={MUSIC_VOLUME},afade=t=in:d=0.8,"
-            f"afade=t=out:st={fade_out:.3f}:d=1.5[aout]")
+            f"[{index}:a]aresample=44100,aformat=channel_layouts=stereo,volume={volume},atrim=0:{total:.3f},"
+            f"afade=t=in:d=0.8,afade=t=out:st={fade_out:.3f}:d=1.5[{label}]")
+
+
+def audio_seconds(path: Path) -> float:
+    return probe(path)["duration"]
 
 
 def _run(cmd: list[str]) -> None:
@@ -61,17 +67,46 @@ def probe(path: Path) -> dict:
 
 
 # ---- slides → motion video ---------------------------------------------------
-def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float = 3.2, fade: float = 0.45) -> Path:
+VOICE_LEAD, VOICE_TAIL = 0.25, 0.45   # pause before / after each spoken line
+MUSIC_UNDER_VOICE = 0.12             # music volume while someone is talking
+
+
+def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float = 3.2, fade: float = 0.45,
+                    voice: list[Path | None] | None = None) -> Path:
+    """Slides → vertical video. With `voice` (one clip or None per slide) each slide lasts as long as its
+    line, the lines play over their slides, and the music sits quietly underneath."""
     if isinstance(seconds, (int, float)):
         seconds = [float(seconds)] * len(images)
     seconds = [max(s, fade + 0.5) for s in seconds]
+    clips = list(voice or [])[:len(images)]
+    clips += [None] * (len(images) - len(clips))
+    if any(clips):  # let the narration set the pace
+        seconds = [max(VOICE_LEAD + audio_seconds(c) + VOICE_TAIL + fade, 1.6) if c else min(s, 2.2)
+                   for s, c in zip(seconds, clips)]
     cmd = ["ffmpeg", "-y", "-hide_banner"]
     for img, d in zip(images, seconds):
         cmd += ["-loop", "1", "-framerate", str(FPS), "-t", f"{d:.3f}", "-i", str(img)]
     total = sum(seconds) - fade * (len(seconds) - 1)
-    audio_in, audio_f = _music_input(out.parent.name, total, len(images))
-    cmd += audio_in
-    parts = [audio_f]
+    n = len(images)
+    if any(clips):
+        audio_in, music_f = _music_input(out.parent.name, total, n, "music", MUSIC_UNDER_VOICE)
+        cmd += audio_in
+        parts, labels, start, idx = [music_f], ["[music]"], 0.0, n + 1
+        for i, c in enumerate(clips):
+            if c:
+                cmd += ["-i", str(c)]
+                ms = int((start + VOICE_LEAD) * 1000)
+                parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,"
+                             f"aresample=44100,adelay={ms}|{ms}[vo{i}]")
+                labels.append(f"[vo{i}]")
+                idx += 1
+            start += seconds[i] - fade
+        parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=first:normalize=0,"
+                     f"alimiter=limit=0.95[aout]")
+    else:
+        audio_in, audio_f = _music_input(out.parent.name, total, n)
+        cmd += audio_in
+        parts = [audio_f]
     for i, d in enumerate(seconds):
         frames = int(d * FPS)
         # slow push-in; upscale first so the zoom doesn't jitter

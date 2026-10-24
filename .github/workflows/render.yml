@@ -5,7 +5,7 @@ name: Render & review drafts
 on:
   push:
     branches: ["drafts/**", "main"]
-    paths: ["queue/**", "inbox/**", "brand/**", "engine/render/**"]
+    paths: ["queue/**", "inbox/**", "brand/**", "engine/render/**", "assets/music/**", "assets/voice/**"]
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,7 @@ concurrency:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,17 +37,24 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt -r requirements-video.txt
 
+      - name: Install voiceover engines (CPU)
+        run: |
+          sudo apt-get install -y -q espeak-ng >/dev/null
+          pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install -q -r requirements-voice.txt
+
       - name: Cache Whisper model
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: whisper-${{ vars.WHISPER_MODEL || 'small' }}
+          key: models-v2-${{ vars.WHISPER_MODEL || 'small' }}
 
       - name: Render slides and videos
         env:
           BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'small' }}
+          VOICE_KEY: ${{ secrets.VOICE_KEY }}
         run: python -m engine.render --upload
 
       - name: Commit rendered media

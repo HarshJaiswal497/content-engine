@@ -23,6 +23,7 @@ slides:                       # for image, carousel, and video.kind: slides
     number: 1
     title: Short title
     body: One or two sentences.
+    say: Optional. What the voiceover says while this slide shows (slide videos only).
     alt: Alt text (optional; defaults to the title)
   - type: code
     title: What the code looks like
@@ -39,6 +40,7 @@ slides:                       # for image, carousel, and video.kind: slides
 video:                        # for linkedin video, instagram reel, youtube short
   kind: slides                # slides | recording | talking_head | same_as
   seconds_per_slide: 3.2      # slides only (per-slide `seconds:` overrides)
+  tone: story                 # slides with `say:` lines: calm | story | upbeat (voice delivery)
   source: inbox/2026-10-28-why-slipnote.mp4   # recording / talking_head
   hook: "I built this in 7 days"              # on-screen text for the first ~3 s
   captions: true              # burn in auto-captions (recording / talking_head)

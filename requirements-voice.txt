@@ -1,0 +1,4 @@
+# Voiceover engines (CPU). Torch comes from the CPU index in the render workflow.
+chatterbox-tts
+kokoro>=0.9
+soundfile

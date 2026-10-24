@@ -61,7 +61,12 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
             with tempfile.TemporaryDirectory() as tmp:
                 imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
                 secs = [float(s.get("seconds", spec.get("seconds_per_slide", 3.2))) for s in slides]
-                slides_to_video(imgs, mp4, secs)
+                lines = [str(s.get("say") or "") for s in slides]
+                voice = None
+                if any(lines) and spec.get("voice", True):
+                    from .tts import synthesize
+                    voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
+                slides_to_video(imgs, mp4, secs, voice=voice)
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
