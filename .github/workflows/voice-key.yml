@@ -1,0 +1,31 @@
+name: Create voice key (one-off)
+
+# Makes a key pair on GitHub's machine. The private half goes straight into the VOICE_PRIVATE_KEY
+# secret (it never leaves GitHub); the public half is committed so a voice sample can be locked with it.
+on: workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  key:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create the key pair and store the private key as a secret
+        env:
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+        run: |
+          umask 077
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$RUNNER_TEMP/priv.pem"
+          mkdir -p assets/voice
+          openssl pkey -in "$RUNNER_TEMP/priv.pem" -pubout -out assets/voice/public.pem
+          gh secret set VOICE_PRIVATE_KEY --repo "$GITHUB_REPOSITORY" < "$RUNNER_TEMP/priv.pem"
+          rm -f "$RUNNER_TEMP/priv.pem"
+      - name: Commit the public key
+        run: |
+          git config user.name "content-engine[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/voice/public.pem
+          git commit -m "Voice public key"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break || sleep 5; done
