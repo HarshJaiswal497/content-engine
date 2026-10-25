@@ -1,0 +1,45 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-10-27T09:15:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: |
+  Before I let anyone else use my workout app, I tested it against my own gym spreadsheet.
+
+  Setalytix's core job is one decision: should you add weight this session, or stay and aim for more reps?
+
+  I'd been making that call myself in a spreadsheet. So my own logs from 30 Sep to 10 Oct became the test: 27 exercises, 9 training days. For every step from one session to the next, does the app make the same call I did?
+
+  It agreed 31 out of 31 times, including all 6 weight increases. The test lives in the codebase, so it fails if a future change ever disagrees.
+
+  A few rules came straight from real training:
+  • Warm-up, drop and failure sets never count toward the decision.
+  • After a weight increase, it learns how far your reps usually drop, from your last 3 increases.
+  • Back after 21+ days off? It repeats your last weight instead of jumping.
+
+  AI helped write the engine. Choosing the rules, and proving them against real data, was the part I had to own.
+
+  #typescript #testing
+first_comment: 'Setalytix is free to use: https://app.setalytix.in'
+slides:
+- type: cover
+  kicker: Setalytix engineering
+  title: My app agreed with my *own decisions* 31 out of 31 times
+- type: point
+  number: 1
+  title: One decision matters
+  body: Add weight this session, or stay and aim for more reps?
+- type: point
+  number: 2
+  title: My spreadsheet became the test
+  body: '30 Sep – 10 Oct: 27 exercises, 9 training days.'
+- type: point
+  number: 3
+  title: '*31 out of 31*'
+  body: Every call matched mine, including all 6 weight increases.
+- type: code
+  title: It fails if that ever changes
+  code: "test('agrees on when to add weight', () => {\n  const disagree = cases.filter(\n    c => c.engineBump !== c.founderMoved)\n  expect(disagree).toEqual([])\n})\n"
+- type: cta
+  title: Try it *free*
+  body: app.setalytix.in

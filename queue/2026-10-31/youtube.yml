@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-10-31T17:45:00+05:30'
+app: slipnote
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram
+youtube:
+  title: Why I'm building Slipnote
+  description: |
+    Handwritten notes that land on the home screen of the people you love. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #androidapp
+  tags:
+  - slipnote
+  - android widget
+  - handwritten notes
+  - build in public
+  - indie developer
+  - flutter

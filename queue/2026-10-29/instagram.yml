@@ -1,0 +1,17 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-10-29T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  A minute inside Setalytix: today's plan, progress that compares the same workout session by session, your history and splits, then a workout with every set's target already filled in. Tick a set and the rest timer starts.
+
+  Free in your browser. Link in bio.
+
+  #setalytix #gymtracker #workoutapp #progressiveoverload #gymlife #fitnessindia
+video:
+  kind: recording
+  source: inbox/setalytix-demo.mp4
+  captions: false
+  hook: A minute inside my gym app
+  tone: upbeat

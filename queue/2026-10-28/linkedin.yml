@@ -1,0 +1,23 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-10-28T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  After planning Slipnote, I found out my idea already existed. The most-downloaded app in this category has over 1 crore installs.
+
+  I could have stopped there. Instead I read the reviews: about 1,040 of them, across four apps in the space.
+
+  They became my product spec:
+
+  • Widgets that only updated after you opened the app. Making the widget update with the app closed was already the first thing I'd tested on a real phone. The reviews confirmed why it mattered.
+  • The biggest complaint: streaks that punished people and covered their friend's note. Slipnote has no streak punishments, and nothing ever covers a friend's note.
+  • People losing old notes. In Slipnote, the app never deletes them.
+  • Drawing tools with hidden limits. Slipnote has real undo, an eraser that only erases ink, and a stabiliser that makes handwriting neat.
+
+  That's also when I scrapped my one-week plan. The idea is proven; the job is to make it better and smoother. The first version on the Play Store will be complete, not a rough beta.
+
+  One-star reviews of apps people already love are the cheapest product research there is.
+
+  #productmanagement #buildinpublic
+first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'

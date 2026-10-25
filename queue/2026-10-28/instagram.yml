@@ -1,0 +1,28 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-10-28T19:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  I used to forget what I lifted last session, so my progress went in circles. Setalytix fixed that for me, and now 15+ people use it.
+
+  Free, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #buildinpublic #gymlife #fitnessindia #workoutlog
+video:
+  kind: talking_head
+  source: inbox/2026-10-28-why-setalytix.mp4
+  hook: I kept forgetting my lifts
+  captions: true
+  script: |
+    I kept forgetting what I lifted last session.
+
+    So my progress went in a loop. One good day, then a bad one, then another. Nothing tracked, nothing going up.
+
+    So I built myself a spreadsheet that told me what to lift next. And it worked.
+
+    Then I thought: if I need this, a lot of other people probably do too. So I turned it into an app, Setalytix.
+
+    You open your workout, the weights and reps are already filled in, and it tells you when it's time to go heavier. Even with no signal in the gym.
+
+    It's free. The link's in my bio.

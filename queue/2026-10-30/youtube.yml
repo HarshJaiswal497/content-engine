@@ -1,0 +1,41 @@
+platform: youtube
+format: short
+scheduled_at: '2026-10-30T17:45:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+slides:
+- type: cover
+  title: Why your gym progress chart *lies*
+  say: Your gym progress chart is probably lying to you.
+- type: point
+  title: Volume per day
+  body: Different days, different muscles. The line just jumps.
+  say: Most apps plot volume per day. But different days train different muscles, so the line just jumps around.
+- type: point
+  title: Compare the *same* workout
+  body: This push day vs your last push day.
+  say: Compare the same workout instead. This push day against your last push day.
+- type: point
+  title: Track each lift
+  body: Your estimated best, session by session.
+  say: And track each lift on its own. Your estimated best, session by session.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: That's how Setalytix does it. It's free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2
+youtube:
+  title: Why your gym progress chart is lying to you
+  description: |
+    Volume per day hides progressive overload. Compare the same workout instead. Free: https://app.setalytix.in
+    #Shorts #progressiveoverload #gym
+  tags:
+  - setalytix
+  - progressive overload
+  - gym tracker
+  - workout log
+  - strength training
+  - gym app

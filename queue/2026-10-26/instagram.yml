@@ -1,0 +1,33 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-10-26T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  I kept forgetting what I lifted last session, so I never knew when to go heavier.
+
+  So I built Setalytix. It fills in today's weights and reps and tells you when it's time to add weight.
+
+  Free, works in your browser, add it to your home screen. Link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #workoutlog #gymlife #strengthtraining #fitnessindia #gymmotivation
+slides:
+- type: cover
+  kicker: Setalytix
+  title: Forgot what you lifted *last week*?
+  subtitle: Your gym app should remember for you.
+- type: point
+  title: Open a workout
+  body: 'Every set is already filled in: the weight, and the reps to aim for.'
+- type: point
+  title: Hit your reps on every set
+  body: Next session it adds weight. Miss them, and it asks for one more rep.
+- type: point
+  title: It tells you *why*
+  body: '"All sets reached 12. Go up to 29 kg and aim for 9 or more."'
+- type: point
+  title: Works with *no signal*
+  body: Basement gym? Sets save on your phone and sync later.
+- type: cta
+  title: Try it *free*
+  body: app.setalytix.in · link in bio
