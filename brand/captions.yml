@@ -1,7 +1,7 @@
 # Auto-captions on talking-head clips and recordings.
 # vocabulary: names the speech model should expect (helps it spell them right).
 # fixes: words it still gets wrong → what the caption should say. Keys can be one or two words.
-vocabulary: [Setalytix, Slipnote, Flutter, Supabase]
+vocabulary: [Setalytix, Slipnote, Flutter, Supabase, reps, sets, lifted, progressive overload]
 fixes:
   satellitics: Setalytix
   satellytics: Setalytix
@@ -11,3 +11,4 @@ fixes:
   set analytics: Setalytix
   slip note: Slipnote
   slipnotes: Slipnote
+  raps: reps

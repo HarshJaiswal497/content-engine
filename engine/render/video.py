@@ -155,7 +155,7 @@ def _ass_escape(s: str) -> str:
     return s.replace("\\", "\\\\").replace("{", "(").replace("}", ")").replace("\n", " ")
 
 
-def transcribe(path: Path) -> list[dict]:
+def transcribe(path: Path, script: str | None = None) -> list[dict]:
     """Word-level timestamps via faster-whisper (CPU). Returns [{'word','start','end'}]."""
     from faster_whisper import WhisperModel  # imported lazily: heavy, CI-only
 
@@ -164,7 +164,7 @@ def transcribe(path: Path) -> list[dict]:
     vocab = ", ".join(cfg.get("vocabulary") or [])
     segments, _ = model.transcribe(str(path), word_timestamps=True, vad_filter=True,
                                    language=os.environ.get("WHISPER_LANG") or "en",
-                                   initial_prompt=f"I'm Harsh. I build apps: {vocab}." if vocab else None)
+                                   initial_prompt=_prompt(script, vocab))
     words = []
     for seg in segments:
         for w in seg.words or []:
@@ -173,6 +173,15 @@ def transcribe(path: Path) -> list[dict]:
 
 
 CAPTIONS_CONFIG = ROOT / "brand" / "captions.yml"
+
+
+def _prompt(script: str | None, vocab: str) -> str | None:
+    """Prime the speech model with the planned script (Harsh may not read it word for word, but it
+    steers spelling and gym/app words) and the app names. Whisper reads ~200 words of prompt at most."""
+    text = " ".join((script or "").split())
+    words = text.split()[-180:]
+    lead = f"{vocab}. " if vocab else ""
+    return (lead + " ".join(words)).strip() or None
 
 
 def caption_config() -> dict:
@@ -235,11 +244,12 @@ def build_ass(chunks: list[dict], hook: str | None, accent_hex: str) -> str:
 
 
 def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "#7DD3FC",
-                  captions: bool = True, words: list[dict] | None = None, mood: str | None = None) -> Path:
+                  captions: bool = True, words: list[dict] | None = None, mood: str | None = None,
+                  script: str | None = None) -> Path:
     info = probe(src)
     duration = min(info["duration"], MAX_SECONDS)
     if captions and info["has_audio"] and words is None:
-        words = transcribe(src)
+        words = transcribe(src, script)
     chunks = chunk_words(words or []) if captions else []
 
     with tempfile.TemporaryDirectory() as tmp:

@@ -71,7 +71,8 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
             caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
-                          captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app))
+                          captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app),
+                          script=spec.get("script"))
             _finish_video(post, mp4, upload)
         elif kind == "same_as":
             sib_path = post.path.parent / f"{spec['post']}.yml"
