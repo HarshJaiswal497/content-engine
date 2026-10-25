@@ -155,7 +155,7 @@ def _ass_escape(s: str) -> str:
     return s.replace("\\", "\\\\").replace("{", "(").replace("}", ")").replace("\n", " ")
 
 
-def transcribe(path: Path, script: str | None = None) -> list[dict]:
+def transcribe(path: Path, script: str | None = None, fixes: dict | None = None) -> list[dict]:
     """Word-level timestamps via faster-whisper (CPU). Returns [{'word','start','end'}]."""
     from faster_whisper import WhisperModel  # imported lazily: heavy, CI-only
 
@@ -172,7 +172,7 @@ def transcribe(path: Path, script: str | None = None) -> list[dict]:
     for seg in segments:
         for w in seg.words or []:
             words.append({"word": w.word.strip(), "start": w.start, "end": w.end})
-    return fix_words(align_to_script(words, script), cfg.get("fixes") or {})
+    return fix_words(align_to_script(words, script), {**(cfg.get("fixes") or {}), **(fixes or {})})
 
 
 CAPTIONS_CONFIG = ROOT / "brand" / "captions.yml"
@@ -221,17 +221,19 @@ def caption_config() -> dict:
 
 def fix_words(words: list[dict], fixes: dict) -> list[dict]:
     """Correct words the speech model gets wrong (e.g. 'Satellitics' → 'Setalytix'). Keys may be one
-    or two words; matching ignores case and punctuation, and keeps the original punctuation."""
+    to three words; matching ignores case and punctuation, and keeps the original punctuation.
+    An empty replacement removes the words (e.g. a stumble)."""
     import re
     norm = lambda t: re.sub(r"[^\w']", "", t).lower()
     table = {tuple(k.lower().split()): v for k, v in fixes.items()}
     out, i = [], 0
     while i < len(words):
-        for n in (2, 1):
+        for n in (3, 2, 1):
             key = tuple(norm(w["word"]) for w in words[i:i + n])
             if len(key) == n and key in table:
                 tail = re.search(r"[^\w']*$", words[i + n - 1]["word"]).group(0)
-                out.append({"word": table[key] + tail, "start": words[i]["start"], "end": words[i + n - 1]["end"]})
+                if table[key]:
+                    out.append({"word": table[key] + tail, "start": words[i]["start"], "end": words[i + n - 1]["end"]})
                 i += n
                 break
         else:
@@ -275,11 +277,11 @@ def build_ass(chunks: list[dict], hook: str | None, accent_hex: str) -> str:
 
 def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "#7DD3FC",
                   captions: bool = True, words: list[dict] | None = None, mood: str | None = None,
-                  script: str | None = None) -> Path:
+                  script: str | None = None, fixes: dict | None = None) -> Path:
     info = probe(src)
     duration = min(info["duration"], MAX_SECONDS)
     if captions and info["has_audio"] and words is None:
-        words = transcribe(src, script)
+        words = transcribe(src, script, fixes)
     chunks = chunk_words(words or []) if captions else []
     if words:
         (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
