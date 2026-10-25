@@ -11,6 +11,8 @@ text: |
   #slipnote #thinkingofyou #buildinpublic #handwrittennotes #bestfriends #familylove #androidapp
 video:
   kind: talking_head
+  caption_fixes:
+    the devil know: ''   # a stumble before 'they never know'
   source: inbox/2026-10-31-why-slipnote.mp4
   hook: Why I'm building Slipnote
   captions: true
