@@ -142,6 +142,9 @@ class Post:
         if self.needs_video and any((sl or {}).get("say") for sl in self.data.get("slides") or []):
             from .render.tts import voice_fingerprint  # narrated: engine, narrator and voice sample matter
             relevant["_voice"] = voice_fingerprint()
+        if self.video_spec.get("kind") in {"recording", "talking_head"}:  # caption fixes re-render clips
+            ccfg = ROOT / "brand" / "captions.yml"
+            relevant["_captions"] = hashlib.sha256(ccfg.read_bytes()).hexdigest()[:8] if ccfg.exists() else "-"
         src = self.video_source()
         if src and src.exists():
             relevant["_src"] = [src.name, src.stat().st_size]

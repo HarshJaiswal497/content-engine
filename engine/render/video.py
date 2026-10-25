@@ -159,14 +159,46 @@ def transcribe(path: Path) -> list[dict]:
     """Word-level timestamps via faster-whisper (CPU). Returns [{'word','start','end'}]."""
     from faster_whisper import WhisperModel  # imported lazily: heavy, CI-only
 
+    cfg = caption_config()
     model = WhisperModel(os.environ.get("WHISPER_MODEL", "small"), device="cpu", compute_type="int8")
+    vocab = ", ".join(cfg.get("vocabulary") or [])
     segments, _ = model.transcribe(str(path), word_timestamps=True, vad_filter=True,
-                                   language=os.environ.get("WHISPER_LANG") or None)
+                                   language=os.environ.get("WHISPER_LANG") or "en",
+                                   initial_prompt=f"I'm Harsh. I build apps: {vocab}." if vocab else None)
     words = []
     for seg in segments:
         for w in seg.words or []:
             words.append({"word": w.word.strip(), "start": w.start, "end": w.end})
-    return words
+    return fix_words(words, cfg.get("fixes") or {})
+
+
+CAPTIONS_CONFIG = ROOT / "brand" / "captions.yml"
+
+
+def caption_config() -> dict:
+    import yaml
+    return (yaml.safe_load(CAPTIONS_CONFIG.read_text()) or {}) if CAPTIONS_CONFIG.exists() else {}
+
+
+def fix_words(words: list[dict], fixes: dict) -> list[dict]:
+    """Correct words the speech model gets wrong (e.g. 'Satellitics' → 'Setalytix'). Keys may be one
+    or two words; matching ignores case and punctuation, and keeps the original punctuation."""
+    import re
+    norm = lambda t: re.sub(r"[^\w']", "", t).lower()
+    table = {tuple(k.lower().split()): v for k, v in fixes.items()}
+    out, i = [], 0
+    while i < len(words):
+        for n in (2, 1):
+            key = tuple(norm(w["word"]) for w in words[i:i + n])
+            if len(key) == n and key in table:
+                tail = re.search(r"[^\w']*$", words[i + n - 1]["word"]).group(0)
+                out.append({"word": table[key] + tail, "start": words[i]["start"], "end": words[i + n - 1]["end"]})
+                i += n
+                break
+        else:
+            out.append(words[i])
+            i += 1
+    return out
 
 
 def chunk_words(words: list[dict], max_words: int = 3, max_gap: float = 0.6) -> list[dict]:
