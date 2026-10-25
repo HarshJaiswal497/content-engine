@@ -4,7 +4,7 @@ scheduled_at: '2026-10-29T19:30:00+05:30'
 app: setalytix
 pillar: feature-spotlight
 text: |
-  A minute inside Setalytix: start a workout, sets already filled in, tick, rest timer, finish, and see what moved up.
+  A minute inside Setalytix: today's plan, progress that compares the same workout session by session, your history and splits, then a workout with every set's target already filled in. Tick a set and the rest timer starts.
 
   Free in your browser. Link in bio.
 
@@ -13,4 +13,5 @@ video:
   kind: recording
   source: inbox/setalytix-demo.mp4
   captions: false
-review_note: Upload your existing setalytix-demo.mp4 (64 s, already captioned) to inbox/. It shows sample data, which is fine for a demo.
+  hook: A minute inside my gym app
+  tone: upbeat
