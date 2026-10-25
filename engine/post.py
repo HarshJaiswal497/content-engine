@@ -145,6 +145,10 @@ class Post:
         if self.video_spec.get("kind") in {"recording", "talking_head"}:  # caption fixes re-render clips
             ccfg = ROOT / "brand" / "captions.yml"
             relevant["_captions"] = hashlib.sha256(ccfg.read_bytes()).hexdigest()[:8] if ccfg.exists() else "-"
+        if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):
+            sib = self.path.parent / f"{self.video_spec['post']}.yml"
+            if sib.exists() and sib != self.path:  # re-copy whenever the sibling's video changes
+                relevant["_sibling"] = load(sib).render_hash()
         src = self.video_source()
         if src and src.exists():
             relevant["_src"] = [src.name, src.stat().st_size]
