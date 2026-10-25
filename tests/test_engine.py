@@ -57,7 +57,11 @@ def test_dry_run_publishes_due_posts(capsys):
     assert rc == 0
 
 
-def test_expired_and_waiting(capsys):
+def test_expired_and_waiting(capsys, monkeypatch):
+    from engine.post import Post
+    real = Post.awaiting_recording  # pretend the clip hasn't been uploaded, whether or not it has
+    monkeypatch.setattr(Post, "awaiting_recording",
+                        lambda self: True if "2026-10-28-why-setalytix" in str(self.video_spec.get("source")) else real(self))
     publish.main(["--dry-run", "--now", "2026-10-28T20:00:00+05:30"])
     out = capsys.readouterr().out
     assert "waiting for recording inbox/2026-10-28-why-setalytix.mp4" in out
