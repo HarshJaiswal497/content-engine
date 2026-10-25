@@ -172,10 +172,46 @@ def transcribe(path: Path, script: str | None = None) -> list[dict]:
     for seg in segments:
         for w in seg.words or []:
             words.append({"word": w.word.strip(), "start": w.start, "end": w.end})
-    return fix_words(words, cfg.get("fixes") or {})
+    return fix_words(align_to_script(words, script), cfg.get("fixes") or {})
 
 
 CAPTIONS_CONFIG = ROOT / "brand" / "captions.yml"
+
+
+def align_to_script(words: list[dict], script: str | None) -> list[dict]:
+    """Harsh reads from a script, so where what Whisper heard is *close* to the script (e.g. "Slipknot"
+    vs "Slipnote", "self-respect" vs "myself a spreadsheet"), use the script's words with the heard
+    timings. Where he clearly said something else, keep what was heard. Script words he skipped are
+    left out."""
+    import difflib
+    import re
+    toks = (script or "").split()
+    if not toks or not words:
+        return words
+    norm = lambda t: re.sub(r"[^\w]", "", t.lower())
+    heard = [norm(w["word"]) for w in words]
+    planned = [norm(t) for t in toks]
+    out: list[dict] = []
+    sm = difflib.SequenceMatcher(None, heard, planned, autojunk=False)
+    for op, i1, i2, j1, j2 in sm.get_opcodes():
+        if op == "equal":
+            out += [{**words[i], "word": toks[j]} for i, j in zip(range(i1, i2), range(j1, j2))]
+        elif op == "replace":
+            h, p = "".join(heard[i1:i2]), "".join(planned[j1:j2])
+            n_h, n_p = i2 - i1, j2 - j1
+            ratio = difflib.SequenceMatcher(None, h, p).ratio()
+            close = (h == p                                     # "one -on -one" vs "one-on-one"
+                     or (n_h == n_p == 1 and ratio >= 0.3)      # one word between matching words
+                     or (ratio >= 0.4 and 0.5 <= n_p / n_h <= 2.5))
+            if close:
+                t0, t1 = words[i1]["start"], words[i2 - 1]["end"]
+                step = (t1 - t0) / n_p
+                out += [{"word": toks[j1 + k], "start": t0 + k * step, "end": t0 + (k + 1) * step} for k in range(n_p)]
+            else:
+                out += words[i1:i2]
+        elif op == "delete":
+            out += words[i1:i2]
+    return out
 
 
 def caption_config() -> dict:

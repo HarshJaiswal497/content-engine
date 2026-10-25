@@ -1,11 +1,13 @@
 # Auto-captions on talking-head clips and recordings.
 # model: the speech model (larger = more accurate, slower). Changing anything here re-captions clips.
 # vocabulary: names the speech model should expect (helps it spell them right).
+# Captions also follow the clip's script where what was heard is close to it.
 # fixes: words it still gets wrong → what the caption should say. Keys can be one or two words.
 model: large-v3-turbo
 vocabulary: [Setalytix, Slipnote, Flutter, Supabase, reps, sets, lifted, progressive overload]
 fixes:
   satellitics: Setalytix
+  satellytix: Setalytix
   satellytics: Setalytix
   satelytics: Setalytix
   setalytics: Setalytix
@@ -14,3 +16,5 @@ fixes:
   slip note: Slipnote
   slipnotes: Slipnote
   raps: reps
+  wraps: reps
+  slipknot: Slipnote
