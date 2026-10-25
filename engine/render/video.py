@@ -225,7 +225,9 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
         graph = f"{base};[base]ass='{assp}':fontsdir='{fontsdir}'[v]"
         cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(src)]
         if info["has_audio"]:
-            cmd += ["-filter_complex", graph, "-map", "[v]", "-map", "0:a:0"]
+            # phone recordings are often quiet: bring speech up to a standard loudness
+            cmd += ["-filter_complex", f"{graph};[0:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]",
+                    "-map", "[v]", "-map", "[aout]"]
         else:
             audio_in, audio_f = _music_input("/".join(out.parts[-4:-1]), duration, 1, mood=mood)
             cmd += [*audio_in, "-filter_complex", f"{graph};{audio_f}", "-map", "[v]", "-map", "[aout]"]
