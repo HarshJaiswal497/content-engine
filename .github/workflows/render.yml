@@ -48,13 +48,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: models-v2-${{ vars.WHISPER_MODEL || 'medium' }}
+          key: models-v2-${{ vars.WHISPER_MODEL || 'large-v3-turbo' }}
 
       - name: Render slides and videos
         env:
           BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'medium' }}
+          WHISPER_MODEL: ${{ vars.WHISPER_MODEL || 'large-v3-turbo' }}
           VOICE_PRIVATE_KEY: ${{ secrets.VOICE_PRIVATE_KEY }}
         run: python -m engine.render --upload
 

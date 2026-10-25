@@ -19,7 +19,7 @@ from .video import caption_video, mood_for, slides_to_video
 
 
 def _clean(asset_dir: Path) -> None:
-    for p in list(asset_dir.glob("slide-*.jpg")) + [asset_dir / "video.mp4", asset_dir / "video.json",
+    for p in list(asset_dir.glob("slide-*.jpg")) + [asset_dir / "video.mp4", asset_dir / "video.json", asset_dir / "captions.txt",
                                                      asset_dir / ".render-hash"]:
         p.unlink(missing_ok=True)
 

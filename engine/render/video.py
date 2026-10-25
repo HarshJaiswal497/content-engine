@@ -160,11 +160,13 @@ def transcribe(path: Path, script: str | None = None) -> list[dict]:
     from faster_whisper import WhisperModel  # imported lazily: heavy, CI-only
 
     cfg = caption_config()
-    model = WhisperModel(os.environ.get("WHISPER_MODEL", "small"), device="cpu", compute_type="int8")
-    vocab = ", ".join(cfg.get("vocabulary") or [])
+    model = WhisperModel(os.environ.get("WHISPER_MODEL", "large-v3-turbo"), device="cpu", compute_type="int8")
+    # hotwords nudge spelling without the planned-script prompt (which made Whisper invent phrases);
+    # not conditioning on previous text stops repeated-phrase loops.
+    hot = " ".join(cfg.get("vocabulary") or []) or None
     segments, _ = model.transcribe(str(path), word_timestamps=True, vad_filter=True,
-                                   language=os.environ.get("WHISPER_LANG") or "en",
-                                   initial_prompt=_prompt(script, vocab))
+                                   language=os.environ.get("WHISPER_LANG") or "en", beam_size=5,
+                                   condition_on_previous_text=False, hotwords=hot)
     words = []
     for seg in segments:
         for w in seg.words or []:
@@ -173,15 +175,6 @@ def transcribe(path: Path, script: str | None = None) -> list[dict]:
 
 
 CAPTIONS_CONFIG = ROOT / "brand" / "captions.yml"
-
-
-def _prompt(script: str | None, vocab: str) -> str | None:
-    """Prime the speech model with the planned script (Harsh may not read it word for word, but it
-    steers spelling and gym/app words) and the app names. Whisper reads ~200 words of prompt at most."""
-    text = " ".join((script or "").split())
-    words = text.split()[-180:]
-    lead = f"{vocab}. " if vocab else ""
-    return (lead + " ".join(words)).strip() or None
 
 
 def caption_config() -> dict:
@@ -251,6 +244,8 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
     if captions and info["has_audio"] and words is None:
         words = transcribe(src, script)
     chunks = chunk_words(words or []) if captions else []
+    if words:
+        (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
 
     with tempfile.TemporaryDirectory() as tmp:
         ass = Path(tmp) / "subs.ass"
