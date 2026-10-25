@@ -160,7 +160,8 @@ def transcribe(path: Path, script: str | None = None) -> list[dict]:
     from faster_whisper import WhisperModel  # imported lazily: heavy, CI-only
 
     cfg = caption_config()
-    model = WhisperModel(os.environ.get("WHISPER_MODEL", "large-v3-turbo"), device="cpu", compute_type="int8")
+    name = cfg.get("model") or os.environ.get("WHISPER_MODEL") or "large-v3-turbo"
+    model = WhisperModel(name, device="cpu", compute_type="int8")
     # hotwords nudge spelling without the planned-script prompt (which made Whisper invent phrases);
     # not conditioning on previous text stops repeated-phrase loops.
     hot = " ".join(cfg.get("vocabulary") or []) or None

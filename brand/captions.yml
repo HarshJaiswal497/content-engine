@@ -1,6 +1,8 @@
 # Auto-captions on talking-head clips and recordings.
+# model: the speech model (larger = more accurate, slower). Changing anything here re-captions clips.
 # vocabulary: names the speech model should expect (helps it spell them right).
 # fixes: words it still gets wrong → what the caption should say. Keys can be one or two words.
+model: large-v3-turbo
 vocabulary: [Setalytix, Slipnote, Flutter, Supabase, reps, sets, lifted, progressive overload]
 fixes:
   satellitics: Setalytix
