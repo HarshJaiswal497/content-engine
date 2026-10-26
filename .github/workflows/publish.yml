@@ -1,7 +1,9 @@
 name: Publish due posts
 
-# Every 15 minutes: publish approved posts (= post files on main) whose time has come.
-# GitHub may start scheduled runs a few minutes late; that's expected.
+# Publish approved posts (= post files on main) when their time comes.
+# GitHub often runs schedules hours late on free repos, so each run stays awake for up to ~5.5 h:
+# it publishes what's due, sleeps until the next post (re-checking main every 30 min), and repeats.
+# The next scheduled run picks up when this one ends.
 on:
   schedule:
     - cron: "7,22,37,52 * * * *"
@@ -17,13 +19,13 @@ permissions:
   issues: write
 
 concurrency:
-  group: main-writer
+  group: publisher
   cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +38,7 @@ jobs:
 
       - run: pip install -q -r requirements.txt
 
-      - name: Publish
+      - name: Publish (and stay awake for upcoming posts)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BLOCKED_TERMS: ${{ secrets.BLOCKED_TERMS }}
@@ -52,7 +54,31 @@ jobs:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: python -m engine.publish ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: |
+          git config user.name "content-engine[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          save_log() {
+            git add published
+            if ! git diff --cached --quiet; then
+              git commit -q -m "Publish log [skip render]"
+              for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && break || sleep 5; done
+            fi
+          }
+          if [ "${{ inputs.dry_run }}" = "true" ]; then python -m engine.publish --dry-run; exit 0; fi
+          deadline=$((SECONDS + 330*60))
+          status=0
+          while :; do
+            python -m engine.publish || status=1
+            save_log
+            next=$(python -m engine.publish --next-due)
+            [ "$next" -lt 0 ] && { echo "Nothing else scheduled."; break; }
+            wait=$(( next < 300 ? 300 : (next > 1800 ? 1800 : next) ))
+            [ $((SECONDS + wait)) -gt $deadline ] && { echo "Next post is after this run's window; the next run will take it."; break; }
+            echo "Next post due in ${next}s; checking again in ${wait}s."
+            sleep "$wait"
+            git pull --rebase -q || true
+          done
+          exit $status
 
       - name: Save publish log
         if: always() && !inputs.dry_run

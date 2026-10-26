@@ -116,9 +116,13 @@ def publish(post, dry_run: bool = False) -> Result:
         vid = upload_video(s, author, resolve_video(post))
         content = {"media": {"id": vid, "title": (post.data.get("video") or {}).get("title", "")[:200]}}
 
+    # LinkedIn's free "Share on LinkedIn" product can't post comments (403), so the link that would
+    # have gone in the first comment goes at the end of the post instead.
+    link_line = (post.data.get("first_comment") or "").strip()
+    text = post.text.rstrip() + (f"\n\n{link_line}" if link_line and link_line not in post.text else "")
     body = {
         "author": author,
-        "commentary": to_little_text(post.text),
+        "commentary": to_little_text(text),
         "visibility": "PUBLIC",
         "distribution": {"feedDistribution": "MAIN_FEED", "targetEntities": [], "thirdPartyDistributionChannels": []},
         "lifecycleState": "PUBLISHED",
@@ -130,11 +134,4 @@ def publish(post, dry_run: bool = False) -> Result:
     urn = r.headers.get("x-restli-id") or r.headers.get("X-RestLi-Id")
     url = f"https://www.linkedin.com/feed/update/{urn}/" if urn else None
 
-    comment = (post.data.get("first_comment") or "").strip()
-    if comment and urn:
-        time.sleep(3)
-        cr = s.post(f"{API}/rest/socialActions/{quote(urn, safe='')}/comments", timeout=30, json={
-            "actor": author, "object": urn, "message": {"text": comment}})
-        if cr.status_code >= 400:
-            return Result("published", urn, url, note=f"first comment failed: {cr.status_code}")
     return Result("published", urn, url)

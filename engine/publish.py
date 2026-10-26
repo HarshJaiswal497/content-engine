@@ -20,12 +20,35 @@ from .post import all_posts
 PUBLISHERS = {"linkedin": linkedin, "instagram": instagram, "youtube": youtube}
 
 
+def seconds_to_next_due(now: datetime | None = None) -> int:
+    """For the publish workflow's wait loop: how long until the next post (or Facebook mirror) is due."""
+    now = now or datetime.now(timezone.utc)
+    log = state.load()
+    times = []
+    for post in all_posts():
+        if not post.scheduled_at or post.errors:
+            continue
+        pending = not state.is_done(log.get(post.id))
+        if post.platform == "instagram" and facebook.configured():
+            pending = pending or not state.is_done(log.get(post.id + "#facebook"))
+        if pending and now - post.scheduled_at < timedelta(hours=calendar().get("max_late_hours", 36)):
+            times.append(post.scheduled_at)
+    if not times:
+        return -1
+    return max(0, int((min(times) - now).total_seconds()))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="don't call any platform API or write the log")
     ap.add_argument("--now", help="pretend it is this time (ISO 8601)")
     ap.add_argument("--only", help="only this post id, e.g. queue/2026-10-26/linkedin")
+    ap.add_argument("--next-due", action="store_true",
+                    help="print seconds until the next unpublished post is due (-1 if none) and exit")
     args = ap.parse_args(argv)
+    if args.next_due:
+        print(seconds_to_next_due())
+        return 0
 
     now = datetime.fromisoformat(args.now) if args.now else datetime.now(timezone.utc)
     if now.tzinfo is None:

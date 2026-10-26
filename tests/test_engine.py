@@ -49,7 +49,8 @@ def test_todo_is_an_error(tmp_path):
     assert any("TODO" in e for e in load(f).errors)
 
 
-def test_dry_run_publishes_due_posts(capsys):
+def test_dry_run_publishes_due_posts(capsys, monkeypatch):
+    monkeypatch.setattr(publish.state, "load", lambda: {})  # independent of the live publish log
     rc = publish.main(["--dry-run", "--now", "2026-10-27T12:00:00+05:30"])
     out = capsys.readouterr().out
     assert "queue/2026-10-26/linkedin" in out and "queue/2026-10-27/linkedin" in out
@@ -58,6 +59,7 @@ def test_dry_run_publishes_due_posts(capsys):
 
 
 def test_expired_and_waiting(capsys, monkeypatch):
+    monkeypatch.setattr(publish.state, "load", lambda: {})
     from engine.post import Post
     real = Post.awaiting_recording  # pretend the clip hasn't been uploaded, whether or not it has
     monkeypatch.setattr(Post, "awaiting_recording",
@@ -104,10 +106,7 @@ def test_linkedin_text_post_body(monkeypatch):
         headers = {}
 
         def post(self, url, json=None, **kw):
-            if "url" not in sent:
-                sent["url"], sent["json"] = url, json
-            else:
-                sent["comment"] = json
+            sent["url"], sent["json"] = url, json
             return FakeResp(201, headers={"x-restli-id": "urn:li:share:1"})
 
     monkeypatch.setattr(linkedin, "_session", lambda: S())
@@ -119,7 +118,7 @@ def test_linkedin_text_post_body(monkeypatch):
     assert "{hashtag|\\#|ainative}" in sent["json"]["commentary"]
     assert "content" not in sent["json"]
     assert r.url == "https://www.linkedin.com/feed/update/urn:li:share:1/"
-    assert sent["comment"]["message"]["text"].startswith("Setalytix: https://app.setalytix.in")
+    assert "https://app.setalytix.in" in sent["json"]["commentary"]  # link is in the post body (no comment API)
 
 
 def test_youtube_handoff_opens_issue(monkeypatch):
