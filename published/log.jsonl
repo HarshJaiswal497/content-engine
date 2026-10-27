@@ -2,3 +2,4 @@
 {"id": "queue/2026-10-26/youtube", "status": "handoff", "at": "2026-10-26T15:35:16+00:00", "remote_id": "2", "url": null, "note": "manual upload issue opened", "attempts": 1}
 {"id": "queue/2026-10-26/instagram", "status": "published", "at": "2026-10-26T15:36:46+00:00", "remote_id": "18127108504928495", "url": "https://www.instagram.com/p/De9noV8kfU9/", "note": null, "attempts": 1}
 {"id": "queue/2026-10-26/instagram#facebook", "status": "published", "at": "2026-10-26T15:36:59+00:00", "remote_id": "1458233884029192_122105173731518200", "url": "https://www.facebook.com/1458233884029192_122105173731518200", "attempts": 1}
+{"id": "queue/2026-10-27/linkedin", "status": "published", "at": "2026-10-27T03:45:05+00:00", "remote_id": "urn:li:ugcPost:7520692018378059776", "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7520692018378059776/", "note": null, "attempts": 1}
