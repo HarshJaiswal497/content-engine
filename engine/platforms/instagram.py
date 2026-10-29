@@ -5,7 +5,7 @@ Meta developer app with the Instagram product. Secrets: IG_ACCESS_TOKEN (long-li
 weekly by the refresh-tokens workflow), IG_USER_ID (optional; looked up if missing).
 
 Images must be JPEG at a public URL — rendered slides are committed to this (public) repo and
-served from raw.githubusercontent.com. Reels are uploaded directly (resumable upload).
+served from raw.githubusercontent.com. Reels are fetched by Instagram from the public media-release URL (video_url).
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import time
 import requests
 
 from ..config import env
-from ..github import raw_url, resolve_video
+from ..github import raw_url
 from . import PublishError, Result
 
 VERSION = "v23.0"
@@ -72,17 +72,17 @@ def _publish(uid: str, container_id: str) -> str:
     return data["id"]
 
 
-def _reel_container(uid: str, caption: str, video_path) -> str:
-    size = video_path.stat().st_size
-    data = _check(requests.post(f"{_base()}/{uid}/media", timeout=60, data={
-        "media_type": "REELS", "upload_type": "resumable", "caption": caption,
-        "share_to_feed": "true", "access_token": _token()}), "reel container")
-    cid, upload_uri = data["id"], data.get("uri") or f"https://rupload.facebook.com/ig-api-upload/{env('IG_API_VERSION') or VERSION}/{data['id']}"
-    with open(video_path, "rb") as f:
-        r = requests.post(upload_uri, data=f, timeout=600, headers={
-            "Authorization": f"OAuth {_token()}", "offset": "0", "file_size": str(size)})
-    _check(r, "reel upload")
-    return cid
+def _reel_container(uid: str, caption: str, video_url: str) -> str:
+    """Reels with Instagram Login must be fetched by Instagram from a public URL (the resumable
+    upload route only exists for Facebook Login apps). Videos are public assets of the media release."""
+    return _container(uid, media_type="REELS", video_url=video_url, caption=caption, share_to_feed="true")
+
+
+def reel_url(post) -> str:
+    ref = post.video_ref()
+    if not ref or not ref.get("url"):
+        raise PublishError(f"{post.id}: no public video URL (video not rendered or not uploaded)")
+    return ref["url"]
 
 
 def publish(post, dry_run: bool = False) -> Result:
@@ -102,7 +102,7 @@ def publish(post, dry_run: bool = False) -> Result:
             children.append(child)
         cid = _container(uid, media_type="CAROUSEL", children=",".join(children), caption=caption)
     elif post.format == "reel":
-        cid = _reel_container(uid, caption, resolve_video(post))
+        cid = _reel_container(uid, caption, reel_url(post))
     else:
         raise PublishError(f"unsupported Instagram format {post.format}")
 
