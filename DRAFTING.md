@@ -10,6 +10,7 @@ names, paths or devices in posts).
 1. Private repo: `brand/founder.md`, `brand/apps/*.md` (fact sheets — what's shareable and what's off-limits)
    and `brand/apps/*-story.md` (full story bibles; skip anything marked [UNSURE] or [IDEA]).
    Also the private repo's `notes/weekly.md`: Harsh's notes on what happened this week. **This week's news leads:** anything he lists there as new (shipped, fixed, decided, learned) should anchor the build-in-public and feature-spotlight posts of the coming week, ahead of older story-bible material. Use the story bibles to fill the remaining slots and to give background. Notes are facts, but anything marked [UNSURE]/[IDEA] or "don't share" is still off-limits.
+   Also `notes/coverage.md` (private repo): the tracker of every angle already used or still unused. See section 5.
 2. This repo: `brand/voice.md`, `brand/pillars.md`, `brand/calendar.yml`, `brand/handles.yml`.
 3. `inbox/` (public) — screenshots and screen recordings. Everything new since last week is fair game; new screen recordings should become
    faceless Reels/Shorts (`video.kind: recording`).
@@ -69,3 +70,10 @@ yourself and don't push to `main`.
 ## 5. Report
 End with a short summary: the week's themes, which days need a talking-head recording (file
 names + scripts), and any TODOs Harsh must fill.
+
+## 5. Coverage tracker (keeps the journey complete)
+The private repo's `notes/coverage.md` lists every story angle, feature and lesson with a status (UNUSED, PARTIAL, USED, DRAFTED, OFF).
+- Before planning, read it. New items from the latest `notes/weekly.md` section come first; add them to the tracker as UNUSED.
+- Fill remaining slots from UNUSED or PARTIAL rows, oldest source first, alternating both apps. Never reuse a USED or DRAFTED angle unless it is a clearly different angle (note it in the row). Never use OFF rows.
+- After drafting, mark each row you used `DRAFTED <date> (<platform>)`, add rows for any new material, then commit and push the updated `notes/coverage.md` to the private repo's `main` (this is the one write allowed to the private repo; write nothing else there).
+- If fewer than about 8 UNUSED angles remain across both apps, say so in the report so Harsh can feed new notes.
