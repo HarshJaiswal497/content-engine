@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-05T17:45:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Only the author sees who reacted
+  description: |
+    How Slipnote handles reactions, saves and shares. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #androidapp
+  tags:
+  - slipnote
+  - android widget
+  - handwritten notes
+  - build in public
+  - indie developer
+  - flutter

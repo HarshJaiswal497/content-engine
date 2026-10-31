@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-07T17:45:00+05:30'
+app: slipnote
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: I called my own app static, so I redesigned it
+  description: |
+    Why Slipnote got a full redesign. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #androidapp
+  tags:
+  - slipnote
+  - android widget
+  - handwritten notes
+  - build in public
+  - indie developer
+  - flutter

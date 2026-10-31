@@ -1,0 +1,46 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-02T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  The first version of Slipnote worked. My own verdict on it: "it lacks motion, interaction, call to actions, it's very static."
+
+  So before building anything else, I stopped and redesigned the whole app. Not in code, on a design canvas. I drew three directions side by side, picked one (a playful scrapbook look), and redrew every screen before I touched the real app again.
+
+  A few things that came out of it:
+  • The composer's tools became six real objects on a shelf, instead of square tiles.
+  • Reactions became a peel-off sticker sheet, because an icon row "looks boring".
+  • Sending a note became a paper plane: it shrinks, pops, and flies away.
+
+  Building the new look took about a day, because every decision had already been made on the canvas.
+
+  The lesson I'm keeping: drawing it first is cheaper than rebuilding it later.
+
+  #flutter #androiddev #buildinpublic
+first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'
+slides:
+- type: cover
+  kicker: Slipnote build log
+  title: The first version was *too static*
+- type: big
+  title: '"It lacks motion, interaction, call to actions."'
+- type: point
+  number: 1
+  title: Three designs, *one canvas*
+  body: I drew them side by side before touching the app.
+- type: point
+  number: 2
+  title: I picked a playful scrapbook
+  body: Then every screen was redrawn in that style.
+- type: point
+  number: 3
+  title: Tools became *real objects*
+  body: Six of them, on a shelf. Reactions became a peel-off sticker sheet.
+- type: point
+  number: 4
+  title: Building took about a day
+  body: Every decision was already made on the canvas.
+- type: cta
+  title: Follow the *Slipnote* build
+  body: Android first · iOS planned

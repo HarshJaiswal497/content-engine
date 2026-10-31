@@ -1,0 +1,35 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-02T12:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  My progress page used to show total volume per day, which doesn't really show if you're getting stronger. So I added a chart that compares the same workout, session by session, plus a chart for every exercise.
+
+  Free: link in bio.
+
+  #setalytix #gymtracker #progressiveoverload #workoutapp #strengthtraining #gymlife #fitnessindia
+slides:
+- type: cover
+  title: My progress page *showed the wrong thing*
+  say: My own app's progress page showed me the wrong thing.
+- type: point
+  title: Total volume per day
+  body: It doesn't show if you're getting stronger.
+  say: It only showed total volume per day, which doesn't really tell you whether you're getting stronger.
+- type: point
+  title: Same workout, *session by session*
+  body: Compare this Push day with the last one.
+  say: So I added a chart that compares the same workout, session by session.
+- type: point
+  title: A chart for *every exercise*
+  body: Your estimated one-rep max, over time.
+  say: And a chart for every exercise, with your estimated one-rep max over time.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free. Try it at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.6

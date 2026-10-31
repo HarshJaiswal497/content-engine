@@ -1,0 +1,47 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-03T09:15:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: |
+  I was mid-workout in my own app. I pressed my phone's back button. The whole app closed.
+
+  Setalytix is a web app, and it swaps screens without changing the web address. So as far as the phone could tell, there was no previous page, and "back" meant "leave".
+
+  The fix: when a workout or cardio session opens, the app quietly adds one step to the phone's back history. Now back goes to Today, and the workout stays open. The app's own Done, Discard and Back buttons take that extra step away again, so presses never pile up.
+
+  The second half mattered just as much. Today had to stay useful while a workout is open. My first version showed only a Resume button. I wanted the normal screen, so Today now shows everything as usual, the day card says IN PROGRESS, and the one change is Start workout becoming Resume workout.
+
+  I checked it in a real browser (start workout, back, Resume, back) and added automated tests for it.
+
+  A small bug, but it's the kind people notice on day one.
+
+  #webdev #pwa #typescript
+first_comment: 'Setalytix (free): https://app.setalytix.in'
+slides:
+- type: cover
+  kicker: Setalytix build log
+  title: My back button *closed the app*
+- type: point
+  number: 1
+  title: The cause
+  body: Screens changed without the web address changing, so the phone saw no previous page.
+- type: point
+  number: 2
+  title: The fix
+  body: Opening a workout adds one step to the back history.
+- type: point
+  number: 3
+  title: The clean-up
+  body: The app's own Done, Discard and Back remove that step, so presses don't pile up.
+- type: point
+  number: 4
+  title: Today stays *whole*
+  body: Same screen as always, with Resume workout instead of Start.
+- type: point
+  number: 5
+  title: Tested in a real browser
+  body: Start workout, back, Resume, back.
+- type: cta
+  title: Try *Setalytix*
+  body: 'Free: app.setalytix.in'
