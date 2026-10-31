@@ -9,7 +9,7 @@ The facts about Harsh and his apps live in the **private** repo `HarshJaiswal497
 names, paths or devices in posts).
 1. Private repo: `brand/founder.md`, `brand/apps/*.md` (fact sheets — what's shareable and what's off-limits)
    and `brand/apps/*-story.md` (full story bibles; skip anything marked [UNSURE] or [IDEA]).
-   Also the private repo's `notes/weekly.md`: Harsh's notes on what happened this week.
+   Also the private repo's `notes/weekly.md`: Harsh's notes on what happened this week. **This week's news leads:** anything he lists there as new (shipped, fixed, decided, learned) should anchor the build-in-public and feature-spotlight posts of the coming week, ahead of older story-bible material. Use the story bibles to fill the remaining slots and to give background. Notes are facts, but anything marked [UNSURE]/[IDEA] or "don't share" is still off-limits.
 2. This repo: `brand/voice.md`, `brand/pillars.md`, `brand/calendar.yml`, `brand/handles.yml`.
 3. `inbox/` (public) — screenshots and screen recordings. Everything new since last week is fair game; new screen recordings should become
    faceless Reels/Shorts (`video.kind: recording`).
@@ -37,7 +37,7 @@ Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram.yml`, `youtu
 Schema and examples: `queue/_template.yml` and any recent week.
 
 Hard rules:
-- **Facts only from the private repo's `brand/`, this repo's `inbox/`, and nothing else.** Each app's fact sheet lists what's off-limits. No invented numbers, users, quotes or outcomes. If a
+- **Facts only from the private repo's `brand/` and `notes/weekly.md`, this repo's `inbox/`, and nothing else.** Each app's fact sheet lists what's off-limits. No invented numbers, users, quotes or outcomes. If a
   post needs a fact that isn't there (a link, a count), write `TODO: <what's needed>` — validation
   flags it and Harsh fills it in during review.
 - Follow `voice.md`. Read every post aloud in your head; cut anything that sounds like a
