@@ -18,3 +18,4 @@
 {"id": "queue/2026-10-30/youtube", "status": "handoff", "at": "2026-10-30T12:15:00+00:00", "remote_id": "8", "url": null, "note": "manual upload issue opened", "attempts": 1}
 {"id": "queue/2026-10-30/instagram", "status": "published", "at": "2026-10-30T14:01:09+00:00", "remote_id": "18125204032711339", "url": "https://www.instagram.com/p/DfHv3x0FOUE/", "note": null, "attempts": 1}
 {"id": "queue/2026-10-30/instagram#facebook", "status": "published", "at": "2026-10-30T14:01:20+00:00", "remote_id": "1458233884029192_122107823685518200", "url": "https://www.facebook.com/1458233884029192_122107823685518200", "attempts": 1}
+{"id": "queue/2026-10-31/linkedin", "status": "published", "at": "2026-10-31T03:50:01+00:00", "remote_id": "urn:li:share:7522142810536603648", "url": "https://www.linkedin.com/feed/update/urn:li:share:7522142810536603648/", "note": null, "attempts": 1}
