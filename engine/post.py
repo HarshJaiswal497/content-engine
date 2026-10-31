@@ -25,7 +25,7 @@ APPS = {"slipnote", "setalytix", "personal"}
 # Hard limits from brand/founder.md. Each entry: (regex, message). Matches are errors.
 FORBIDDEN = [
     (r"(?i)terms of service|privacy (notice|policy)|disclaimer|\bdpdp\b|\bgdpr\b|lawyer|\blegal\b", "legal topic — not allowed in posts for now"),
-    (r"₹\s?[1-9]|(?i:\bper month\b|/month|subscription|\bpremium\b|\bpaywall\b|\bads\b)", "pricing/ads/premium — not until near launch"),
+    (r"[₹$€£]\s?[1-9]|(?i:\bper (month|year)\b|/month|/year|\bpaywall\b|\bads\b)", "no prices or ads — premium, trials and subscriptions may be mentioned only without any amount"),
 ]
 
 

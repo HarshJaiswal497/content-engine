@@ -22,9 +22,12 @@ names, paths or devices in posts).
 Next Monday → Sunday. One post per platform per day at the slot times in `calendar.yml`
 (skip days listed as excluded). Balance pillars per `pillars.md`. Per week aim for:
 - LinkedIn: 3 text, 3 carousel, 1 image or video.
-- Instagram: 4 carousels, 3 Reels (2–3 of the Reels talking-head, rest faceless).
-- YouTube: 7 Shorts. Reuse the day's Instagram Reel with `video.kind: same_as` when there is
-  one; otherwise make a slide Short (`video.kind: slides`, 4–7 slides, 18–30 s total).
+- Instagram: **a Reel every day (7)** in `instagram-reel.yml` at the `instagram_reel` slot, plus 4
+  carousels in `instagram.yml` at the `instagram` slot (so four days have two Instagram posts, three
+  days have only the Reel). Of the 7 Reels, 2–3 are talking-head and the rest faceless. Instagram
+  posts get few views, so Reels are the growth lever.
+- YouTube: 7 Shorts, one per day. Reuse the day's Reel: `video.kind: same_as` with
+  `video.post: instagram-reel`.
 - Every slide video gets a voiceover: give each slide a `say:` line (one or two short spoken
   sentences, first person as Harsh, conversational, numbers written as words, no hashtags or
   emoji). Line one is the hook. The last line is a platform-neutral CTA ("try it free at
@@ -33,7 +36,7 @@ Next Monday → Sunday. One post per platform per day at the slot times in `cale
   story (Slipnote build moments) or calm. Same rules as captions: no pricing, legal or competitors.
 
 ## 3. Write the files
-Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram.yml`, `youtube.yml`.
+Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram-reel.yml`, `youtube.yml`, and `instagram.yml` (the carousel) on the four carousel days.
 Schema and examples: `queue/_template.yml` and any recent week.
 
 Hard rules:
@@ -46,6 +49,12 @@ Hard rules:
   `video.source` is `inbox/<date>-<slug>.mp4`; `video.hook` is the 3–6 word on-screen hook.
 - Slide text: titles ≤ 10 words, bodies ≤ 30 words. Use `*accent*` on 1–3 key words per title.
 - Instagram: caption ends with 5–10 specific hashtags. LinkedIn: ≤ 3 hashtags, links in `first_comment`.
+- Money talk (cleared by Harsh, 31 Oct): you may say some Slipnote themes are premium and that there will be free
+  trials and a subscription, but only together with "plenty is free and free stays free". Never write a price
+  (no monthly or yearly amount, no currency figure) and never mention ads. Test counts, the Slipnote waitlist link and
+  app.setalytix.in may be used. Fact sheets say exactly what else is cleared or off-limits.
+- YouTube is posted by Harsh by hand: one GitHub issue per week lists every Short with its schedule time,
+  title, description and tags, so write each `youtube.title` and `youtube.description` ready to paste.
 - YouTube: `youtube.title` ≤ 60 chars, `youtube.description` 1–3 lines + hashtags, 5–10 tags.
 
 ## 4. Ship the drafts

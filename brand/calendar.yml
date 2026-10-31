@@ -3,7 +3,8 @@ timezone: Asia/Kolkata
 
 slots:
   linkedin:  "09:15"   # Indian working professionals check LinkedIn before work
-  instagram: "19:30"   # evening scroll
+  instagram: "19:30"   # carousels: evening scroll
+  instagram_reel: "12:30"   # the daily Reel: lunch-break scroll, away from the carousel
   youtube:   "17:45"   # Shorts do well late afternoon/evening
 
 # One post per platform per day. Set a day to [] to skip it.

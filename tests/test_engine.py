@@ -186,3 +186,15 @@ def test_facebook_carousel_and_mirror_after_instagram(monkeypatch, tmp_path):
     log = state.load()
     assert log["queue/2026-10-27/instagram"]["status"] == "published"
     assert log["queue/2026-10-27/instagram#facebook"]["status"] == "published"
+
+
+def test_youtube_weekly_issue_is_one_issue(monkeypatch):
+    from engine.platforms import youtube
+    from engine.post import all_posts
+    posts = [p for p in all_posts() if p.platform == "youtube"][:3]
+    made = []
+    monkeypatch.setattr(youtube, "create_issue", lambda title, body, labels: made.append((title, body)) or 9)
+    number, lines = youtube.weekly_handoff(posts)
+    assert number == 9 and len(made) == 1 and len(lines) == 3
+    title, body = made[0]
+    assert "(3)" in title and body.count("- [ ] Uploaded and scheduled") == 3 and "IST" in body

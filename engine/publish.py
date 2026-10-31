@@ -28,6 +28,8 @@ def seconds_to_next_due(now: datetime | None = None) -> int:
     for post in all_posts():
         if not post.scheduled_at or post.errors:
             continue
+        if post.platform == "youtube" and youtube.mode() == "handoff":
+            continue  # handled in one weekly issue, not at its own time
         pending = not state.is_done(log.get(post.id))
         if post.platform == "instagram" and facebook.configured():
             pending = pending or not state.is_done(log.get(post.id + "#facebook"))
@@ -58,8 +60,38 @@ def main(argv: list[str] | None = None) -> int:
     lines, failures = [], 0
     ig_published_now: set[str] = set()
 
+    # YouTube (hand-off mode): one issue for every rendered, not-yet-handed-off Short in the coming week,
+    # as soon as they are on main, instead of one issue per day.
+    batch = []
+    if youtube.mode() == "handoff":
+        horizon = now + timedelta(days=8)
+        for post in all_posts():
+            if post.platform != "youtube" or (args.only and post.id != args.only):
+                continue
+            if state.is_done(log.get(post.id)) or post.errors or not post.scheduled_at:
+                continue
+            if post.scheduled_at > horizon or now - post.scheduled_at > max_late:
+                continue
+            if post.awaiting_recording() or not post.is_rendered():
+                continue
+            batch.append(post)
+        if batch:
+            try:
+                number, yt_lines = youtube.weekly_handoff(batch, dry_run=args.dry_run)
+                lines.extend(yt_lines)
+                if not args.dry_run:
+                    for post in batch:
+                        state.record(post.id, "handoff", remote_id=str(number) if number else None,
+                                     note="weekly upload issue opened", attempts=1)
+            except Exception as exc:
+                failures += 1
+                lines.append(f"❌ YouTube weekly issue failed: {type(exc).__name__}: {exc}")
+                traceback.print_exc()
+
     for post in all_posts():
         if args.only and post.id != args.only:
+            continue
+        if post.platform == "youtube" and youtube.mode() == "handoff":
             continue
         entry = log.get(post.id)
         if state.is_done(entry) or not post.scheduled_at or post.scheduled_at > now:
