@@ -1,0 +1,18 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-06T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  My widget said "your first note lands here" while a friend's note was sitting right there.
+
+  The cause: the app asked for the 20 newest notes in the circle. I'd been testing by sending 20+ notes myself, so my own notes filled the list and my friend's note fell off the end.
+
+  It's the kind of bug no demo shows, because a demo never has 20 of your own notes in a row.
+
+  The fix: ask for exactly what the screen shows, "the newest from others", as its own small query. Empty widgets now fill themselves when you open the app, at most once a launch, so it costs no extra reads in the common case.
+
+  The rule I keep relearning: don't fetch "recent stuff" and filter it afterwards. Fetch the exact thing you display.
+
+  #androiddev #flutter #buildinpublic
+first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'

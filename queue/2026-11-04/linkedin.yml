@@ -1,0 +1,20 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-04T09:15:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  My tests were passing. Then I used my own apps like a normal person and found things the tests never would.
+
+  1. Slipnote's themes looked almost the same on the widget. Every check passed. But if the difference is that small, nobody has a reason to care about themes, so I'm drawing a proper look for each one.
+  2. After I sent a note with no signal, the card kept saying "Waiting for internet" even once the phone was back online.
+  3. In Setalytix, pressing the back button mid-workout closed the app.
+
+  None of those were failing tests. They're the gap between "works" and "feels right", and I only see it when I'm holding the phone.
+
+  So now my routine is: build it, use it for a few days, write down every moment that annoyed me, then decide what to fix.
+
+  Tests tell me the code works. Using it tells me whether the app is any good.
+
+  #buildinpublic #androiddev #webdev
+first_comment: 'Setalytix (free): https://app.setalytix.in · Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'

@@ -1,0 +1,20 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-07T09:15:00+05:30'
+app: personal
+pillar: build-in-public
+text: |
+  What I shipped this week, in plain terms.
+
+  Setalytix: the back button no longer closes the app mid-workout, Today keeps everything while a workout is open, a bug that broke adding exercises to a split is fixed, and errors now speak in plain sentences. 220 automated tests pass.
+
+  Slipnote: a full redesign, every screen redone in a playful scrapbook style, plus a paper-plane send animation, a peel-off sticker sheet for reactions, optional profile photos, and six themes. 469 automated tests pass across the app, its server and its database rules.
+
+  The best finds weren't from the tests. They came from using my own apps like a normal person and writing down every moment that annoyed me.
+
+  I build these solo, with AI writing a lot of the code. Deciding what each app should do, and proving that it works, is my job.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  #buildinpublic #androiddev #webdev
+first_comment: 'Setalytix (free): https://app.setalytix.in · Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'

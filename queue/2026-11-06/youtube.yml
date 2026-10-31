@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-06T17:45:00+05:30'
+app: setalytix
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: My app stopped talking like a database
+  description: |
+    Plain-language errors in Setalytix. Free: https://app.setalytix.in
+    #Shorts #buildinpublic #webdev
+  tags:
+  - setalytix
+  - gym tracker
+  - workout log
+  - progressive overload
+  - strength training
+  - gym app

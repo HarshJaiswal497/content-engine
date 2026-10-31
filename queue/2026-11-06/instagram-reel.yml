@@ -1,0 +1,35 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-06T12:30:00+05:30'
+app: setalytix
+pillar: lessons
+text: |
+  Your app shouldn't talk like a database. Setalytix now says "Could not reach the server" or "Your sign-in has expired" instead of showing raw technical errors.
+
+  Free, link in bio.
+
+  #setalytix #buildinpublic #webdev #uxdesign #gymtracker #indiedev #pwa
+slides:
+- type: cover
+  title: Your app shouldn't *talk like a database*
+  say: Your app shouldn't talk like a database.
+- type: point
+  title: 'Before: a wall of tech text'
+  body: It scared people and told them nothing.
+  say: Before, a small problem showed a wall of technical text that told you nothing.
+- type: point
+  title: 'Now: *plain sentences*'
+  body: '"Could not reach the server." "Your sign-in has expired."'
+  say: 'Now it says things like: could not reach the server, or your sign-in has expired.'
+- type: point
+  title: Still easy to debug
+  body: The original error still goes to the browser console.
+  say: The original error is still logged, so I can find and fix it.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free. Try it at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.6

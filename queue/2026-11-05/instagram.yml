@@ -1,0 +1,31 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-05T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  A group widget that doesn't bury the quiet friend.
+
+  It stays on the newest note, tap to step through, and keeps each friend's newest note plus two more. Before, it rotated by itself and that looked like a bug.
+
+  Waitlist link in bio. Android first, iOS planned.
+
+  #slipnote #homescreenwidget #androidapp #friendgroup #handwrittennotes #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote
+  title: A group widget that *doesn't bury* the quiet friend
+- type: big
+  title: Notes pile up fast in a *busy group*.
+- type: point
+  title: It stays put
+  body: The widget stays on the newest note. Changing by itself looked like a bug.
+- type: point
+  title: Tap to step through
+  body: One tap moves to the next note.
+- type: point
+  title: Everyone keeps a spot
+  body: Each friend's newest note, plus two more, so a quiet friend isn't buried.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio

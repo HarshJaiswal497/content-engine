@@ -1,0 +1,26 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-04T12:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  Mid-workout, I pressed back and my own app closed. So I fixed it: back now takes you to Today, and your workout stays open.
+
+  Free, link in bio.
+
+  #setalytix #buildinpublic #gymtracker #progressiveoverload #webdev #indiedev #gymlife
+video:
+  kind: talking_head
+  source: inbox/2026-11-04-back-button.mp4
+  hook: My app closed mid-workout
+  captions: true
+  script: |
+    I was in the middle of a workout, in my own app, and I pressed the back button on my phone. And the whole app just closed.
+
+    My app changes screens without changing the web address, so the phone thought there was nothing to go back to.
+
+    So I fixed it. Now when you open a workout, back takes you to Today, and your workout is still open. You just tap Resume.
+
+    It's a small thing, but it's exactly the kind of thing you only notice when you actually use your own app.
+
+    Setalytix is free. The link's in my bio.

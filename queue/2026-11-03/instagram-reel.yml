@@ -1,0 +1,37 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-03T12:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  Sending a note should feel like something. So it's a paper plane: the note shrinks, pops, and flies off to your friend.
+
+  (My first idea was crumple and fold. It wouldn't look that realistic, so I dropped it.)
+
+  Waitlist link in bio.
+
+  #slipnote #buildinpublic #flutter #androiddev #appdesign #handwrittennotes #indiedev
+slides:
+- type: cover
+  title: Sending a note should *feel like something*
+  say: Sending a note should feel like something.
+- type: point
+  title: 'First idea: crumple and fold'
+  body: I dropped it. It wouldn't look that realistic.
+  say: My first idea was to crumple the paper and fold it. I dropped that, because it wouldn't look that realistic.
+- type: point
+  title: 'Now: shrink, pop, *fly*'
+  body: The note flies off like a paper plane.
+  say: So now the note shrinks, pops, and flies off like a paper plane.
+- type: point
+  title: Then a small card says *Sent*
+  body: No guessing if it went.
+  say: Then a small card tells you it's been sent.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio
+  say: This is Slipnote, handwritten notes on your friends' home screens. The waitlist link is on my profile.
+video:
+  kind: slides
+  tone: story
+  seconds_per_slide: 3.6

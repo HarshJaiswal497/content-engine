@@ -1,0 +1,32 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-06T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  What happens when you send a note with no signal? The card says "Waiting for internet", and when your phone is back online it turns into "Sent".
+
+  (It used to stay on "Waiting" even after you were back online. Fixed.)
+
+  Waitlist link in bio.
+
+  #slipnote #androidapp #buildinpublic #handwrittennotes #indiedev #appdesign #flutter
+slides:
+- type: cover
+  kicker: Slipnote
+  title: What happens when you send a note *with no signal*?
+- type: point
+  title: It tells you
+  body: The card reads Waiting for internet, so you're never left guessing.
+- type: point
+  title: Then it goes
+  body: When your phone reconnects, the card turns into Sent.
+- type: point
+  title: The bug I fixed
+  body: It used to stay on Waiting even after you were back online.
+- type: point
+  title: Then your choice
+  body: Doodle another, or tap Done.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio

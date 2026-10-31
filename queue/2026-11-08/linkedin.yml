@@ -1,0 +1,21 @@
+platform: linkedin
+format: video
+scheduled_at: '2026-11-08T09:15:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Logging a set in a gym app should take one tap.
+
+  In Setalytix, every set already has today's weight and reps filled in. You lift, tap the tick, and the set is saved and the rest timer starts (90 seconds by default, and you can set it per exercise). Tapped by mistake? Tap again to undo.
+
+  Behind that one tap, sets save on the phone first and sync in the background. IDs are created on the phone, so a retry can never duplicate a set. With no signal, the app says "Offline, N waiting to sync", then flips to "All saved" once it's done.
+
+  Setalytix started as a spreadsheet I used for myself, and the whole point of turning it into an app was that it should take a few taps in the gym and tell me what to lift today.
+
+  Small flow, a lot of care.
+
+  #pwa #typescript #buildinpublic
+first_comment: 'Setalytix (free): https://app.setalytix.in'
+video:
+  kind: same_as
+  post: instagram-reel

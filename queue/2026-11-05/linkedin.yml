@@ -1,0 +1,53 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-05T09:15:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: |
+  A bug that only shows up if you delete from the middle.
+
+  In Setalytix I deleted an exercise from a split, then tried to add another. It failed. It kept failing even after the workout ended.
+
+  Each exercise in a split sits in a numbered slot. Deleting one from the middle leaves a gap: slots 0, 1, 2, 4. When I added a new exercise, the app used "how many exercises there are" as the next slot number. That's 4, and slot 4 was already taken.
+
+  It would have hit anyone who removed a middle exercise and then added one.
+
+  The fix: a new exercise goes in the slot after the highest one, not the slot after the count.
+
+  The good news: my workout was never at risk. A running workout uses its own saved copy of the plan, so editing the split can't touch it.
+
+  I also replaced raw database errors with plain sentences like "Could not reach the server" and "Your sign-in has expired", so nobody gets a wall of technical text.
+
+  #webdev #typescript #buildinpublic
+first_comment: 'Setalytix (free): https://app.setalytix.in'
+slides:
+- type: cover
+  kicker: Setalytix build log
+  title: A bug that only appears *after a delete*
+- type: point
+  number: 1
+  title: Slots have numbers
+  body: 'Each exercise in a split sits in a numbered slot: 0, 1, 2, 3.'
+- type: point
+  number: 2
+  title: Delete from the middle
+  body: 'Now there''s a gap: 0, 1, 2, 4.'
+- type: code
+  title: Two lines apart
+  code: |
+    // before: clashes with slot 4
+    next = count        // 4
+
+    // after
+    next = highest + 1  // 5
+- type: point
+  number: 3
+  title: The workout was safe
+  body: A running workout uses its own saved copy of the plan.
+- type: point
+  number: 4
+  title: Plain-language errors
+  body: '"Could not reach the server" beats a wall of database text.'
+- type: cta
+  title: Try *Setalytix*
+  body: 'Free: app.setalytix.in'

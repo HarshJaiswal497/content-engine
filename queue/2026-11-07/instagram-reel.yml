@@ -1,0 +1,24 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-07T12:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  I looked at Slipnote and thought: it's very static. So I stopped building features, drew three designs side by side, picked a playful scrapbook look and redrew every screen.
+
+  Still in development. Waitlist link in bio.
+
+  #slipnote #buildinpublic #appdesign #androidapp #flutter #indiedev #handwrittennotes
+video:
+  kind: talking_head
+  source: inbox/2026-11-07-slipnote-redesign.mp4
+  hook: I called my own app static
+  captions: true
+  script: |
+    When I first got Slipnote working, I looked at it and thought: it's very static. No motion, nothing to tap, nothing that makes you want to send a note.
+
+    So I stopped building features. I drew three different designs side by side, picked one, a playful scrapbook look, and redrew every screen before I touched the real app.
+
+    Now sending a note is a little paper plane that flies away. Reactions are stickers you peel off a sheet.
+
+    It's still in development, but if you want to know when it's ready, the waitlist link is in my bio.
