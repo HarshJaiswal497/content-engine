@@ -49,7 +49,7 @@ Hard rules:
 - Talking-head posts: `video.script` is 60–110 words, conversational, first line is the hook;
   `video.source` is `inbox/<date>-<slug>.mp4`; `video.hook` is the 3–6 word on-screen hook.
 - Slide text: titles ≤ 10 words, bodies ≤ 30 words. Use `*accent*` on 1–3 key words per title.
-- Instagram: caption ends with 5–10 specific hashtags. LinkedIn: ≤ 3 hashtags, links in `first_comment`.
+- Instagram: caption ends with 5–10 specific hashtags. LinkedIn: ≤ 3 hashtags; the link goes inside `text`, on its own line just above the hashtags (LinkedIn cannot post comments, so never use `first_comment`). Instagram: link in bio is fine, plus `app.setalytix.in` in the caption for Setalytix posts. YouTube: the link goes in `youtube.description`.
 - Money talk (cleared by Harsh, 31 Oct): you may say some Slipnote themes are premium and that there will be free
   trials and a subscription, but only together with "plenty is free and free stays free". Never write a price
   (no monthly or yearly amount, no currency figure) and never mention ads. Test counts, the Slipnote waitlist link and

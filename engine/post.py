@@ -213,7 +213,7 @@ def validate(post: Post) -> None:
         if len(HASHTAG.findall(text)) > 3:
             w.append("more than 3 hashtags on LinkedIn")
         if "http" in text:
-            w.append("link in LinkedIn body — put it in first_comment for better reach")
+            w.append("link in the LinkedIn body (intended: comments cannot be posted, so the link goes in the text)")
     if post.platform == "instagram":
         if len(text) > 2200:
             e.append(f"Instagram caption is {len(text)} chars (max 2200)")
