@@ -1,0 +1,36 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-02T19:30:00+05:30'
+app: slipnote
+pillar: community
+text: |
+  Slipnote isn't out yet, but here's what's staying free: drawing with real tools, pairs and groups, home-screen widgets, replay, history, and any paper colour you like.
+
+  Some themes will be premium, with a free trial. Plenty is free, and free stays free.
+
+  Android first, iOS planned. Waitlist link in bio.
+
+  #slipnote #handwrittennotes #androidapp #homescreenwidget #buildinpublic #indiedev #thinkingofyou
+slides:
+- type: cover
+  kicker: Slipnote
+  title: What's *free* in Slipnote
+  subtitle: Plenty. And free stays free.
+- type: point
+  title: Draw what you like
+  body: Pen, marker, highlighter, pencil, eraser and undo. No typed text, on purpose.
+- type: point
+  title: Pairs and groups
+  body: A circle for your partner, your friends or your family. Join by code or link.
+- type: point
+  title: Widgets on your home screen
+  body: Their note lands there, even when the app is closed.
+- type: point
+  title: Replay, history, any paper colour
+  body: Watch a note being drawn. Nothing is ever deleted.
+- type: point
+  title: Some themes will be *premium*
+  body: With a free trial. The core stays free, and free stays free.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio

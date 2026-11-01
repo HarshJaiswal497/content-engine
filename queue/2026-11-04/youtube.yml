@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-04T17:45:00+05:30'
+app: setalytix
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: My app closed when I pressed back
+  description: |
+    A small Setalytix fix: back now returns to Today and your workout stays open. Free: https://app.setalytix.in
+    #Shorts #buildinpublic #gym
+  tags:
+  - setalytix
+  - gym tracker
+  - workout log
+  - progressive overload
+  - strength training
+  - gym app

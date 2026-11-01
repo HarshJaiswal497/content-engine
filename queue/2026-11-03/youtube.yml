@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-03T17:45:00+05:30'
+app: slipnote
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: How a Slipnote flies to your friend
+  description: |
+    Slipnote sends handwritten notes to a friend's home screen. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #androidapp
+  tags:
+  - slipnote
+  - android widget
+  - handwritten notes
+  - build in public
+  - indie developer
+  - flutter

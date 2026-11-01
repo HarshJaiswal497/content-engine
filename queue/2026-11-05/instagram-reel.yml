@@ -1,0 +1,35 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-05T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  On Slipnote, everyone in a circle can see how many people reacted, saved or shared a note. But only the person who made it can see who. And you're told if someone saves or shares it.
+
+  Waitlist link in bio.
+
+  #slipnote #privacy #buildinpublic #androidapp #handwrittennotes #indiedev #appdesign
+slides:
+- type: cover
+  title: Who *reacted* to your note? Only you.
+  say: On Slipnote, only you can see who reacted to your note.
+- type: point
+  title: Everyone sees the count
+  body: How many reacted, saved or shared.
+  say: Everyone in the circle can see how many people reacted, saved or shared it.
+- type: point
+  title: Only the author sees *who*
+  body: The names stay with the person who made it.
+  say: But who it was? Only the person who made the note can see that.
+- type: point
+  title: You're told if it's saved
+  body: Saves and shares don't happen silently.
+  say: And if someone saves or shares your note, you get told.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio
+  say: This is Slipnote, handwritten notes on your friends' home screens. The waitlist link is on my profile.
+video:
+  kind: slides
+  tone: story
+  seconds_per_slide: 3.6

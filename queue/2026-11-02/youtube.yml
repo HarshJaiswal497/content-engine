@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-02T17:45:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: My gym app's progress page was wrong
+  description: |
+    Setalytix now compares the same workout session by session, plus a chart per exercise. Free: https://app.setalytix.in
+    #Shorts #progressiveoverload #gym
+  tags:
+  - setalytix
+  - gym tracker
+  - workout log
+  - progressive overload
+  - strength training
+  - gym app

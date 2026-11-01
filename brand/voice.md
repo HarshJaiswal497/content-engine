@@ -10,7 +10,7 @@ The audience should come away thinking: *"this person actually ships, explains t
 - Honest about what broke, what's unfinished and what he doesn't know yet.
 
 ## Never
-- Break the hard limits: no legal topics; no Slipnote pricing, ads or premium plans until near launch; never name competitor apps; friends are "a friend", never named; never post private details (project IDs, repo names, file paths with usernames, devices, emails). Validation blocks the first three.
+- Break the hard limits: no legal topics; no prices or amounts anywhere and no ads (Slipnote's premium themes, free trials and subscription may be mentioned, always with "plenty is free and free stays free"); never name competitor apps; friends are "a friend", never named; never post private details (project IDs, repo names, file paths with usernames, devices, emails). Validation blocks the first three.
 - Invent numbers (users, downloads, revenue, % improvements). If a number isn't in `brand/apps/*.md` or `inbox/`, don't use it.
 - Engagement bait ("Agree?", "Comment YES"), fake urgency, "I'm humbled to announce".
 - AI tells: "delve", "game-changer", "in today's fast-paced world", "let's dive in", "here's the thing", stacked rhetorical triads, one-word dramatic lines.

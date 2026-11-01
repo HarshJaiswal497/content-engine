@@ -1,0 +1,32 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-04T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Lifting and cardio in the same app, kept separate so cardio never messes with your strength progress.
+
+  Pick treadmill, walk or run, cycling, elliptical, stairs, rowing or swimming. A weekly minutes ring shows your progress, and calories you type in always win over the app's rough estimate.
+
+  Free, link in bio.
+
+  #setalytix #cardio #gymtracker #workoutapp #fitnessindia #gymlife #buildinpublic
+slides:
+- type: cover
+  kicker: Setalytix
+  title: Lifting *and* cardio, one app
+- type: point
+  title: Pick your cardio
+  body: Treadmill, walk or run, cycling, elliptical, stairs, rowing, swimming.
+- type: point
+  title: A weekly minutes ring
+  body: The default goal is 150 minutes a week. Change it to suit you.
+- type: point
+  title: Your calories win
+  body: Type them in and they're used. Otherwise a rough estimate marked ~, which you can hide.
+- type: point
+  title: Kept apart from lifting
+  body: Cardio never touches your strength progress.
+- type: cta
+  title: Try *Setalytix*
+  body: 'Free: app.setalytix.in'
