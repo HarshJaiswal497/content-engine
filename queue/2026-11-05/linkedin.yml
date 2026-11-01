@@ -18,8 +18,9 @@ text: |
 
   I also replaced raw database errors with plain sentences like "Could not reach the server" and "Your sign-in has expired", so nobody gets a wall of technical text.
 
+  Setalytix (free): https://app.setalytix.in
+
   #webdev #typescript #buildinpublic
-first_comment: 'Setalytix (free): https://app.setalytix.in'
 slides:
 - type: cover
   kicker: Setalytix build log

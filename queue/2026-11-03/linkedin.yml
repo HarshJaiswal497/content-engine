@@ -16,8 +16,9 @@ text: |
 
   A small bug, but it's the kind people notice on day one.
 
+  Setalytix (free): https://app.setalytix.in
+
   #webdev #pwa #typescript
-first_comment: 'Setalytix (free): https://app.setalytix.in'
 slides:
 - type: cover
   kicker: Setalytix build log

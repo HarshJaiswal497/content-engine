@@ -17,8 +17,9 @@ text: |
 
   The lesson I'm keeping: drawing it first is cheaper than rebuilding it later.
 
+  Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+
   #flutter #androiddev #buildinpublic
-first_comment: 'Slipnote waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/'
 slides:
 - type: cover
   kicker: Slipnote build log
