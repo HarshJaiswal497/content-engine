@@ -402,3 +402,30 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
 
 def have_ffmpeg() -> bool:
     return shutil.which("ffmpeg") is not None
+
+
+def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None, mood: str | None = None,
+                         script: str | None = None, fixes: dict | None = None, inserts: list[dict] | None = None,
+                         emphasis: list[str] | None = None) -> Path:
+    """Talking-head clip with HyperFrames captions, zooms, hook and phone inserts. The picture is rendered
+    silent; the clip's own speech (loudness-normalised) is laid back on with ffmpeg."""
+    from .hyperframes import render_talking
+    info = probe(src)
+    duration = min(info["duration"], MAX_SECONDS)
+    words = transcribe(src, script, fixes) if info["has_audio"] else []
+    if words:
+        (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
+    with tempfile.TemporaryDirectory() as tmp:
+        silent = Path(tmp) / "picture.mp4"
+        render_talking(src, words, hook, app, duration, silent, Path(tmp), inserts,
+                       portrait=info["height"] >= info["width"] * 1.6, emphasis=emphasis)
+        cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(silent)]
+        if info["has_audio"]:
+            cmd += ["-i", str(src), "-filter_complex", "[1:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]",
+                    "-map", "0:v", "-map", "[aout]"]
+        else:
+            audio_in, audio_f = _music_input("/".join(out.parts[-4:-1]), duration, 1, mood=mood)
+            cmd += [*audio_in, "-filter_complex", audio_f, "-map", "0:v", "-map", "[aout]"]
+        cmd += ["-t", f"{duration:.3f}", *ENC, str(out)]
+        _run(cmd)
+    return out

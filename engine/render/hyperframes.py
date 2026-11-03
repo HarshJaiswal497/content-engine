@@ -223,3 +223,126 @@ def render_motion(slides: list[dict], app: str, seconds: list[float], fade: floa
                   quality: str = "looks") -> Path:
     proj = build_project(slides, app, seconds, fade, work / "hf-project")
     return render_project(proj, out, quality)
+
+
+# ---------------------------------------------------------------- talking head
+
+ZOOM_CYCLE = [1.0, 1.12, 1.0, 1.2]   # punch-in rhythm: wide, in, wide, closer
+
+
+def _sentences(words: list[dict]) -> list[float]:
+    """Start time of each sentence (a word after one ending . ? !)."""
+    starts = [words[0]["start"]] if words else []
+    for prev, w in zip(words, words[1:]):
+        if prev["word"].endswith((".", "?", "!")):
+            starts.append(w["start"])
+    return starts
+
+
+def _caption_chunks(words: list[dict], dur: float) -> list[dict]:
+    chunks, cur = [], []
+    for w in words:
+        if cur and (len(cur) >= 3 or w["start"] - cur[-1]["end"] > 0.6 or cur[-1]["word"].endswith((".", "?", "!", ","))):
+            chunks.append(cur); cur = []
+        cur.append(w)
+    if cur:
+        chunks.append(cur)
+    out = []
+    for i, c in enumerate(chunks):
+        s, e = c[0]["start"], max(c[-1]["end"], c[0]["start"] + 0.4)
+        if i + 1 < len(chunks):   # hold through a short gap so captions do not flicker
+            nxt = chunks[i + 1][0]["start"]
+            e = min(max(e, nxt - 0.02), e + 0.35)
+            e = min(e, nxt - 0.02) if nxt - 0.02 > s else e
+        out.append({"s": round(s, 3), "e": round(min(e, dur), 3),
+                    "w": [[round(w["start"], 3), round(max(w["end"], w["start"] + 0.1), 3), w["word"]] for w in c]})
+    return out
+
+
+def build_talking_project(src: Path, words: list[dict], hook: str | None, app: str, dur: float,
+                          out_dir: Path, inserts: list[dict] | None = None, portrait: bool = True,
+                          emphasis: list[str] | None = None) -> Path:
+    """HyperFrames project for a talking-head clip: the clip (muted; audio is muxed later), word-highlight
+    captions, punch-in zooms at sentence starts, a hook pill, and phone-screen inserts."""
+    theme = THEMES.get(app, THEMES["personal"])
+    comps = out_dir / "compositions"
+    (out_dir / "assets").mkdir(parents=True, exist_ok=True)
+    comps.mkdir(parents=True, exist_ok=True)
+    shutil.copy(HF / "shared" / "gsap.min.js", out_dir / "gsap.min.js")
+    (out_dir / "hyperframes.json").write_text((HF / "talking-head" / "hyperframes.json").read_text())
+    shutil.copy(src, out_dir / "assets" / "clip.mp4")
+
+    chunks = _caption_chunks(words, dur)
+    caps_html = []
+    for i, c in enumerate(chunks):
+        spans = "".join(f'<span class="cw" id="cap{i}w{j}">{html.escape(w[2])}</span>' for j, w in enumerate(c["w"]))
+        caps_html.append(f'    <div class="cap" id="cap{i}">{spans}</div>')
+
+    starts = _sentences(words)
+    zooms = [[0, 1.0]]
+    for k, t in enumerate(starts[1:], start=1):
+        zooms.append([round(max(t - 0.05, 0), 3), ZOOM_CYCLE[k % len(ZOOM_CYCLE)]])
+    emph = {re.sub(r"\W", "", e.lower()) for e in (emphasis or [])}
+    for w in words:
+        if re.sub(r"\W", "", w["word"].lower()) in emph:
+            zooms.append([round(w["start"] - 0.05, 3), 1.26])
+            zooms.append([round(w["end"] + 0.35, 3), 1.0])
+    zooms.sort()
+
+    ins_html, ins_data = [], []
+    for i, ins in enumerate(inserts or []):
+        owner, slug, entry = resolve_screen(ins["screen"], app)
+        shutil.copy(ROOT / "assets" / "screens" / owner / f"{slug}.png", out_dir / "assets" / f"{owner}-{slug}.png")
+        box = _focus_box(ins.get("focus"), entry)
+        ring = lab = ""
+        if box:
+            ring = (f'<div class="ring" style="left:{(box["x"]-.015)*100:.2f}%;top:{(box["y"]-.008)*100:.2f}%;'
+                    f'width:{(box["w"]+.03)*100:.2f}%;height:{(box["h"]+.016)*100:.2f}%"></div>')
+            if ins.get("label"):
+                lab = (f'<div class="lab" style="left:-8px;top:{max(box["y"]*100-2, 1):.1f}%">'
+                       f'{html.escape(str(ins["label"]))}</div>')
+        at = float(ins["at"])
+        end = min(at + float(ins.get("dur", 3.5)), dur)
+        ins_html.append(f'    <div class="ins" id="ins{i}"><div class="scr"><img src="assets/{owner}-{slug}.png" alt="">{ring}</div>{lab}</div>')
+        ins_data.append({"s": round(at, 3), "e": round(end, 3), "ring": bool(box)})
+
+    hook_end = 2.8
+    tokens = {
+        "BG": "#000000", "ACCENT": theme.accent, "ON_ACCENT": theme.on_accent,
+        "VIDEO_SRC": "assets/clip.mp4", "VIDEO_TOP": 0 if portrait else 360, "VIDEO_H": 1920 if portrait else 1200,
+        "CAP_TOP": 1120, "INS_TOP": 230,
+        "HOOK": html.escape(hook or ""), "HOOK_ON": "true" if hook else "false", "HOOK_END": hook_end,
+        "CAPS_HTML": "\n".join(caps_html), "INSERTS_HTML": "\n".join(ins_html),
+        "ZOOMS": json.dumps(zooms), "CAPS": json.dumps(chunks), "INSERTS": json.dumps(ins_data),
+    }
+    (comps / "th.html").write_text(_fill((HF / "talking-head" / "templates" / "main.html").read_text(), tokens))
+    (out_dir / "index.html").write_text(f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width={W}, height={H}" />
+    <script src="gsap.min.js"></script>
+    <style>
+      * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+      html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; background: #000; }}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{dur:.3f}" data-width="{W}" data-height="{H}" data-fps="{FPS}">
+      <div id="th" data-composition-id="th" data-composition-src="compositions/th.html" data-start="0" data-duration="{dur:.3f}" data-track-index="1" data-track-kind="graphics" data-width="{W}" data-height="{H}"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({{ paused: true }});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
+""")
+    return out_dir
+
+
+def render_talking(src: Path, words: list[dict], hook: str | None, app: str, dur: float, out: Path, work: Path,
+                   inserts: list[dict] | None = None, portrait: bool = True, emphasis: list[str] | None = None,
+                   quality: str = "looks") -> Path:
+    proj = build_talking_project(src, words, hook, app, dur, work / "hf-th", inserts, portrait, emphasis)
+    return render_project(proj, out, quality)

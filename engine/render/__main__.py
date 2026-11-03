@@ -15,7 +15,7 @@ from pathlib import Path
 from .. import github, state
 from ..post import Post, all_posts, load
 from .slides import THEMES, render_post_slides
-from .video import caption_video, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
+from .video import caption_video, caption_video_motion, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
 
 
 def _clean(asset_dir: Path) -> None:
@@ -83,9 +83,20 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
-            caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
-                          captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app),
-                          script=spec.get("script"), fixes=spec.get("caption_fixes"))
+            done = False
+            if spec.get("captions", True) and video_style(spec, post.path.parent.name) == "motion":
+                try:
+                    caption_video_motion(post.video_source(), mp4, post.app, hook=spec.get("hook"),
+                                         mood=mood_for(spec.get("tone"), post.app), script=spec.get("script"),
+                                         fixes=spec.get("caption_fixes"), inserts=spec.get("inserts"),
+                                         emphasis=spec.get("emphasis"))
+                    done = True
+                except Exception:   # fall back to the classic caption burn-in
+                    print(f"{post.id}: motion captions failed, using classic\n{traceback.format_exc()[-1500:]}", flush=True)
+            if not done:
+                caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
+                              captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app),
+                              script=spec.get("script"), fixes=spec.get("caption_fixes"))
             _finish_video(post, mp4, upload)
         elif kind == "same_as":
             sib_path = post.path.parent / f"{spec['post']}.yml"

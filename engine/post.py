@@ -158,6 +158,10 @@ class Post:
             if video_style(self.video_spec, self.path.parent.name) == "motion":  # classic posts keep their old hash
                 relevant["_style"] = "motion"
         if self.video_spec.get("kind") in {"recording", "talking_head"}:  # caption fixes re-render clips
+            from .render.video import video_style
+            if video_style(self.video_spec, self.path.parent.name) == "motion":
+                relevant["_style"] = "motion"
+                relevant["_hf"] = hashlib.sha256(b"".join(f.read_bytes() for f in sorted((ROOT / "hf" / "talking-head").rglob("*")) if f.is_file())).hexdigest()[:8]
             ccfg = ROOT / "brand" / "captions.yml"
             relevant["_captions"] = hashlib.sha256(ccfg.read_bytes()).hexdigest()[:8] if ccfg.exists() else "-"
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):

@@ -21,3 +21,12 @@ Edit the `.html`/`.css` in `promo/templates/`. `{{TOKENS}}` are filled by the br
 
 ## Try it locally
 Needs Node 22+, ffmpeg and Chrome (`HYPERFRAMES_BROWSER_PATH`). `pip install -r requirements.txt`, then call `engine.render.hyperframes.render_motion(...)` (see `tests/test_engine.py` for the project builder).
+
+## Talking-head (hf/talking-head/)
+
+Clips (`kind: talking_head` / `recording`) get word-highlight captions, punch-in zooms at each sentence start,
+a hook pill and optional phone-screen inserts. On from `motion_from` in `brand/video-styles.yml` (or `video.style: motion`);
+any failure falls back to the classic burn-in. Optional post fields under `video:`:
+
+- `inserts: [{at: 8, dur: 3.5, screen: today, focus: start-button, label: Resume}]` (screens from `brand/screens.yml`)
+- `emphasis: [closed, free]` extra zoom while those words are spoken

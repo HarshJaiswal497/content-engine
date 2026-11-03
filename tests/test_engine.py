@@ -231,3 +231,14 @@ def test_phone_scene_and_screen_validation(tmp_path):
         hf.resolve_screen("nope", "setalytix")
     with pytest.raises(ValueError):
         hf._focus_box("nope", hf.resolve_screen("today", "setalytix")[2])
+
+
+def test_talking_project_builds(tmp_path):
+    from engine.render.hyperframes import build_talking_project
+    clip = tmp_path / "c.mp4"
+    clip.write_bytes(b"x")
+    words = [{"word": w, "start": i * 0.4, "end": i * 0.4 + 0.3} for i, w in enumerate("So I fixed it. Now it works.".split())]
+    proj = build_talking_project(clip, words, "My hook", "setalytix", 4.0, tmp_path / "p",
+                                 inserts=[{"at": 1, "dur": 2, "screen": "today", "focus": "start-button", "label": "Resume"}])
+    page = (proj / "compositions" / "th.html").read_text()
+    assert 'id="cap0w0"' in page and 'id="ins0"' in page and "Resume" in page and "My hook" in page
