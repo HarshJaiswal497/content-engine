@@ -22,6 +22,7 @@ from .slides import APP_LABEL, THEMES, _words, handles
 HF = ROOT / "hf"
 W, H, FPS = 1080, 1920, 30
 FADE = 0.45   # overlap between scenes (the next scene wipes in over the last)
+LEAD, TAIL = 0.35, -0.15   # voice starts 0.35 s into its scene; the next scene wipes in 0.15 s before the line ends
 HEX = re.compile(r"^#([0-9a-fA-F]{6})$")
 
 
