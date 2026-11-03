@@ -429,3 +429,43 @@ def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None
         cmd += ["-t", f"{duration:.3f}", *ENC, str(out)]
         _run(cmd)
     return out
+
+
+def _sfx_filter(kind: str, label: str) -> str:
+    """Tiny synthetic sound effects (no audio files): pop, ping (happy), dun (sad/shock)."""
+    if kind == "ping":
+        return (f"aevalsrc='0.35*sin(2*PI*1568*t)*exp(-9*t)+0.25*sin(2*PI*2093*t)*exp(-11*t)':d=0.5:s=44100,"
+                f"aformat=channel_layouts=stereo[{label}]")
+    if kind == "dun":
+        return f"aevalsrc='0.5*sin(2*PI*(170-60*t)*t)*exp(-6*t)':d=0.6:s=44100,aformat=channel_layouts=stereo[{label}]"
+    return (f"aevalsrc='0.5*sin(2*PI*(520+900*t)*t)*exp(-28*t)':d=0.25:s=44100,aformat=channel_layouts=stereo[{label}]")   # pop
+
+
+def skit_audio(video: Path, out: Path, starts: list[float], total: float, beats: list[dict], mood: str | None, key: str) -> Path:
+    """Music bed (quiet) plus a small sound effect at each beat (beat `sfx`: pop (default), ping, dun, none)."""
+    audio_in, music_f = _music_input(key, total, 1, "music", mood=mood)
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(video), *audio_in]
+    parts, labels = [music_f], ["[music]"]
+    for i, b in enumerate(beats):
+        kind = str(b.get("sfx") or "pop")
+        if kind == "none":
+            continue
+        ms = int(starts[i] * 1000)
+        parts.append(f"{_sfx_filter(kind, f'e{i}')}")
+        parts.append(f"[e{i}]volume=0.6,adelay={ms}|{ms}[d{i}]")
+        labels.append(f"[d{i}]")
+    parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
+    cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[mixed]", "-t", f"{total:.3f}",
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
+    _run(cmd)
+    return out
+
+
+def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: str | None = None) -> Path:
+    from .hyperframes import render_skit
+    with tempfile.TemporaryDirectory() as tmp:
+        silent = Path(tmp) / "picture.mp4"
+        _, marks = render_skit(beats, app, silent, Path(tmp), title)
+        total = marks[-1] + 0.4
+        skit_audio(silent, out, marks[:-1], total, beats, mood, "/".join(out.parts[-4:-1]))
+    return out

@@ -1,0 +1,62 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; background: {{BG}}; color: {{INK}}; }
+    .tex { position: absolute; inset: 0; {{TEXTURE}} }
+    .floor { position: absolute; left: 0; right: 0; top: 1560px; bottom: 0; background: {{CARD}}; }
+    .chip { position: absolute; top: 215px; left: 0; right: 0; display: flex; justify-content: center; }
+    .chip span { font-weight: 900; font-size: 34px; letter-spacing: 0.22em; padding: 14px 30px; border-radius: 999px; background: {{INK}}; color: {{BG}}; opacity: 0; }
+    .actor { position: absolute; }
+    .actor.slip { left: {{SLIP_L}}px; top: {{SLIP_T}}px; width: {{SLIP_W}}px; }
+    .actor.human { left: {{HUMAN_L}}px; top: {{HUMAN_T}}px; width: {{HUMAN_W}}px; }
+    .pose { position: absolute; left: 0; top: 0; width: 100%; opacity: 0; }
+    .pose.first { position: relative; }
+    .bubble { position: absolute; left: 70px; right: 70px; top: 380px; opacity: 0; transform-origin: 50% 100%; }
+    .bubble .card { position: relative; min-height: 230px; border-radius: 52px; background: #fff; border: 8px solid {{INK}}; padding: 46px 52px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 22px; font-weight: 800; font-size: 70px; line-height: 1.15; text-align: center; box-shadow: 0 14px 0 rgba(0,0,0,.14); color: #1b1b22; }
+    .bubble.slip .card { background: #FFF6DC; }
+    .bubble .tail { position: absolute; bottom: -34px; width: 60px; height: 60px; background: inherit; border-right: 8px solid {{INK}}; border-bottom: 8px solid {{INK}}; transform: rotate(45deg); margin-left: -30px; background: #fff; }
+    .bubble.slip .tail { background: #FFF6DC; }
+    .bw { display: inline-block; opacity: 0; }
+    .bw.em { background: {{ACCENT}}; color: {{ON_ACCENT}}; padding: 0 16px 6px; border-radius: 16px; }
+  </style>
+  <div id="root" data-composition-id="skit" data-width="1080" data-height="1920">
+    <div class="tex"></div>
+    <div class="floor"></div>
+    <div class="chip"><span id="chip">{{LABEL}}</span></div>
+    <div class="actor human" id="human"><div id="human-in">
+{{IMGS_HUMAN}}
+    </div></div>
+    <div class="actor slip" id="slip"><div id="slip-in">
+{{IMGS_SLIP}}
+    </div></div>
+{{BUBBLES}}
+  </div>
+  <script>
+    const D = {{DATA}};
+    const tl = gsap.timeline({ paused: true });
+    tl.to("#chip", { opacity: 1, duration: 0.3 }, 0.1);
+    // actors slide in
+    tl.fromTo("#slip", { x: -520 }, { x: 0, duration: 0.55, ease: "back.out(1.4)" }, 0.05);
+    tl.fromTo("#human", { x: 560 }, { x: 0, duration: 0.55, ease: "back.out(1.4)" }, 0.15);
+    // idle bob
+    ["slip", "human"].forEach((c, k) => tl.to("#" + c + "-in", { y: -12, duration: 0.5, yoyo: true, repeat: Math.floor(D.total / 0.5) - 1, ease: "sine.inOut" }, 0.6 + k * 0.2));
+    const shown = { slip: null, human: null };
+    D.starts.forEach((s, i) => {
+      const e = s + D.durs[i];
+      ["slip", "human"].forEach(c => {
+        const id = "#" + c + "-" + D.poses[i][c];
+        if (shown[c] !== id) {
+          if (shown[c]) tl.set(shown[c], { opacity: 0 }, s);
+          tl.set(id, { opacity: 1 }, s);
+          shown[c] = id;
+        }
+      });
+      const who = D.who[i], b = "#b" + i;
+      tl.fromTo(b, { opacity: 0, scale: 0.6, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, s);
+      tl.set(b, { opacity: 0 }, e);
+      gsap.utils.toArray(b + " .bw").forEach((w, j) => tl.fromTo(w, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, s + 0.18 + j * 0.07));
+      // speaker bounce
+      tl.fromTo("#" + who, { scale: 1 }, { scale: 1.06, duration: 0.14, yoyo: true, repeat: 1, transformOrigin: "50% 100%", ease: "power2.out" }, s + 0.05);
+    });
+    window.__timelines["skit"] = tl;
+  </script>
+</template>

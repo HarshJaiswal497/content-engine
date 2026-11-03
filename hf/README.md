@@ -30,3 +30,19 @@ any failure falls back to the classic burn-in. Optional post fields under `video
 
 - `inserts: [{at: 8, dur: 3.5, screen: today, focus: start-button, label: Resume}]` (screens from `brand/screens.yml`)
 - `emphasis: [closed, free]` extra zoom while those words are spoken
+
+## Skit (hf/skit/)
+
+`video.kind: skit` — Slip and a human talk in speech bubbles, with a music bed and tiny sound effects. Characters live in
+`assets/characters/` (see its README). Beats:
+
+```yaml
+video:
+  kind: skit
+  title: optional
+  beats:
+    - {who: human, pose: phone, text: "My workout *vanished*?!", seconds: 3, other_pose: surprised, sfx: dun}
+    - {who: slip, pose: wave, text: "Hi, I'm Slip."}      # sfx: pop (default) | ping | dun | none
+```
+`*word*` gets the accent highlight. Slip poses: idle happy wave surprised think write sleepy sad peek cheer.
+Human poses: idle talk shocked happy sad phone think. Skits are not date-gated: a post opts in with `kind: skit`.

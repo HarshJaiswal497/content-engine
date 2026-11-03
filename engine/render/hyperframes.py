@@ -346,3 +346,120 @@ def render_talking(src: Path, words: list[dict], hook: str | None, app: str, dur
                    quality: str = "looks") -> Path:
     proj = build_talking_project(src, words, hook, app, dur, work / "hf-th", inserts, portrait, emphasis)
     return render_project(proj, out, quality)
+
+
+# ---------------------------------------------------------------- skit (Slip + a human, speech bubbles)
+
+CHARS = ROOT / "assets" / "characters"
+SKIT_LAYOUT = {   # left, top, width (px) of each character on the 1080x1920 frame
+    "slip": (0, 880, 560),
+    "human": (580, 830, 480),
+}
+
+
+def _bubble_html(text: str) -> str:
+    parts = []
+    for w in _words(text):
+        if w[0][0] == "\n":
+            parts.append('<span style="flex-basis:100%;height:0"></span>')
+            continue
+        label = html.escape("".join(t for t, _ in w))
+        parts.append(f'<span class="bw{" em" if any(a for _, a in w) else ""}">{label}</span>')
+    return "".join(parts)
+
+
+def skit_beats_ok(beats: list[dict]) -> list[str]:
+    errs = []
+    for n, b in enumerate(beats or [], 1):
+        who = (b or {}).get("who")
+        if who not in SKIT_LAYOUT:
+            errs.append(f"beat {n}: who must be one of {sorted(SKIT_LAYOUT)}")
+            continue
+        other = "human" if who == "slip" else "slip"
+        for key, owner in (("pose", who), ("other_pose", other)):
+            if b.get(key) and not (CHARS / owner / f"{b[key]}.png").exists():
+                errs.append(f"beat {n}: unknown {key} '{b[key]}' for {owner}")
+        if not str(b.get("text") or "").strip():
+            errs.append(f"beat {n}: text is required")
+    return errs
+
+
+def build_skit_project(beats: list[dict], app: str, out_dir: Path, title: str | None = None) -> tuple[Path, list[float]]:
+    theme = THEMES.get(app, THEMES["personal"])
+    (out_dir / "assets").mkdir(parents=True, exist_ok=True)
+    (out_dir / "compositions").mkdir(parents=True, exist_ok=True)
+    shutil.copy(HF / "shared" / "gsap.min.js", out_dir / "gsap.min.js")
+    (out_dir / "hyperframes.json").write_text((HF / "skit" / "hyperframes.json").read_text())
+    errs = skit_beats_ok(beats)
+    if errs:
+        raise ValueError("; ".join(errs))
+
+    durs = [float(b.get("seconds") or max(1.8, 0.35 + 0.34 * len(str(b["text"]).split()) + 0.5)) for b in beats]
+    starts, t = [], 0.0
+    for d in durs:
+        starts.append(round(t, 3)); t += d
+    total = t + 0.4
+
+    # which poses each character shows, and when
+    state = {"slip": "idle", "human": "idle"}
+    timeline: list[dict] = []   # per beat: {who, poses: {slip, human}}
+    used: dict[str, set] = {"slip": {"idle"}, "human": {"idle"}}
+    for b in beats:
+        who = b["who"]
+        other = "human" if who == "slip" else "slip"
+        state[who] = b.get("pose") or ("wave" if who == "slip" and not timeline else "idle" if who == "slip" else "talk")
+        if b.get("other_pose"):
+            state[other] = b["other_pose"]
+        used["slip"].add(state["slip"]); used["human"].add(state["human"])
+        timeline.append(dict(state))
+
+    imgs = []
+    for ch, poses in used.items():
+        left, top, width = SKIT_LAYOUT[ch]
+        for p in sorted(poses):
+            src = CHARS / ch / f"{p}.png"
+            shutil.copy(src, out_dir / "assets" / f"{ch}-{p}.png")
+            imgs.append(f'      <img class="pose {ch}" id="{ch}-{p}" src="assets/{ch}-{p}.png" alt="">')
+    bubbles = []
+    for i, b in enumerate(beats):
+        left_tail = 24 if b["who"] == "slip" else 74
+        bubbles.append(f'    <div class="bubble {b["who"]}" id="b{i}"><div class="card">{_bubble_html(str(b["text"]))}</div>'
+                       f'<i class="tail" style="left:{left_tail}%"></i></div>')
+    data = {"starts": starts, "durs": [round(x, 3) for x in durs], "who": [b["who"] for b in beats], "poses": timeline, "total": round(total, 3)}
+    page = (HF / "skit" / "main.html").read_text()
+    tokens = {"BG": theme.bg, "INK": theme.ink, "ACCENT": theme.accent, "ON_ACCENT": theme.on_accent, "CARD": theme.card,
+              "TEXTURE": _texture(theme.texture, theme.ink), "LABEL": html.escape(APP_LABEL.get(app, app.upper())),
+              "TITLE": html.escape(title or ""), "TITLE_ON": "true" if title else "false",
+              "IMGS_SLIP": "\n".join(i for i in imgs if " slip" in i), "IMGS_HUMAN": "\n".join(i for i in imgs if " human" in i), "BUBBLES": "\n".join(bubbles), "DATA": json.dumps(data),
+              "SLIP_L": SKIT_LAYOUT["slip"][0], "SLIP_T": SKIT_LAYOUT["slip"][1], "SLIP_W": SKIT_LAYOUT["slip"][2],
+              "HUMAN_L": SKIT_LAYOUT["human"][0], "HUMAN_T": SKIT_LAYOUT["human"][1], "HUMAN_W": SKIT_LAYOUT["human"][2]}
+    (out_dir / "compositions" / "skit.html").write_text(_fill(page, tokens))
+    (out_dir / "index.html").write_text(f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width={W}, height={H}" />
+    <script src="gsap.min.js"></script>
+    <style>
+      * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+      html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; background: {theme.bg}; }}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{total:.3f}" data-width="{W}" data-height="{H}" data-fps="{FPS}">
+      <div id="skit" data-composition-id="skit" data-composition-src="compositions/skit.html" data-start="0" data-duration="{total:.3f}" data-track-index="1" data-track-kind="graphics" data-width="{W}" data-height="{H}"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({{ paused: true }});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
+""")
+    return out_dir, starts + [round(total - 0.4, 3)]
+
+
+def render_skit(beats: list[dict], app: str, out: Path, work: Path, title: str | None = None,
+                quality: str = "looks") -> tuple[Path, list[float]]:
+    proj, marks = build_skit_project(beats, app, work / "hf-skit", title)
+    return render_project(proj, out, quality), marks

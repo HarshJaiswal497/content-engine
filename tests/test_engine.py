@@ -242,3 +242,13 @@ def test_talking_project_builds(tmp_path):
                                  inserts=[{"at": 1, "dur": 2, "screen": "today", "focus": "start-button", "label": "Resume"}])
     page = (proj / "compositions" / "th.html").read_text()
     assert 'id="cap0w0"' in page and 'id="ins0"' in page and "Resume" in page and "My hook" in page
+
+
+def test_skit_project_builds(tmp_path):
+    from engine.render.hyperframes import build_skit_project, skit_beats_ok
+    beats = [{"who": "human", "pose": "phone", "text": "It *vanished*?!"}, {"who": "slip", "pose": "wave", "text": "Hi, I'm Slip."}]
+    assert skit_beats_ok(beats) == []
+    assert skit_beats_ok([{"who": "robot", "text": "x"}])
+    proj, marks = build_skit_project(beats, "slipnote", tmp_path / "p")
+    page = (proj / "compositions" / "skit.html").read_text()
+    assert 'id="b0"' in page and 'id="slip-wave"' in page and 'id="human-phone"' in page and len(marks) == 3

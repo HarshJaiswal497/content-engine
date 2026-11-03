@@ -19,7 +19,7 @@ FORMATS = {
     "instagram": {"image", "carousel", "reel"},
     "youtube": {"short"},
 }
-VIDEO_KINDS = {"slides", "recording", "talking_head", "same_as"}
+VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "same_as"}
 APPS = {"slipnote", "setalytix", "personal"}
 
 # Hard limits from brand/founder.md. Each entry: (regex, message). Matches are errors.
@@ -164,6 +164,9 @@ class Post:
                 relevant["_hf"] = hashlib.sha256(b"".join(f.read_bytes() for f in sorted((ROOT / "hf" / "talking-head").rglob("*")) if f.is_file())).hexdigest()[:8]
             ccfg = ROOT / "brand" / "captions.yml"
             relevant["_captions"] = hashlib.sha256(ccfg.read_bytes()).hexdigest()[:8] if ccfg.exists() else "-"
+        if self.video_spec.get("kind") == "skit":   # a changed character or skit template re-renders
+            files = [f for d in (ROOT / "assets" / "characters", ROOT / "hf" / "skit") for f in sorted(d.rglob("*")) if f.is_file() and f.suffix in (".png", ".html")]
+            relevant["_skit"] = hashlib.sha256(b"".join(f.read_bytes() for f in files)).hexdigest()[:8]
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):
             sib = self.path.parent / f"{self.video_spec['post']}.yml"
             if sib.exists() and sib != self.path:  # re-copy whenever the sibling's video changes
@@ -275,6 +278,12 @@ def validate(post: Post) -> None:
                             w.append(f"slide {n}: label is long (keep it to about four words)")
                     except ValueError as ex:
                         e.append(f"slide {n}: {ex}")
+        if kind == "skit":
+            from .render.hyperframes import skit_beats_ok
+            beats = post.video_spec.get("beats") or []
+            if not beats:
+                e.append("video.kind 'skit' needs video.beats")
+            e += skit_beats_ok(beats)
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):
             e.append("video.source (file in inbox/) is required for recording/talking_head")
         if kind == "talking_head" and not post.video_spec.get("script"):
