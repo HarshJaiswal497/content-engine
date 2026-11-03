@@ -1,0 +1,5 @@
+# How faceless slide videos (video.kind: slides) are rendered.
+#   slides: the classic still slides with a slow push-in and cross-fades
+#   motion: HyperFrames scenes (kinetic titles, filled highlights, wipes). Needs Node 22 and Chrome (installed in CI).
+# A post can override this with `video: {style: motion}` or `{style: slides}`.
+slides_style: slides

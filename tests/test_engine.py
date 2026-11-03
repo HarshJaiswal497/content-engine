@@ -198,3 +198,14 @@ def test_youtube_weekly_issue_is_one_issue(monkeypatch):
     assert number == 9 and len(made) == 1 and len(lines) == 3
     title, body = made[0]
     assert "(3)" in title and body.count("- [ ] Uploaded and scheduled") == 3 and "IST" in body
+
+
+def test_motion_project_is_built_from_slides(tmp_path):
+    from engine.render import hyperframes as hf
+    slides = [{"type": "cover", "title": "One tap *logs a set*"}, {"type": "point", "title": "Fast", "body": "Tap the tick."},
+              {"type": "cta", "title": "Try *Setalytix*", "body": "Free at app.setalytix.in"}]
+    proj = hf.build_project(slides, "setalytix", [3.0, 3.0, 3.0], 0.45, tmp_path / "p")
+    index = (proj / "index.html").read_text()
+    assert index.count("data-composition-src") == 3 and 'data-duration="8.100"' in index
+    assert "{{" not in "".join(p.read_text() for p in (proj / "compositions").glob("*.html"))
+    assert hf._title_html("a *b c* d").count("hl") == 1   # neighbouring accent words share one pill

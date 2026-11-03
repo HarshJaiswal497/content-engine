@@ -5,7 +5,7 @@ name: Render & review drafts
 on:
   push:
     branches: ["drafts/**", "main"]
-    paths: ["queue/**", "inbox/**", "brand/**", "engine/render/**", "assets/music/**", "assets/voice/**"]
+    paths: ["queue/**", "inbox/**", "brand/**", "engine/render/**", "hf/**", "assets/**"]
   workflow_dispatch:
 
 permissions:
@@ -33,6 +33,13 @@ jobs:
       - name: Install ffmpeg
         uses: AnimMouse/setup-ffmpeg@v1
         timeout-minutes: 5
+
+      # HyperFrames (motion videos) needs Node 22+ and Chrome; the runner image already has Chrome.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Point HyperFrames at Chrome
+        run: echo "HYPERFRAMES_BROWSER_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
 
       - name: Install Python deps
         run: pip install -r requirements.txt -r requirements-video.txt

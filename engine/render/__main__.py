@@ -15,7 +15,7 @@ from pathlib import Path
 from .. import github, state
 from ..post import Post, all_posts, load
 from .slides import THEMES, render_post_slides
-from .video import caption_video, mood_for, slides_to_video
+from .video import caption_video, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
 
 
 def _clean(asset_dir: Path) -> None:
@@ -59,14 +59,22 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
         mp4 = post.asset_dir / "video.mp4"
         if kind == "slides":
             with tempfile.TemporaryDirectory() as tmp:
-                imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
                 secs = [float(s.get("seconds", spec.get("seconds_per_slide", 3.2))) for s in slides]
                 lines = [str(s.get("say") or "") for s in slides]
                 voice = None
                 if any(lines) and spec.get("voice", True):
                     from .tts import synthesize
                     voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
-                slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
+                if video_style(spec) == "motion":   # HyperFrames picture + the same voice and music
+                    from .hyperframes import FADE, render_motion
+                    secs = plan_seconds(len(slides), secs, voice, FADE)
+                    silent = Path(tmp) / "picture.mp4"
+                    render_motion(slides, post.app, secs, FADE, silent, Path(tmp))
+                    mux_audio(silent, mp4, secs, FADE, voice, mood_for(spec.get("tone"), post.app),
+                              "/".join(mp4.parts[-4:-1]))
+                else:
+                    imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
+                    slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
