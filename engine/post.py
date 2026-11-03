@@ -142,6 +142,10 @@ class Post:
         if self.needs_video and any((sl or {}).get("say") for sl in self.data.get("slides") or []):
             from .render.tts import voice_fingerprint  # narrated: engine, narrator and voice sample matter
             relevant["_voice"] = voice_fingerprint()
+        if self.video_spec.get("kind") == "slides":
+            from .render.video import video_style
+            if video_style(self.video_spec, self.path.parent.name) == "motion":  # classic posts keep their old hash
+                relevant["_style"] = "motion"
         if self.video_spec.get("kind") in {"recording", "talking_head"}:  # caption fixes re-render clips
             ccfg = ROOT / "brand" / "captions.yml"
             relevant["_captions"] = hashlib.sha256(ccfg.read_bytes()).hexdigest()[:8] if ccfg.exists() else "-"

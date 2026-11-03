@@ -209,3 +209,9 @@ def test_motion_project_is_built_from_slides(tmp_path):
     assert index.count("data-composition-src") == 3 and 'data-duration="8.100"' in index
     assert "{{" not in "".join(p.read_text() for p in (proj / "compositions").glob("*.html"))
     assert hf._title_html("a *b c* d").count("hl") == 1   # neighbouring accent words share one pill
+
+
+def test_motion_style_switches_on_by_date():
+    from engine.render.video import video_style
+    assert video_style({}, "2026-11-08") == "slides" and video_style({}, "2026-11-09") == "motion"
+    assert video_style({"style": "slides"}, "2026-12-01") == "slides" and video_style({"style": "motion"}, "2026-11-01") == "motion"

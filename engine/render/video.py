@@ -24,13 +24,17 @@ APP_MOOD = {"setalytix": "upbeat", "slipnote": "story"}
 VIDEO_STYLES = ROOT / "brand" / "video-styles.yml"
 
 
-def video_style(spec: dict) -> str:
-    """'motion' (HyperFrames) or 'slides' (classic). A post's own video.style wins, then brand/video-styles.yml."""
+def video_style(spec: dict, day: str | None = None) -> str:
+    """'motion' (HyperFrames) or 'slides' (classic). A post's own video.style wins; otherwise
+    brand/video-styles.yml: `motion_from` (a date) makes posts for that day and later motion, else `slides_style`."""
     if spec.get("style") in ("motion", "slides"):
         return spec["style"]
     if VIDEO_STYLES.exists():
         import yaml
-        return (yaml.safe_load(VIDEO_STYLES.read_text()) or {}).get("slides_style", "slides")
+        cfg = yaml.safe_load(VIDEO_STYLES.read_text()) or {}
+        if day and cfg.get("motion_from") and str(day) >= str(cfg["motion_from"]):
+            return "motion"
+        return cfg.get("slides_style", "slides")
     return "slides"
 
 

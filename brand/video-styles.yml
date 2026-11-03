@@ -1,5 +1,7 @@
 # How faceless slide videos (video.kind: slides) are rendered.
 #   slides: the classic still slides with a slow push-in and cross-fades
-#   motion: HyperFrames scenes (kinetic titles, filled highlights, wipes). Needs Node 22 and Chrome (installed in CI).
-# A post can override this with `video: {style: motion}` or `{style: slides}`.
+#   motion: HyperFrames scenes (kinetic titles, filled highlights, wipes, whoosh). Needs Node 22 and Chrome (installed in CI).
+# slides_style is the default; motion_from makes every post scheduled on that date or later use motion.
+# A post can override both with `video: {style: motion}` or `{style: slides}`.
 slides_style: slides
+motion_from: 2026-11-09
