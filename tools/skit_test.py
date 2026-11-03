@@ -1,5 +1,6 @@
 """One-off: render hf/skit/example.yml with real voices (run in CI). Usage: python tools/skit_test.py <out.mp4>"""
 import sys
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.parent))
 from pathlib import Path
 import yaml
 from engine.render.video import skit_video
