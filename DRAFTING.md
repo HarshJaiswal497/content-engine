@@ -31,7 +31,9 @@ Next Monday → Sunday. One post per platform per day at the slot times in `cale
   `video.post: instagram-reel`.
 - Every slide video gets a voiceover: give each slide a `say:` line (one or two short spoken
   sentences, first person as Harsh, conversational, numbers written as words, no hashtags or
-  emoji). Line one is the hook. The last line is a platform-neutral CTA ("try it free at
+  emoji). Line one is the hook. Write the lines so the talk flows into the next scene: end a line on a comma or a connecting
+  word ("and", "so", "then") when the next line continues the thought, vary the length of the lines, and use at most one
+  question per video. The pictures change while the voice is still finishing, so lines that each end like a full stop sound robotic. The last line is a platform-neutral CTA ("try it free at
   app.setalytix.in" / "the waitlist link is on my profile"), never "link in description" or
   "link in bio", because Reels reuse the Short. Set `video.tone`: upbeat (Setalytix tips),
   story (Slipnote build moments) or calm. Same rules as captions: no pricing, legal or competitors.

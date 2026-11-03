@@ -68,12 +68,12 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                 done = False
                 if video_style(spec) == "motion":   # HyperFrames picture + the same voice and music
                     try:
-                        from .hyperframes import FADE, render_motion
-                        mseconds = plan_seconds(len(slides), secs, voice, FADE)
+                        from .hyperframes import FADE, LEAD, TAIL, render_motion
+                        mseconds = plan_seconds(len(slides), secs, voice, FADE, LEAD, TAIL)
                         silent = Path(tmp) / "picture.mp4"
                         render_motion(slides, post.app, mseconds, FADE, silent, Path(tmp))
                         mux_audio(silent, mp4, mseconds, FADE, voice, mood_for(spec.get("tone"), post.app),
-                                  "/".join(mp4.parts[-4:-1]))
+                                  "/".join(mp4.parts[-4:-1]), lead=LEAD, sfx=True)
                         done = True
                     except Exception:   # never lose a post over the fancy renderer: fall back to the classic look
                         print(f"{post.id}: motion render failed, using classic slides\n{traceback.format_exc()[-1500:]}", flush=True)

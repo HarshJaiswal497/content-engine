@@ -68,6 +68,17 @@ def _kokoro():
     return KPipeline(lang_code=voice[0]), voice
 
 
+def _trim_silence(path: Path) -> None:
+    """Cut the silence the voice model leaves before and after a line, so lines can follow each other naturally."""
+    tmp = path.with_suffix(".trim.wav")
+    cut = "silenceremove=start_periods=1:start_duration=0:start_threshold=-45dB"
+    r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", f"{cut},areverse,{cut},areverse", str(tmp)],
+                       capture_output=True)
+    if r.returncode == 0 and tmp.exists() and tmp.stat().st_size > 1000:
+        tmp.replace(path)
+    tmp.unlink(missing_ok=True)
+
+
 def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Path | None]:
     """Write one WAV per non-empty line into out_dir; returns paths (None for empty lines)."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -97,6 +108,7 @@ def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Pat
                 if ref:
                     kw["audio_prompt_path"] = str(ref)
                 torchaudio.save(str(out), model.generate(line, **kw), model.sr)
+            _trim_silence(out)
             paths.append(out)
     return paths
 

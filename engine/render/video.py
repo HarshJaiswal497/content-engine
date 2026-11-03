@@ -158,47 +158,71 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
 
 
 # ---- motion video (HyperFrames picture) + the same voice and music ----------------
-def plan_seconds(count: int, seconds: list[float] | float, voice: list[Path | None] | None, fade: float) -> list[float]:
-    """Per-slide durations: the narration sets the pace when there is a voice (same rule as slides_to_video)."""
+def plan_seconds(count: int, seconds: list[float] | float, voice: list[Path | None] | None, fade: float,
+                 lead: float = VOICE_LEAD, tail: float = VOICE_TAIL) -> list[float]:
+    """Per-slide durations: the narration sets the pace when there is a voice. The voice of slide i starts
+    `lead` after its scene starts, and the next scene starts `tail` after the line ends (negative = the
+    picture changes before the sentence finishes, which keeps the talk flowing)."""
     if isinstance(seconds, (int, float)):
         seconds = [float(seconds)] * count
     seconds = [max(s, fade + 0.5) for s in seconds]
     clips = list(voice or [])[:count] + [None] * (count - len(list(voice or [])[:count]))
     if any(clips):
-        seconds = [max(VOICE_LEAD + audio_seconds(c) + VOICE_TAIL + fade, 1.6) if c else min(s, 2.2)
+        seconds = [max(lead + audio_seconds(c) + tail + fade, 1.6) if c else min(s, 2.2)
                    for s, c in zip(seconds, clips)]
     return seconds
 
 
+def _whoosh_filter(label: str = "sw") -> str:
+    """A soft synthetic whoosh (filtered pink noise), no audio file needed."""
+    return (f"anoisesrc=color=pink:duration=0.6:amplitude=0.6:sample_rate=44100,highpass=f=350,lowpass=f=5500,"
+            f"afade=t=in:d=0.22,afade=t=out:st=0.24:d=0.36,volume=0.55,aformat=channel_layouts=stereo[{label}]")
+
+
 def mux_audio(video: Path, out: Path, seconds: list[float], fade: float, voice: list[Path | None] | None,
-              mood: str | None, key: str) -> Path:
-    """Add the voiceover (music ducks under it) or just music to a silent video of the same length."""
+              mood: str | None, key: str, lead: float = VOICE_LEAD, sfx: bool = False) -> Path:
+    """Add the voiceover (music ducks under it) or just music to a silent video of the same length.
+    With sfx, a soft whoosh plays at each scene change."""
     total = sum(seconds) - fade * (len(seconds) - 1)
     clips = list(voice or [])[:len(seconds)]
     clips += [None] * (len(seconds) - len(clips))
+    starts, t = [], 0.0
+    for d in seconds:
+        starts.append(t)
+        t += d - fade
     cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(video)]
     if any(clips):
         audio_in, music_f = _music_input(key, total, 1, "music", MUSIC_WITH_VOICE, mood)
         cmd += audio_in
-        parts, labels, start, idx = [music_f], [], 0.0, 2
+        parts, labels, idx = [music_f], [], 2
         for i, c in enumerate(clips):
             if c:
                 cmd += ["-i", str(c)]
-                ms = int((start + VOICE_LEAD) * 1000)
+                ms = int((starts[i] + lead) * 1000)
                 parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,"
                              f"aresample=44100,adelay={ms}|{ms}[vo{i}]")
                 labels.append(f"[vo{i}]")
                 idx += 1
-            start += seconds[i] - fade
         parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0,"
                      f"apad=whole_dur={total:.3f},atrim=0:{total:.3f},asplit=2[voice][key]")
         parts.append("[music][key]sidechaincompress=threshold=0.015:ratio=12:attack=15:release=450:makeup=1[bed]")
-        parts.append("[bed][voice]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[aout]")
+        parts.append("[bed][voice]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
     else:
-        audio_in, audio_f = _music_input(key, total, 1, mood=mood)
+        audio_in, audio_f = _music_input(key, total, 1, "mixed", mood=mood)
         cmd += audio_in
         parts = [audio_f]
-    cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[aout]", "-t", f"{total:.3f}",
+    final = "[mixed]"
+    if sfx and len(starts) > 1:
+        n = len(starts) - 1
+        parts.append(_whoosh_filter("sw0"))
+        parts.append(f"[sw0]asplit={n}" + "".join(f"[sx{i}]" for i in range(n)))
+        for i in range(n):
+            ms = max(int((starts[i + 1] - 0.05) * 1000), 0)
+            parts.append(f"[sx{i}]adelay={ms}|{ms}[sd{i}]")
+        parts.append(f"[mixed]{''.join(f'[sd{i}]' for i in range(n))}amix=inputs={n + 1}:duration=first:normalize=0,"
+                     f"alimiter=limit=0.95[withsfx]")
+        final = "[withsfx]"
+    cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", final, "-t", f"{total:.3f}",
             "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
     _run(cmd)
     return out
