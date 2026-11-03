@@ -1,0 +1,40 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-29T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Doodle a note, send it, and it lands on their home screen. Only you see who reacted.
+
+  Waitlist link in bio.
+
+  #slipnote #buildinpublic #androidapp
+slides:
+- type: cover
+  title: Doodle it. *Send it.*
+  say: You doodle a note, and you send it,
+- type: point
+  title: Real tools on a *shelf*
+  screen: composer
+  focus: shelf
+  label: Pen, marker, pencil
+  say: using real tools on a shelf, a pen, a marker, a pencil and an eraser,
+- type: point
+  title: It lands on their *home screen*
+  screen: add-widget
+  focus: preview
+  label: Even with the app closed
+  say: and it lands on their home screen, even when the app is closed.
+- type: point
+  title: React with a *sticker*
+  screen: note-react
+  focus: reactions
+  label: Only you see who
+  say: They react with a sticker, and only you see who reacted.
+- type: cta
+  title: Join the *waitlist*
+  body: Android first · iOS planned · link in bio
+  say: It's called Slipnote. The waitlist link is on my profile.
+video:
+  kind: slides
+  tone: story

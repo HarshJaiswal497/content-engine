@@ -4,26 +4,32 @@ scheduled_at: '2026-12-28T12:30:00+05:30'
 app: setalytix
 pillar: feature-spotlight
 text: |
-  One tap logs a set and starts your rest timer. Tapped by mistake? Tap again to undo. Today's weight and reps are already filled in.
+  One tap logs a set and starts your rest timer. Tapped by mistake? Tap again to undo.
 
   Free, link in bio.
 
-  #setalytix #gymtracker #workoutapp #progressiveoverload #gymlife #fitnessindia #buildinpublic
+  #setalytix #gymtracker #workoutapp
 slides:
 - type: cover
   title: One tap *logs a set*
   say: In my gym app, one tap logs a set,
 - type: point
   title: Weight and reps *already filled in*
-  body: Today's numbers are ready before you start.
+  screen: workout-targets
+  focus: target
+  label: Pre-filled for you
   say: and today's weight and reps are already filled in.
 - type: point
   title: Tap the tick, timer starts
-  body: 90 seconds by default. Set it per exercise.
+  screen: workout-logging
+  focus: rest-timer
+  label: Rest timer starts
   say: Tap the tick and the rest timer starts, ninety seconds by default.
 - type: point
   title: Tapped by mistake? *Tap again*
-  body: That undoes it.
+  screen: workout-logging
+  focus: ticks
+  label: Tap again to undo
   say: Tapped by mistake? Just tap again to undo.
 - type: cta
   title: Try *Setalytix*
@@ -31,6 +37,4 @@ slides:
   say: It's called Setalytix, it's free, and you can try it at app.setalytix.in.
 video:
   kind: slides
-  style: motion
   tone: upbeat
-  seconds_per_slide: 3.6
