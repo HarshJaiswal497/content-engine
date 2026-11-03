@@ -38,6 +38,16 @@ Next Monday → Sunday. One post per platform per day at the slot times in `cale
   "link in bio", because Reels reuse the Short. Set `video.tone`: upbeat (Setalytix tips),
   story (Slipnote build moments) or calm. Same rules as captions: no pricing, legal or competitors.
 
+### Phone screens in faceless Reels
+`brand/screens.yml` lists the real app screens you can show (files in `assets/screens/<app>/`). On a middle slide of a
+`video.kind: slides` post, add `screen: <name>` and the slide becomes a phone scene: the phone rises in with a tilt, then the
+camera zooms to the part that matters.
+- `focus: <region>` (a region named in the catalog, or a box `{x, y, w, h}` as fractions of the screen) sets where it zooms and draws a ring.
+- `label: <up to four words>` adds a small pill pointing at the ring. Skip the `body` on those slides (the picture says it).
+- Use 2-3 phone slides per Reel, only when a screen shows exactly what the voice line says. Other slides stay as before.
+- Use a screen of the post's own app by its plain name (`today`), or `slipnote/composer` for the other app. Only screens in the
+  catalog (they show cleared features). Never describe a screen as something it does not show. If no screen fits, use a normal slide.
+
 ## 3. Write the files
 Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram-reel.yml`, `youtube.yml`, and `instagram.yml` (the carousel) on the four carousel days.
 Schema and examples: `queue/_template.yml` and any recent week.

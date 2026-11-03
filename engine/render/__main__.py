@@ -66,7 +66,7 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                     from .tts import synthesize
                     voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
                 done = False
-                if video_style(spec) == "motion":   # HyperFrames picture + the same voice and music
+                if video_style(spec, post.path.parent.name) == "motion":   # HyperFrames picture + the same voice and music
                     try:
                         from .hyperframes import FADE, LEAD, TAIL, render_motion
                         mseconds = plan_seconds(len(slides), secs, voice, FADE, LEAD, TAIL)

@@ -1,0 +1,49 @@
+<template>
+  <style>
+{{BASE_CSS}}
+    #{{ID}}-title { top: 190px; height: 330px; font-size: {{TITLE_SIZE}}px; }
+    #{{ID}}-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; perspective: 1800px; }
+    #{{ID}}-phone { position: absolute; left: 270px; top: {{PHONE_TOP}}px; width: 540px; height: 1169px; transform-origin: {{FOCUS_ORIGIN}}; }
+    #{{ID}}-frame { position: absolute; inset: -16px; border-radius: 74px; background: #0E0B1A; box-shadow: 0 0 0 3px rgba(255,255,255,.22), 0 40px 90px rgba(0,0,0,.35); }
+    #{{ID}}-screen { position: absolute; inset: 0; border-radius: 60px; overflow: hidden; background: #fff; }
+    #{{ID}}-screen img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #{{ID}}-ring { position: absolute; left: {{RING_L}}%; top: {{RING_T}}%; width: {{RING_W}}%; height: {{RING_H}}%; border: 7px solid {{ACCENT}}; border-radius: 22px; box-shadow: 0 0 0 9999px rgba(0,0,0,0); opacity: 0; }
+    #{{ID}}-label { position: absolute; left: {{LABEL_X}}%; top: {{LABEL_T}}%; transform: translate(-50%, {{LABEL_TR}}); font-size: 27px; font-weight: 800; white-space: nowrap; padding: 10px 22px; border-radius: 999px; background: {{ACCENT}}; color: {{ON_ACCENT}}; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="{{ID}}" data-width="1080" data-height="1920">
+    <div id="{{ID}}-wrap" class="wrap">
+    <div class="tex"></div>
+    <div id="{{ID}}-title" class="title">{{TITLE_HTML}}</div>
+    <div id="{{ID}}-stage">
+      <div id="{{ID}}-phone">
+        <div id="{{ID}}-frame"></div>
+        <div id="{{ID}}-screen"><img src="{{SCREEN_SRC}}" alt="" /></div>
+        <div id="{{ID}}-ring"></div>
+        <div id="{{ID}}-label">{{LABEL}}</div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const dir = {{DIR}};
+    const words = gsap.utils.toArray("#{{ID}}-title .w");
+    tl.fromTo("#{{ID}}-wrap", { xPercent: dir * 100, boxShadow: "0 0 90px rgba(0,0,0,.35)" }, { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 0);
+    words.forEach((w, i) => {
+      tl.fromTo(w, { opacity: 0, x: -dir * 60, filter: "blur(10px)" },
+        { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "power4.out" }, 0.4 + i * 0.07);
+    });
+    const t1 = 0.4 + words.length * 0.07 + 0.15;
+    gsap.utils.toArray("#{{ID}}-title .hl").forEach((h, i) => { tl.to(h, { scaleX: 1, duration: 0.4, ease: "power3.out" }, t1 + i * 0.1); tl.to(h.parentNode, { color: "{{ON_ACCENT}}", duration: 0.25 }, t1 + 0.1 + i * 0.1); });
+    // the phone rises in with a tilt that settles
+    tl.fromTo("#{{ID}}-phone", { y: 760, rotationX: 38, rotationY: dir * -14, scale: 0.92, opacity: 0 },
+      { y: 0, rotationX: 0, rotationY: 0, scale: 1, opacity: 1, duration: 0.85, ease: "expo.out" }, 0.3);
+    // then the camera moves onto the part that matters
+    const tz = Math.min(1.5, Math.max(1.15, {{DUR}} * 0.36));
+    tl.to("#{{ID}}-title", { opacity: 0, y: -50, duration: 0.35, ease: "power2.in" }, tz);
+    tl.to("#{{ID}}-phone", { scale: {{ZOOM}}, x: {{ZOOM_X}}, y: {{ZOOM_Y}}, duration: 0.9, ease: "power2.inOut" }, tz);
+    tl.fromTo("#{{ID}}-ring", { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, tz + 0.75);
+    tl.fromTo("#{{ID}}-label", { opacity: 0, y: 12, scale: 0.7 }, { opacity: {{LABEL_ON}}, y: 0, scale: 1, duration: 0.35, ease: "back.out(2)" }, tz + 0.95);
+    window.__timelines["{{ID}}"] = tl;
+  </script>
+</template>
