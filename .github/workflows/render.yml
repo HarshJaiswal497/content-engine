@@ -49,7 +49,7 @@ jobs:
           sudo apt-get install -y -q espeak-ng >/dev/null
           ENGINE=$(python -c "import yaml;print((yaml.safe_load(open('brand/voice.yml')) or {}).get('engine','chatterbox'))")
           pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-          if [ "$ENGINE" = kokoro ]; then pip install -q "kokoro>=0.9" soundfile; else pip install -q chatterbox-tts soundfile; fi
+          if [ "$ENGINE" = kokoro ]; then pip install -q "kokoro>=0.9" soundfile; else pip install -q chatterbox-tts soundfile "kokoro>=0.9"; fi
 
       - name: Cache Whisper model
         uses: actions/cache@v4

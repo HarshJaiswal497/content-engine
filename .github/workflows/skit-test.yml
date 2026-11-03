@@ -18,7 +18,7 @@ jobs:
       - run: |
           sudo apt-get install -y -q espeak-ng >/dev/null
           pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-          pip install -q chatterbox-tts soundfile
+          pip install -q chatterbox-tts soundfile "kokoro>=0.9"
       - env:
           VOICE_PRIVATE_KEY: ${{ secrets.VOICE_PRIVATE_KEY }}
         run: python tools/skit_test.py samples/slipnote-skit-voiced.mp4

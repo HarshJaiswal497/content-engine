@@ -11,3 +11,9 @@ narrator: am_michael
 pronounce:
   Setalytix: Setalytics
   app.setalytix.in: app dot setalytics dot in
+
+# Slip, the mascot in skits: a free preset girl voice (Kokoro), no pitch shifting.
+# Try af_heart (warm, sweet), af_bella, af_nicole, af_sky, af_sarah. speed 1.0-1.15.
+slip:
+  voice: af_heart
+  speed: 1.05
