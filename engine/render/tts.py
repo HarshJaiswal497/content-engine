@@ -121,6 +121,8 @@ def voice_fingerprint() -> str:
 
 
 def _cute(path: Path, pitch: float, speed: float) -> None:
+    if pitch == 1.0 and speed == 1.0:
+        return
     """Make a voice smaller and sweeter: raise pitch (asetrate), keep it light on speed."""
     tmp = path.with_suffix(".cute.wav")
     sr = 24000
@@ -136,7 +138,7 @@ def skit_voices(beats: list[dict], out_dir: Path) -> list[Path | None]:
     more expressive and pitched up so it sounds small and cute (brand/voice.yml -> slip: {pitch, speed, exaggeration})."""
     out_dir.mkdir(parents=True, exist_ok=True)
     cfg = config()
-    slip = {"pitch": 1.28, "speed": 1.08, "exaggeration": 0.8, **(cfg.get("slip") or {})}
+    slip = {"pitch": 1.0, "speed": 1.0, "exaggeration": 0.8, **(cfg.get("slip") or {})}
     human_ex = float(cfg.get("exaggeration") if cfg.get("exaggeration") is not None else 0.5)
     paths: list[Path | None] = []
     import torchaudio
