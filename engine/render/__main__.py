@@ -65,14 +65,19 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                 if any(lines) and spec.get("voice", True):
                     from .tts import synthesize
                     voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
+                done = False
                 if video_style(spec) == "motion":   # HyperFrames picture + the same voice and music
-                    from .hyperframes import FADE, render_motion
-                    secs = plan_seconds(len(slides), secs, voice, FADE)
-                    silent = Path(tmp) / "picture.mp4"
-                    render_motion(slides, post.app, secs, FADE, silent, Path(tmp))
-                    mux_audio(silent, mp4, secs, FADE, voice, mood_for(spec.get("tone"), post.app),
-                              "/".join(mp4.parts[-4:-1]))
-                else:
+                    try:
+                        from .hyperframes import FADE, render_motion
+                        mseconds = plan_seconds(len(slides), secs, voice, FADE)
+                        silent = Path(tmp) / "picture.mp4"
+                        render_motion(slides, post.app, mseconds, FADE, silent, Path(tmp))
+                        mux_audio(silent, mp4, mseconds, FADE, voice, mood_for(spec.get("tone"), post.app),
+                                  "/".join(mp4.parts[-4:-1]))
+                        done = True
+                    except Exception:   # never lose a post over the fancy renderer: fall back to the classic look
+                        print(f"{post.id}: motion render failed, using classic slides\n{traceback.format_exc()[-1500:]}", flush=True)
+                if not done:
                     imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
                     slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
