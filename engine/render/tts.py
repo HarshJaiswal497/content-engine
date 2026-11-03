@@ -118,3 +118,50 @@ def voice_fingerprint() -> str:
     ref = hashlib.sha256(REFERENCE.read_bytes()).hexdigest()[:8] if REFERENCE.exists() else "-"
     cfg = hashlib.sha256(CONFIG.read_bytes()).hexdigest()[:8] if CONFIG.exists() else "-"
     return f"{cfg}:{ref}"
+
+
+def _cute(path: Path, pitch: float, speed: float) -> None:
+    """Make a voice smaller and sweeter: raise pitch (asetrate), keep it light on speed."""
+    tmp = path.with_suffix(".cute.wav")
+    sr = 24000
+    af = f"asetrate={int(sr * pitch)},aresample=24000,atempo={speed / pitch:.4f}"
+    r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", af, str(tmp)], capture_output=True)
+    if r.returncode == 0 and tmp.exists() and tmp.stat().st_size > 1000:
+        tmp.replace(path)
+    tmp.unlink(missing_ok=True)
+
+
+def skit_voices(beats: list[dict], out_dir: Path) -> list[Path | None]:
+    """One WAV per beat. The human speaks in Harsh's cloned voice; Slip gets Chatterbox's default voice,
+    more expressive and pitched up so it sounds small and cute (brand/voice.yml -> slip: {pitch, speed, exaggeration})."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    cfg = config()
+    slip = {"pitch": 1.28, "speed": 1.08, "exaggeration": 0.8, **(cfg.get("slip") or {})}
+    human_ex = float(cfg.get("exaggeration") if cfg.get("exaggeration") is not None else 0.5)
+    paths: list[Path | None] = []
+    import torchaudio
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = _decrypt_reference(Path(tmp))
+        print(f"skit voices: human={'Harsh’s voice sample' if ref else 'default'}, slip=default + pitch {slip['pitch']}", flush=True)
+        model = _chatterbox()
+        for i, b in enumerate(beats):
+            line = re.sub(r"[*_]", "", str(b.get("say") or b.get("text") or "")).strip()
+            if not line or b.get("voice") is False:
+                paths.append(None)
+                continue
+            for word, spoken in (cfg.get("pronounce") or {}).items():
+                line = re.sub(rf"\b{re.escape(word)}\b", spoken, line)
+            out = out_dir / f"beat-{i + 1}.wav"
+            if b.get("who") == "slip":
+                wav = model.generate(line, exaggeration=float(slip["exaggeration"]), cfg_weight=0.3)
+            else:
+                kw = {"exaggeration": human_ex, "cfg_weight": 0.4}
+                if ref:
+                    kw["audio_prompt_path"] = str(ref)
+                wav = model.generate(line, **kw)
+            torchaudio.save(str(out), wav, model.sr)
+            _trim_silence(out)
+            if b.get("who") == "slip":
+                _cute(out, float(slip["pitch"]), float(slip["speed"]))
+            paths.append(out)
+    return paths

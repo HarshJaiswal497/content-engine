@@ -167,6 +167,9 @@ class Post:
         if self.video_spec.get("kind") == "skit":   # a changed character or skit template re-renders
             files = [f for d in (ROOT / "assets" / "characters", ROOT / "hf" / "skit") for f in sorted(d.rglob("*")) if f.is_file() and f.suffix in (".png", ".html")]
             relevant["_skit"] = hashlib.sha256(b"".join(f.read_bytes() for f in files)).hexdigest()[:8]
+            if self.video_spec.get("voice", True):
+                from .render.tts import voice_fingerprint
+                relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):
             sib = self.path.parent / f"{self.video_spec['post']}.yml"
             if sib.exists() and sib != self.path:  # re-copy whenever the sibling's video changes

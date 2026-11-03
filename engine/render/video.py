@@ -441,31 +441,71 @@ def _sfx_filter(kind: str, label: str) -> str:
     return (f"aevalsrc='0.5*sin(2*PI*(520+900*t)*t)*exp(-28*t)':d=0.25:s=44100,aformat=channel_layouts=stereo[{label}]")   # pop
 
 
-def skit_audio(video: Path, out: Path, starts: list[float], total: float, beats: list[dict], mood: str | None, key: str) -> Path:
-    """Music bed (quiet) plus a small sound effect at each beat (beat `sfx`: pop (default), ping, dun, none)."""
-    audio_in, music_f = _music_input(key, total, 1, "music", mood=mood)
+def skit_audio(video: Path, out: Path, starts: list[float], total: float, beats: list[dict], mood: str | None, key: str,
+               voice: list[Path | None] | None = None, lead: float = 0.18) -> Path:
+    """Music bed (ducked under speech), each beat's voice, and a small sound effect per beat
+    (beat `sfx`: pop (default), ping, dun, none)."""
+    audio_in, music_f = _music_input(key, total, 1, "music", MUSIC_WITH_VOICE if voice and any(voice) else MUSIC_VOLUME, mood)
     cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(video), *audio_in]
-    parts, labels = [music_f], ["[music]"]
+    parts, vlabels, idx = [music_f], [], 2
+    for i, c in enumerate(voice or []):
+        if c:
+            cmd += ["-i", str(c)]
+            ms = int((starts[i] + lead) * 1000)
+            parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,aresample=44100,adelay={ms}|{ms}[vo{i}]")
+            vlabels.append(f"[vo{i}]")
+            idx += 1
+    sx = []
     for i, b in enumerate(beats):
         kind = str(b.get("sfx") or "pop")
         if kind == "none":
             continue
         ms = int(starts[i] * 1000)
-        parts.append(f"{_sfx_filter(kind, f'e{i}')}")
-        parts.append(f"[e{i}]volume=0.6,adelay={ms}|{ms}[d{i}]")
-        labels.append(f"[d{i}]")
-    parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
+        parts.append(_sfx_filter(kind, f"e{i}"))
+        parts.append(f"[e{i}]volume={0.35 if vlabels else 0.6},adelay={ms}|{ms}[d{i}]")
+        sx.append(f"[d{i}]")
+    if vlabels:
+        parts.append(f"{''.join(vlabels)}amix=inputs={len(vlabels)}:duration=longest:normalize=0,apad=whole_dur={total:.3f},"
+                     f"atrim=0:{total:.3f},asplit=2[voice][key]")
+        parts.append("[music][key]sidechaincompress=threshold=0.015:ratio=12:attack=15:release=450:makeup=1[bed]")
+        mix = ["[bed]", "[voice]", *sx]
+    else:
+        mix = ["[music]", *sx]
+    parts.append(f"{''.join(mix)}amix=inputs={len(mix)}:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
     cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[mixed]", "-t", f"{total:.3f}",
             "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
     _run(cmd)
     return out
 
 
-def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: str | None = None) -> Path:
+def _wav_seconds(path: Path) -> float:
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                                capture_output=True, text=True, check=True).stdout.strip() or 0)
+
+
+def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: str | None = None,
+               voices: bool = True, voice_files: list[Path | None] | None = None) -> Path:
+    """Render a skit. With voices, each beat lasts as long as its line (plus a breath) and the sound is mixed in."""
     from .hyperframes import render_skit
     with tempfile.TemporaryDirectory() as tmp:
+        files = voice_files
+        if files is None and voices:
+            try:
+                from .tts import skit_voices
+                files = skit_voices(beats, Path(tmp) / "voice")
+            except Exception:   # no voice engine available: a silent skit still ships
+                import traceback
+                print(f"skit voices failed, continuing without\n{traceback.format_exc()[-1200:]}", flush=True)
+                files = None
+        timed = []
+        for i, b in enumerate(beats):
+            b = dict(b)
+            f = files[i] if files and i < len(files) else None
+            if f:
+                b["seconds"] = round(max(1.6, _wav_seconds(f) + 0.18 + 0.4), 2)
+            timed.append(b)
         silent = Path(tmp) / "picture.mp4"
-        _, marks = render_skit(beats, app, silent, Path(tmp), title)
+        _, marks = render_skit(timed, app, silent, Path(tmp), title)
         total = marks[-1] + 0.4
-        skit_audio(silent, out, marks[:-1], total, beats, mood, "/".join(out.parts[-4:-1]))
+        skit_audio(silent, out, marks[:-1], total, timed, mood, "/".join(out.parts[-4:-1]), voice=files)
     return out

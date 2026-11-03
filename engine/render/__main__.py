@@ -82,7 +82,8 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                     slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
         elif kind == "skit":
-            skit_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("title"))
+            skit_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("title"),
+                       voices=spec.get("voice", True))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
