@@ -143,6 +143,17 @@ class Post:
             from .render.tts import voice_fingerprint  # narrated: engine, narrator and voice sample matter
             relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "slides":
+            used = sorted({str(sl["screen"]) for sl in self.data.get("slides") or [] if (sl or {}).get("screen")})
+            if used:   # a changed screen image or catalog entry re-renders the videos that show it
+                from .render.hyperframes import resolve_screen
+                bits = []
+                for ref in used:
+                    try:
+                        o, sg, _ = resolve_screen(ref, self.app)
+                        bits.append(hashlib.sha256((ROOT / "assets" / "screens" / o / f"{sg}.png").read_bytes()).hexdigest()[:8])
+                    except ValueError:
+                        bits.append("missing")
+                relevant["_screens"] = bits
             from .render.video import video_style
             if video_style(self.video_spec, self.path.parent.name) == "motion":  # classic posts keep their old hash
                 relevant["_style"] = "motion"
@@ -249,6 +260,17 @@ def validate(post: Post) -> None:
             e.append(f"video.kind must be one of {sorted(VIDEO_KINDS)}")
         if kind == "slides" and not d.get("slides"):
             e.append("video.kind 'slides' needs slides")
+        if kind == "slides":
+            from .render.hyperframes import _focus_box, resolve_screen
+            for n, sl in enumerate(d.get("slides") or [], 1):
+                if (sl or {}).get("screen"):
+                    try:
+                        _, _, entry = resolve_screen(sl["screen"], post.app)
+                        _focus_box(sl.get("focus"), entry)
+                        if len(str(sl.get("label") or "")) > 32:
+                            w.append(f"slide {n}: label is long (keep it to about four words)")
+                    except ValueError as ex:
+                        e.append(f"slide {n}: {ex}")
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):
             e.append("video.source (file in inbox/) is required for recording/talking_head")
         if kind == "talking_head" and not post.video_spec.get("script"):

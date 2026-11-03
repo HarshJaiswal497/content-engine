@@ -43,6 +43,31 @@ def _title_size(text: str, big: bool) -> int:
     return 72 if big else 68
 
 
+def screen_catalog() -> dict:
+    import yaml
+    p = ROOT / "brand" / "screens.yml"
+    return yaml.safe_load(p.read_text()) if p.exists() else {}
+
+
+def resolve_screen(ref: str, app: str) -> tuple[str, str, dict]:
+    """'today' (this post's app) or 'slipnote/composer' -> (app, slug, catalog entry). Raises if unknown."""
+    ref = str(ref).strip()
+    owner, slug = ref.split("/", 1) if "/" in ref else (app, ref)
+    entry = (screen_catalog().get(owner) or {}).get(slug)
+    if entry is None or not (ROOT / "assets" / "screens" / owner / f"{slug}.png").exists():
+        raise ValueError(f"unknown screen '{ref}' (see brand/screens.yml)")
+    return owner, slug, entry
+
+
+def _focus_box(focus, entry: dict) -> dict | None:
+    if not focus:
+        return None
+    box = (entry.get("regions") or {}).get(focus) if isinstance(focus, str) else focus
+    if not isinstance(box, dict) or not {"x", "y", "w", "h"} <= set(box):
+        raise ValueError(f"unknown focus '{focus}' (use a region name from brand/screens.yml or an {{x, y, w, h}} box)")
+    return {k: float(box[k]) for k in ("x", "y", "w", "h")}
+
+
 def _title_html(text: str) -> str:
     """Words as spans. Neighbouring *accent* words share one highlight pill (unless the phrase is long)."""
     items: list[tuple[str, bool]] = []
@@ -65,6 +90,32 @@ def _title_html(text: str) -> str:
         hl = '<i class="hl"></i>' if acc else ""
         out.append(f'<span class="w{" acc" if acc else ""}">{html.escape(label)}{hl}</span>')
     return "".join(out)
+
+
+def _phone_tokens(slide: dict, app: str, dur: float, out_dir: Path, title_size: int) -> dict:
+    owner, slug, entry = resolve_screen(slide["screen"], app)
+    dest = out_dir / "assets" / f"{owner}-{slug}.png"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(ROOT / "assets" / "screens" / owner / f"{slug}.png", dest)
+    box = _focus_box(slide.get("focus"), entry)
+    top, pw, ph = 560.0, 540.0, 1169.0
+    t = {"SCREEN_SRC": f"assets/{owner}-{slug}.png", "PHONE_TOP": int(top), "DUR": f"{dur:.2f}",
+         "TITLE_SIZE": min(title_size, 92), "LABEL": html.escape(str(slide.get("label") or "")),
+         "ZOOM": 1, "ZOOM_X": 0, "ZOOM_Y": 0, "FOCUS_ORIGIN": "50% 50%", "LABEL_ON": 0,
+         "RING_L": 0, "RING_T": 0, "RING_W": 0, "RING_H": 0, "LABEL_X": 50, "LABEL_T": 0, "LABEL_TR": "-100%"}
+    if box:
+        cx, cy = box["x"] + box["w"] / 2, box["y"] + box["h"] / 2
+        zoom = min(2.1, max(1.15, 1.6 / max(box["w"], 0.2)), 880 / (max(box["h"], 0.05) * ph))
+        t.update(ZOOM=round(zoom, 3), ZOOM_X=round(540 - (270 + cx * pw)), ZOOM_Y=round(860 - (top + cy * ph)),
+                 FOCUS_ORIGIN=f"{cx * 100:.1f}% {cy * 100:.1f}%",
+                 RING_L=round((box["x"] - 0.015) * 100, 2), RING_T=round((box["y"] - 0.008) * 100, 2),
+                 RING_W=round((box["w"] + 0.03) * 100, 2), RING_H=round((box["h"] + 0.016) * 100, 2),
+                 LABEL_X=round(cx * 100, 1), LABEL_ON=1 if t["LABEL"] else 0)
+        if box["y"] < 0.1:
+            t.update(LABEL_T=round((box["y"] + box["h"]) * 100 + 3.5, 2), LABEL_TR="0%")
+        else:
+            t.update(LABEL_T=round(box["y"] * 100 - 1.6, 2))
+    return t
 
 
 def _texture(kind: str, ink: str) -> str:
@@ -103,6 +154,8 @@ def build_project(slides: list[dict], app: str, seconds: list[float], fade: floa
             kind = "cover"
         if i == len(slides) - 1 and len(slides) > 1:
             kind = "cta"
+        if kind == "point" and slide.get("screen"):
+            kind = "phone"
         title = slide.get("title") or ""
         tokens = {
             "ID": f"s{i}", "LABEL": label, "HANDLE": handle, "N": n_point + 1,
@@ -112,6 +165,9 @@ def build_project(slides: list[dict], app: str, seconds: list[float], fade: floa
             "MUTED": theme.muted, "CARD": theme.card, "ON_ACCENT": theme.on_accent, "DIR": 1 if n_point % 2 == 0 else -1,
             "TITLE_SIZE": _title_size(title, kind in {"cover", "cta"}),
         }
+        if kind == "phone":
+            n_point += 1
+            tokens.update(_phone_tokens(slide, app, dur, out_dir, tokens["TITLE_SIZE"]))
         if kind == "point":
             n_point += 1
             if n_point % 2 == 0:       # alternate the ground for rhythm

@@ -215,3 +215,19 @@ def test_motion_style_switches_on_by_date():
     from engine.render.video import video_style
     assert video_style({}, "2026-11-08") == "slides" and video_style({}, "2026-11-09") == "motion"
     assert video_style({"style": "slides"}, "2026-12-01") == "slides" and video_style({"style": "motion"}, "2026-11-01") == "motion"
+
+
+def test_phone_scene_and_screen_validation(tmp_path):
+    from engine.render import hyperframes as hf
+    slides = [{"type": "cover", "title": "Hi"},
+              {"type": "point", "title": "Prefilled", "screen": "workout-targets", "focus": "target", "label": "Pre-filled"},
+              {"type": "cta", "title": "Try it", "body": "Free"}]
+    proj = hf.build_project(slides, "setalytix", [3.0, 4.0, 3.0], 0.45, tmp_path / "p")
+    assert (proj / "assets" / "setalytix-workout-targets.png").exists()
+    scene = (proj / "compositions" / "s1.html").read_text()
+    assert "{{" not in scene and "Pre-filled" in scene and "setalytix-workout-targets.png" in scene
+    import pytest
+    with pytest.raises(ValueError):
+        hf.resolve_screen("nope", "setalytix")
+    with pytest.raises(ValueError):
+        hf._focus_box("nope", hf.resolve_screen("today", "setalytix")[2])
