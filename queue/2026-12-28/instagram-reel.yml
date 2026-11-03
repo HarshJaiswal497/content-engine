@@ -12,23 +12,23 @@ text: |
 slides:
 - type: cover
   title: One tap *logs a set*
-  say: In my gym app, one tap logs a set.
+  say: In my gym app, one tap logs a set,
 - type: point
   title: Weight and reps *already filled in*
   body: Today's numbers are ready before you start.
-  say: Today's weight and reps are already filled in.
+  say: and today's weight and reps are already filled in.
 - type: point
   title: Tap the tick, timer starts
   body: 90 seconds by default. Set it per exercise.
-  say: Tap the tick, and the rest timer starts. Ninety seconds by default.
+  say: Tap the tick and the rest timer starts, ninety seconds by default.
 - type: point
   title: Tapped by mistake? *Tap again*
   body: That undoes it.
-  say: Tapped by mistake? Tap again to undo.
+  say: Tapped by mistake? Just tap again to undo.
 - type: cta
   title: Try *Setalytix*
   body: Free at app.setalytix.in
-  say: It's called Setalytix, and it's free. Try it at app.setalytix.in.
+  say: It's called Setalytix, it's free, and you can try it at app.setalytix.in.
 video:
   kind: slides
   style: motion
