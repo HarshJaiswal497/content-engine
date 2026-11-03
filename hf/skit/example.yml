@@ -1,0 +1,22 @@
+# Example skit post (copy into queue/<monday>/ and adjust). Facts must come from the fact sheet.
+platform: instagram
+format: reel
+scheduled_at: '2026-11-12T12:30:00+05:30'
+app: slipnote
+pillar: product
+text: |
+  You don't always have time to talk. But you can still let someone know you're thinking of them.
+
+  Slipnote is in development. Waitlist link in bio.
+
+  #slipnote #handwrittennotes #androidapp #buildinpublic #indiedev
+video:
+  kind: skit
+  tone: playful
+  beats:
+    - {who: human, pose: phone, text: "I haven't talked to my best friend in weeks...", seconds: 3.2, other_pose: sad, sfx: dun}
+    - {who: slip, pose: wave, text: "Don't text. *Doodle.*", seconds: 2.4}
+    - {who: human, pose: shocked, text: "A doodle?", seconds: 1.8, other_pose: think}
+    - {who: slip, pose: write, text: "It lands on their *home screen*. No interrupting.", seconds: 3.4}
+    - {who: human, pose: happy, text: "That's Slipnote?", seconds: 1.8, other_pose: cheer, sfx: ping}
+    - {who: slip, pose: cheer, text: "In development. *Waitlist in bio!*", seconds: 2.8, sfx: ping}

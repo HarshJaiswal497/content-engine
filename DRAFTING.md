@@ -70,6 +70,13 @@ Hard rules:
   title, description and tags, so write each `youtube.title` and `youtube.description` ready to paste.
 - YouTube: `youtube.title` ≤ 60 chars, `youtube.description` 1–3 lines + hashtags, 5–10 tags.
 
+## Video types you can use (all rendered free by HyperFrames)
+
+- **Faceless Reel** (`kind: slides`): narrated scenes, with phone screens (see "Phone screens" above).
+- **Talking head** (`kind: talking_head`): Harsh's clip gets highlight captions, zooms and a hook pill. Optional `inserts:` (phone screen at a time) and `emphasis:` words; see `hf/README.md`.
+- **Skit** (`kind: skit`): Slip (the Slipnote mascot) and a human talk in bubbles. Use at most one a week, for Slipnote, 4–6 beats, 12–16 seconds,
+  light and warm, never sarcastic. Same fact rules as any post: Slip may only say things from the fact sheet. Copy `hf/skit/example.yml`.
+
 ## 4. Ship the drafts
 ```bash
 git checkout -b drafts/<monday-date>
