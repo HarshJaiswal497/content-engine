@@ -12,12 +12,12 @@ jobs:
         with: { python-version: "3.11" }
       - run: |
           sudo apt-get install -y -q espeak-ng >/dev/null
-          pip install -q torch --index-url https://download.pytorch.org/whl/cpu
-          pip install -q "kokoro>=0.9" soundfile
+          pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install -q "kokoro>=0.9" soundfile chatterbox-tts
       - run: python tools/slip_voices.py samples
       - name: Save to the voice-samples branch
         run: |
-          for f in samples/*.wav; do ffmpeg -loglevel error -i "$f" -b:a 96k "${f%.wav}.mp3" && rm "$f"; done
+          rm -f samples/slip-*.wav; for f in samples/*.wav; do ffmpeg -loglevel error -i "$f" -b:a 96k "${f%.wav}.mp3" && rm "$f"; done
           git config user.name "content-engine[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for i in 1 2 3 4 5; do
             git fetch -q origin voice-samples && git checkout -q -B voice-samples origin/voice-samples || git checkout -q --orphan voice-samples
