@@ -12,8 +12,9 @@ pronounce:
   Setalytix: Setalytics
   app.setalytix.in: app dot setalytics dot in
 
-# Slip, the mascot in skits: a free preset girl voice (Kokoro), no pitch shifting.
-# Try af_heart (warm, sweet), af_bella, af_nicole, af_sky, af_sarah. speed 1.0-1.15.
+# Slip, the mascot in skits: Chatterbox copying Kokoro's sweet af_heart voice, delivered lively (picked 4 Nov).
+# exaggeration: 0.85 lively, 1.1 very excited. voice: any Kokoro voice (af_bella, af_nicole, ...).
 slip:
   voice: af_heart
-  speed: 1.05
+  exaggeration: 0.85
+  cfg_weight: 0.3

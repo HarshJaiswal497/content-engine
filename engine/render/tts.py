@@ -133,28 +133,36 @@ def _cute(path: Path, pitch: float, speed: float) -> None:
     tmp.unlink(missing_ok=True)
 
 
-def _kokoro_voice(name: str):
+SLIP_REF_LINES = ["Hi! I'm Slip! Let's fix that!", "Don't text! Doodle!"]
+
+
+def _slip_reference(tmp: Path, voice: str) -> Path:
+    """A short clip of Kokoro's preset girl voice, used as the sound for Chatterbox to copy."""
+    import numpy as np
+    import soundfile as sf
     from kokoro import KPipeline
-    return KPipeline(lang_code=name[0])
+    pipe = KPipeline(lang_code=voice[0])
+    audio = np.concatenate([a for line in SLIP_REF_LINES for _, _, a in pipe(line, voice=voice, speed=1.05)])
+    ref = tmp / "slip-ref.wav"
+    sf.write(ref, audio, 24000)
+    return ref
 
 
 def skit_voices(beats: list[dict], out_dir: Path) -> list[Path | None]:
-    """One WAV per beat. The human speaks in Harsh's cloned voice (Chatterbox). Slip gets a sweet preset girl voice
-    (Kokoro, free) with no pitch shifting; set brand/voice.yml -> slip: {voice: af_heart, speed: 1.05}.
-    A pitch can still be set (slip.pitch) but is off by default."""
+    """One WAV per beat. The human speaks in Harsh's cloned voice. Slip is Chatterbox copying Kokoro's sweet
+    `af_heart` voice with a lively, excited delivery (picked by Harsh, 4 Nov: "C chatterbox heart lively").
+    Tune in brand/voice.yml -> slip: {voice, exaggeration}."""
     out_dir.mkdir(parents=True, exist_ok=True)
     cfg = config()
-    slip = {"voice": "af_heart", "speed": 1.05, "pitch": None, **(cfg.get("slip") or {})}
+    slip = {"voice": "af_heart", "exaggeration": 0.85, "cfg_weight": 0.3, **(cfg.get("slip") or {})}
     human_ex = float(cfg.get("exaggeration") if cfg.get("exaggeration") is not None else 0.5)
     paths: list[Path | None] = []
-    import numpy as np
-    import soundfile as sf
     import torchaudio
     with tempfile.TemporaryDirectory() as tmp:
         ref = _decrypt_reference(Path(tmp))
-        print(f"skit voices: human={'Harsh’s voice sample' if ref else 'default'}, slip=kokoro {slip['voice']}", flush=True)
+        slip_ref = _slip_reference(Path(tmp), str(slip["voice"])) if any(b.get("who") == "slip" for b in beats) else None
+        print(f"skit voices: human={'Harsh’s voice sample' if ref else 'default'}, slip=chatterbox copying {slip['voice']}", flush=True)
         model = _chatterbox()
-        kpipe = _kokoro_voice(str(slip["voice"])) if any(b.get("who") == "slip" for b in beats) else None
         for i, b in enumerate(beats):
             line = re.sub(r"[*_]", "", str(b.get("say") or b.get("text") or "")).strip()
             if not line or b.get("voice") is False:
@@ -164,15 +172,15 @@ def skit_voices(beats: list[dict], out_dir: Path) -> list[Path | None]:
                 line = re.sub(rf"\b{re.escape(word)}\b", spoken, line)
             out = out_dir / f"beat-{i + 1}.wav"
             if b.get("who") == "slip":
-                audio = np.concatenate([a for _, _, a in kpipe(line, voice=str(slip["voice"]), speed=float(slip["speed"]))])
-                sf.write(out, audio, 24000)
-                if slip.get("pitch"):
-                    _cute(out, float(slip["pitch"]), 1.0)
+                line = re.sub(r"\.(\s|$)", r"!\1", line)   # Slip is excited: full stops become exclamations
+                wav = model.generate(line, audio_prompt_path=str(slip_ref), exaggeration=float(slip["exaggeration"]),
+                                     cfg_weight=float(slip["cfg_weight"]))
             else:
                 kw = {"exaggeration": human_ex, "cfg_weight": 0.4}
                 if ref:
                     kw["audio_prompt_path"] = str(ref)
-                torchaudio.save(str(out), model.generate(line, **kw), model.sr)
+                wav = model.generate(line, **kw)
+            torchaudio.save(str(out), wav, model.sr)
             _trim_silence(out)
             paths.append(out)
     return paths
