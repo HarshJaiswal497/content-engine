@@ -21,7 +21,7 @@ jobs:
           pip install -q chatterbox-tts soundfile "kokoro>=0.9"
       - env:
           VOICE_PRIVATE_KEY: ${{ secrets.VOICE_PRIVATE_KEY }}
-        run: python tools/skit_test.py samples/slipnote-skit-voiced.mp4
+        run: python tools/skit_test.py samples/skit-${{ github.run_id }}.mp4
       - name: Save to the voice-samples branch
         run: |
           git config user.name "content-engine[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
