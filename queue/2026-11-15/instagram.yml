@@ -17,10 +17,10 @@ slides:
   number: 1
   title: Same weight, *one more rep*
   body: Until every working set hits the rep goal.
-- type: point
-  number: 2
+- type: image
+  image: assets/screens/setalytix/workout-targets.png
   title: Hit every set, *add weight*
-  body: The weight goes up one step (2.5 kg by default) and the rep goal drops.
+  body: The green box tells you why. Up one step (2.5 kg by default), rep goal drops.
 - type: point
   number: 3
   title: Away 21+ days? *Repeat*

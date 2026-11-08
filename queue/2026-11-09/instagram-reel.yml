@@ -17,13 +17,16 @@ slides:
 - type: point
   title: '*One rule*, about 400 sets'
   body: Same weight, one more rep. Hit every rep goal and it adds weight.
+  screen: workout-targets
+  focus: target
+  label: Why this weight
   say: The rule is simple, same weight and one more rep, and when I hit every rep goal, it adds weight. I followed it on almost every one of about four hundred sets.
 - type: point
   title: Every set *pre-filled*
   body: Weight and reps are already there.
-  screen: workout-targets
-  focus: target
-  label: Pre-filled target
+  screen: workout-logging
+  focus: ticks
+  label: Tap to log
   say: Every set opens with the weight and reps already filled in, so I never had to guess.
 - type: big
   title: Hit the target on about *7 in 10* sets

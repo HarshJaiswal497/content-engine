@@ -17,13 +17,13 @@ slides:
   number: 1
   title: You land *inside the app*
   body: No sign-in wall. Open Setalytix and you're in.
-- type: point
-  number: 2
-  title: Pick a starter split
+- type: image
+  image: assets/screens/setalytix/welcome.png
+  title: Pick a *starter split*
   body: Push/Pull/Legs, Upper/Lower or Full Body. Or build your own.
-- type: point
-  number: 3
-  title: Make it yours
+- type: image
+  image: assets/screens/setalytix/edit-split.png
+  title: Make it *yours*
   body: Edit splits and exercises, set up cardio. It all saves on your phone.
 - type: point
   number: 4

@@ -42,6 +42,6 @@ video:
     other_pose: happy
   - who: slip
     pose: cheer
-    text: Time capsules. In development. *Waitlist in bio!*
+    text: That's *Slipnote*. In development. *Waitlist in bio!*
     seconds: 3.0
     sfx: ping
