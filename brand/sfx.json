@@ -1,0 +1,158 @@
+{
+ "hit": [
+  {
+   "file": "hit0.wav",
+   "peak": 0.181,
+   "dur": 0.667,
+   "from": "pro_impact/short"
+  },
+  {
+   "file": "hit1.wav",
+   "peak": 0.172,
+   "dur": 0.848,
+   "from": "pro_impact/air"
+  },
+  {
+   "file": "hit2.wav",
+   "peak": 0.058,
+   "dur": 0.282,
+   "from": "cut_hit/punch"
+  }
+ ],
+ "whoosh": [
+  {
+   "file": "whoosh0.wav",
+   "peak": 0.131,
+   "dur": 0.568,
+   "from": "swipe/flick"
+  },
+  {
+   "file": "whoosh1.wav",
+   "peak": 0.162,
+   "dur": 0.536,
+   "from": "whoosh_fast/tight"
+  },
+  {
+   "file": "whoosh2.wav",
+   "peak": 0.176,
+   "dur": 0.676,
+   "from": "swipe/cloth"
+  },
+  {
+   "file": "whoosh3.wav",
+   "peak": 0.131,
+   "dur": 1.056,
+   "from": "whoosh_fast/crisp"
+  }
+ ],
+ "pop": [
+  {
+   "file": "pop0.wav",
+   "peak": 0.018,
+   "dur": 0.17,
+   "from": "pro_pop_in/airy"
+  },
+  {
+   "file": "pop1.wav",
+   "peak": 0.017,
+   "dur": 0.118,
+   "from": "ui_pop/blip"
+  },
+  {
+   "file": "pop2.wav",
+   "peak": 0.006,
+   "dur": 0.123,
+   "from": "pro_pop/bloop"
+  },
+  {
+   "file": "pop3.wav",
+   "peak": 0.019,
+   "dur": 0.172,
+   "from": "pro_pop_in/round"
+  }
+ ],
+ "ping": [
+  {
+   "file": "ping0.wav",
+   "peak": 0.013,
+   "dur": 0.27,
+   "from": "pro_notify/ding_1930"
+  },
+  {
+   "file": "ping1.wav",
+   "peak": 0.013,
+   "dur": 0.3,
+   "from": "pro_notify/ding_2167"
+  }
+ ],
+ "dun": [
+  {
+   "file": "dun0.wav",
+   "peak": 0.249,
+   "dur": 1.0,
+   "from": "pro_sub_drop/quick"
+  },
+  {
+   "file": "dun1.wav",
+   "peak": 0.493,
+   "dur": 1.482,
+   "from": "pro_sub_drop/soft"
+  }
+ ],
+ "tick": [
+  {
+   "file": "tick0.wav",
+   "peak": 0.007,
+   "dur": 0.061,
+   "from": "pro_typing_key/tick"
+  },
+  {
+   "file": "tick1.wav",
+   "peak": 0.004,
+   "dur": 0.032,
+   "from": "pro_hover_tick/soft"
+  },
+  {
+   "file": "tick2.wav",
+   "peak": 0.011,
+   "dur": 0.072,
+   "from": "pro_typing_key/soft"
+  }
+ ],
+ "tap": [
+  {
+   "file": "tap0.wav",
+   "peak": 0.013,
+   "dur": 0.089,
+   "from": "pro_tap/finger"
+  },
+  {
+   "file": "tap1.wav",
+   "peak": 0.018,
+   "dur": 0.098,
+   "from": "pro_tap/soft"
+  }
+ ],
+ "riser": [
+  {
+   "file": "riser0.wav",
+   "peak": 1.278,
+   "dur": 1.3,
+   "from": "pro_riser/roll"
+  }
+ ],
+ "sting": [
+  {
+   "file": "sting0.wav",
+   "peak": 0.157,
+   "dur": 0.95,
+   "from": "pro_logo_sting/taps_tone"
+  },
+  {
+   "file": "sting1.wav",
+   "peak": 0.076,
+   "dur": 0.96,
+   "from": "pro_logo_sting/zap_bloom"
+  }
+ ]
+}

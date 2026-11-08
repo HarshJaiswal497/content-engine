@@ -217,14 +217,23 @@ def mux_audio(video: Path, out: Path, seconds: list[float], fade: float, voice: 
         parts = [audio_f]
     final = "[mixed]"
     if sfx and len(starts) > 1:
-        n = len(starts) - 1
-        parts.append(_whoosh_filter("sw0"))
-        parts.append(f"[sw0]asplit={n}" + "".join(f"[sx{i}]" for i in range(n)))
-        for i in range(n):
-            ms = max(int((starts[i + 1] - 0.05) * 1000), 0)
-            parts.append(f"[sx{i}]adelay={ms}|{ms}[sd{i}]")
-        parts.append(f"[mixed]{''.join(f'[sd{i}]' for i in range(n))}amix=inputs={n + 1}:duration=first:normalize=0,"
-                     f"alimiter=limit=0.95[withsfx]")
+        from . import sfx as sfxlib
+        next_in = 2 + sum(1 for c in clips if c)
+        args, sparts, labels = sfxlib.add_to_graph(sfxlib.cues_for_scenes(starts, total, hook=True), next_in, total)
+        if labels:
+            cmd += args
+            parts += sparts
+            parts.append(f"[mixed]{''.join(labels)}amix=inputs={len(labels) + 1}:duration=first:normalize=0,"
+                         f"alimiter=limit=0.95[withsfx]")
+        else:   # no library files: the old synthetic whoosh
+            n = len(starts) - 1
+            parts.append(_whoosh_filter("sw0"))
+            parts.append(f"[sw0]asplit={n}" + "".join(f"[sx{i}]" for i in range(n)))
+            for i in range(n):
+                ms = max(int((starts[i + 1] - 0.05) * 1000), 0)
+                parts.append(f"[sx{i}]adelay={ms}|{ms}[sd{i}]")
+            parts.append(f"[mixed]{''.join(f'[sd{i}]' for i in range(n))}amix=inputs={n + 1}:duration=first:normalize=0,"
+                         f"alimiter=limit=0.95[withsfx]")
         final = "[withsfx]"
     cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", final, "-t", f"{total:.3f}",
             "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
@@ -455,14 +464,25 @@ def skit_audio(video: Path, out: Path, starts: list[float], total: float, beats:
             parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,aresample=44100,adelay={ms}|{ms}[vo{i}]")
             vlabels.append(f"[vo{i}]")
             idx += 1
+    from . import sfx as sfxlib
     sx = []
+    n_in = idx
     for i, b in enumerate(beats):
         kind = str(b.get("sfx") or "pop")
         if kind == "none":
             continue
-        ms = int(starts[i] * 1000)
-        parts.append(_sfx_filter(kind, f"e{i}"))
-        parts.append(f"[e{i}]volume={0.35 if vlabels else 0.6},adelay={ms}|{ms}[d{i}]")
+        take = sfxlib.pick(kind if kind in ("pop", "ping", "dun", "tap", "hit", "tick") else "pop", i)
+        if take:
+            start = max(starts[i] + sfxlib.LIGHT_AFTER_SOUND - take["peak"], 0.0)
+            ms = int(start * 1000)
+            cmd += ["-i", str(sfxlib.DIR / take["file"])]
+            parts.append(f"[{n_in}:a]aresample=44100,aformat=channel_layouts=stereo,"
+                         f"volume={0.5 if vlabels else 0.8},adelay={ms}|{ms}[d{i}]")
+            n_in += 1
+        else:
+            ms = int(starts[i] * 1000)
+            parts.append(_sfx_filter(kind, f"e{i}"))
+            parts.append(f"[e{i}]volume={0.35 if vlabels else 0.6},adelay={ms}|{ms}[d{i}]")
         sx.append(f"[d{i}]")
     if vlabels:
         parts.append(f"{''.join(vlabels)}amix=inputs={len(vlabels)}:duration=longest:normalize=0,apad=whole_dur={total:.3f},"
