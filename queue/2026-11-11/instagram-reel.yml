@@ -1,0 +1,36 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-11T12:30:00+05:30'
+app: setalytix
+pillar: lessons
+text: |
+  About ten thousand pageviews, almost no signups. The numbers looked great until I read them properly. So Setalytix now lets you in before it asks who you are.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #buildinpublic #indiedev #indiehacker #webdev #gymtracker #pwa #productthinking
+video:
+  kind: talking_head
+  source: inbox/2026-11-11-guest-mode.mp4
+  hook: 10k pageviews, almost no signups
+  captions: true
+  emphasis:
+  - bots
+  - wall
+  - first
+  inserts:
+  - at: 16
+    dur: 4.5
+    screen: welcome
+    focus: starters
+    label: Try it first
+  script: |-
+    About ten thousand pageviews in thirty days, and almost nobody signed up. That's what the dashboard said about Setalytix.
+
+    But only five hundred and fifty-eight of those were unique visitors. The rest is repeat opens, bots, link previews and me.
+
+    And the real ones hit a sign-in wall before they saw anything.
+
+    So now Setalytix lets you in first. Pick a starter split, edit it, set up cardio, all before you make an account.
+
+    I don't know yet if it works. I'll tell you what happens.

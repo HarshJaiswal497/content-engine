@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-14T17:45:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 'One doodle, one guess: Guess the doodle in Slipnote'
+  description: |
+    Slip deals the words, your friend draws, you pick from four. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #slipnote #doodle
+  tags:
+  - slipnote
+  - guess the doodle
+  - doodle game
+  - handwritten notes
+  - android app
+  - indie developer

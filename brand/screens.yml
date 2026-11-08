@@ -62,3 +62,49 @@ slipnote:
   history:
     shows: History, a grid of past notes
     regions: {grid: {x: .04, y: .2, w: .92, h: .5}}
+  # --- Phase 9 screens (added 8 Nov 2026): the new play features, photobook, memory lane ---
+  guess-pick-word:
+    shows: Pick a word to draw (three words dealt, friends guess from four, only you see it)
+    regions: {cards: {x: .05, y: .72, w: .9, h: .2}}
+  guess-friend:
+    shows: Guessing a friend's doodle, four options, one guess each
+    regions: {doodle: {x: .06, y: .13, w: .88, h: .33}, options: {x: .05, y: .51, w: .9, h: .17}}
+  guess-results:
+    shows: Who guessed your doodle, with each friend's guess ticked or crossed
+    regions: {guesses: {x: .05, y: .59, w: .9, h: .27}}
+  capsule-seal:
+    shows: Sealing a time capsule, choosing the day it opens
+    regions: {when: {x: .04, y: .4, w: .92, h: .2}, seal-button: {x: .05, y: .9, w: .9, h: .075}}
+  photobook-cover:
+    shows: The photobook cover looks (scrapbook, cheerful, classic and more), everything editable
+    regions: {cover: {x: .06, y: .07, w: .88, h: .4}, looks: {x: .02, y: .72, w: .96, h: .18}}
+  photobook-page:
+    shows: Editing a photobook page, with undo and redo and the tools row
+    regions: {page: {x: .04, y: .1, w: .92, h: .42}, tools: {x: .04, y: .6, w: .92, h: .09}, undo-redo: {x: .03, y: .02, w: .35, h: .06}}
+  photobook-spread:
+    shows: Turning a photobook page, and the book lying open as two-page spreads sideways
+    regions: {page: {x: .05, y: .1, w: .9, h: .52}, spread: {x: .04, y: .76, w: .92, h: .19}}
+  play-home:
+    shows: A circle's home with the Play button (badge shows what is waiting)
+    regions: {play-button: {x: .62, y: .85, w: .34, h: .13}}
+  daily-prompt-list:
+    shows: Today's prompt card on the circles list
+    regions: {prompt: {x: .04, y: .33, w: .92, h: .15}}
+  sticker-day:
+    shows: The daily sticker pack, today's sticker and the 30 to collect
+    regions: {today: {x: .04, y: .29, w: .92, h: .12}, grid: {x: .04, y: .44, w: .92, h: .38}}
+  thinking-of-you:
+    shows: Thinking of you, send a one-tap sticker poke
+    regions: {stickers: {x: .04, y: .53, w: .92, h: .2}}
+  video-record:
+    shows: Recording a video note, up to 10 seconds, with sound
+    regions: {clip: {x: .04, y: .1, w: .92, h: .43}, record: {x: .3, y: .58, w: .4, h: .17}}
+  boomerang-note:
+    shows: A received boomerang note (a short bouncing clip) with the reaction row
+    regions: {note: {x: .05, y: .11, w: .9, h: .45}}
+  finish-ask:
+    shows: The composer with "Ask them to finish it" ticked
+    regions: {ask: {x: .06, y: .05, w: .5, h: .08}}
+  memory-lane-story:
+    shows: A memory lane story, "Chai crew's October", scroll to remember
+    regions: {title: {x: .1, y: .18, w: .8, h: .12}, stack: {x: .15, y: .3, w: .7, h: .38}}

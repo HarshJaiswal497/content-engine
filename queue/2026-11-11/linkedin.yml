@@ -1,0 +1,19 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-11T09:15:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  Can an app choose your weights? I've been testing that on myself.
+
+  For about a month I followed Setalytix's pick on almost every set: roughly 400 sets across 25 workouts and 27 exercises. The rule is plain. Same weight, one more rep. When every working set hits the rep goal, the weight goes up one step and the rep target drops.
+
+  About seven in ten sets hit or beat the target. The interesting part is what happens right after the weight goes up: when the app told me to go heavier, I hit the target on only about one set in three. The first session at a new weight is the hard one, and the app is built to hold the weight until I've earned the next step.
+
+  The numbers are approximate (they come from my own training log, matched to what the app suggested), so read them as "about", not exact.
+
+  I'll keep posting what the data shows, one episode a week.
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #progressiveoverload #pwa

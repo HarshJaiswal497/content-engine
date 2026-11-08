@@ -1,0 +1,21 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-12T17:45:00+05:30'
+app: slipnote
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: I rebuilt my app's photobook three times in a day
+  description: |
+    Slipnote's photobook: a cover that swings open, pages that turn, two-page spreads. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #slipnote #buildinpublic
+  tags:
+  - slipnote
+  - photobook
+  - scrapbook
+  - handwritten notes
+  - build in public
+  - indie developer
+  - android app

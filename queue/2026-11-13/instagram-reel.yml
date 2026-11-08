@@ -1,0 +1,40 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-13T12:30:00+05:30'
+app: setalytix
+pillar: community
+text: |
+  Guess what Setalytix picks next. I did twelve reps on three sets at 12.5 kg. A, B or C? Tell me what you picked.
+
+  The answer is in the video. Free at app.setalytix.in, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #guesstheweight #workoutlog #gymlife #buildinpublic
+slides:
+- type: cover
+  kicker: Guess the weight
+  title: 12 reps, 3 sets. *What does the app pick next?*
+  say: I did twelve reps on three sets, at twelve and a half kilos. What does the app pick next?
+- type: point
+  title: Pick one
+  body: 'A: 12.5 kg, 13 reps. B: 15 kg, 9 reps. C: 20 kg, 6 reps.'
+  say: A, twelve and a half kilos for thirteen reps. B, fifteen kilos for nine. Or C, twenty kilos for six. Pick one,
+  seconds: 5
+- type: point
+  title: The *rule*
+  body: Hit every rep goal and the weight goes up one step. The rep goal drops.
+  say: The rule is, when every set hits the rep goal, the weight goes up one step and the rep goal drops a little.
+- type: point
+  title: It picked *15 kg for 9*
+  body: 'Answer: B.'
+  screen: workout-targets
+  focus: target
+  label: 'Answer: B'
+  say: And it picked fifteen kilos for nine reps. That's B.
+- type: cta
+  title: Did you get it? *Tell me*
+  body: Free at app.setalytix.in
+  say: Did you get it? Tell me your answer, and try Setalytix free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2
