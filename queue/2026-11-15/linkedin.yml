@@ -1,0 +1,20 @@
+platform: linkedin
+format: video
+scheduled_at: '2026-11-15T09:15:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Your gym machine doesn't have a 17.5 kg setting, so your app shouldn't ask you to lift one.
+
+  Setalytix gives every exercise its own weight step. A dumbbell can go up by 2.5, a machine can use the real stack (9, 14, 16, 19 and so on), and assisted lifts count less assistance as progress. The next weight the app fills in is one you can actually put on.
+
+  It's a small detail, but it's the difference between an app that suits a gym and one that only suits a spreadsheet. The engine behind it matched my own spreadsheet's add-weight decisions 31 out of 31 times when I tested it.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #pwa #typescript
+video:
+  kind: same_as
+  post: instagram-reel

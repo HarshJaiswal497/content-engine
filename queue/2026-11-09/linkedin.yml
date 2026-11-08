@@ -1,0 +1,21 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-09T09:15:00+05:30'
+app: setalytix
+pillar: lessons
+text: |
+  My app got 10,790 pageviews in 30 days, from 558 unique visitors. Almost nobody signed up.
+
+  Cloudflare made it look like a crowd. I read it differently: most of that is repeat opens, bots, link previews and me refreshing my own app. It was not seven thousand people, and I won't call it users.
+
+  The number that stung was the second one. A few hundred real visitors, and almost none of them signed up. My best guess is the sign-in wall: Setalytix put an account screen in front of everything, so nobody could see the app before they trusted it with an email.
+
+  So this week I shipped guest mode. A new visitor lands inside the app, picks a starter split, edits exercises and sets up cardio, all saved on their phone. The first time they tap Start workout, they're asked to create an account, and their setup copies over.
+
+  I haven't measured whether it helps yet, so I'm not claiming it does. Next I'll compare signups before and after.
+
+  If you build something, ask what a stranger can see before they have to trust you.
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #productthinking #pwa

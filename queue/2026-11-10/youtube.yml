@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-10T17:45:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 'Slip & Me 1: the note you can''t peek at'
+  description: |
+    A time capsule note in Slipnote stays sealed until the day you pick. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #slipnote #handwrittennotes
+  tags:
+  - slipnote
+  - slip and me
+  - handwritten notes
+  - android widget
+  - time capsule
+  - indie developer

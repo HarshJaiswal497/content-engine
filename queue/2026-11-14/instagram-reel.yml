@@ -1,0 +1,41 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-14T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  You only get one guess at your friend's doodle. Slip deals the words, your friend draws, and you pick from four.
+
+  Guess the doodle is one of the new ways to play in Slipnote. It's in development. Waitlist link in bio.
+
+  #slipnote #guessthedoodle #doodle #handwrittennotes #androidapp #games #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Guess the doodle
+  title: One doodle. *One guess.*
+  say: You only get one guess at your friend's doodle, so make it count,
+- type: point
+  title: Slip deals *three words*
+  body: Your friend picks one and draws it.
+  screen: slipnote/slip-peeks
+  focus: slip
+  label: Meet Slip
+  say: Slip deals your friend three words, from about three hundred, and they pick one to draw,
+- type: point
+  title: Real pens
+  body: Pen, marker, highlighter, pencil.
+  screen: slipnote/composer
+  focus: shelf
+  label: Draw it
+  say: They draw it with real pens, and send it to your circle,
+- type: big
+  title: 4 options. *1 guess.*
+  say: Everyone in the circle sees four options, and each of them gets exactly one guess.
+- type: cta
+  title: Slipnote, *in development*
+  body: Waitlist link in my bio
+  say: It's called Slipnote, it's still in development, and the waitlist link is on my profile.
+video:
+  kind: slides
+  tone: story
+  seconds_per_slide: 3.2

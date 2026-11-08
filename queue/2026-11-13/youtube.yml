@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-13T17:45:00+05:30'
+app: setalytix
+pillar: community
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 'Guess the weight: what does the app pick next?'
+  description: |
+    12 reps on 3 sets at 12.5 kg. What weight does Setalytix pick next? Try it free: https://app.setalytix.in
+    #Shorts #gym #progressiveoverload
+  tags:
+  - setalytix
+  - guess the weight
+  - progressive overload
+  - gym app
+  - workout tracker
+  - strength training

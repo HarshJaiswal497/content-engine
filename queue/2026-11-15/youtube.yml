@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-15T17:45:00+05:30'
+app: setalytix
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Your gym machine has no 17.5 kg setting
+  description: |
+    Setalytix gives each exercise its own weight steps, including real machine stacks. Free: https://app.setalytix.in
+    #Shorts #gym #workout
+  tags:
+  - setalytix
+  - gym app
+  - workout tracker
+  - machine weights
+  - progressive overload
+  - strength training

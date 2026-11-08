@@ -1,0 +1,38 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-13T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  A photobook that opens like a real book, built from a month or a year of notes.
+
+  Cover swings open, pages turn, two-page spreads, free-form pages, and a print-ready PDF. Slipnote is in development. Waitlist link in bio.
+
+  #slipnote #photobook #scrapbook #handwrittennotes #androidapp #widgets #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote photobook
+  title: A photobook that *opens like a book*
+- type: point
+  number: 1
+  title: The cover *swings open*
+  body: Pages turn, and the spreads run sideways, two pages at a time.
+- type: point
+  number: 2
+  title: Several notes *per page*
+  body: A month or a year of notes, laid out like a scrapbook.
+- type: point
+  number: 3
+  title: Free-form pages
+  body: Add notes, captions, stickers, doodles and a pen. Tidy up, undo and redo.
+- type: point
+  number: 4
+  title: '*8* covers, *13* fonts, *24* doodles'
+  body: Zoom in up to 5×.
+- type: point
+  number: 5
+  title: Export a *print-ready PDF*
+  body: 206 mm pages at 300 dpi, with bleed.
+- type: cta
+  title: Slipnote, *in development*
+  body: Waitlist link in my bio

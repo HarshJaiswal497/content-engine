@@ -1,0 +1,35 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-12T12:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  I wanted a scrapbook that opens like a real book. It took three tries in one day, and it was worth it.
+
+  Slipnote's photobook has a cover that swings open, pages that turn and two-page spreads. It's in development. Waitlist link in bio.
+
+  #slipnote #photobook #scrapbook #handwrittennotes #androidapp #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote
+  title: A *scrapbook* that opens like a real book
+  say: I wanted my notes to open like a real scrapbook, not scroll past like a slideshow, and it took me three tries in one day,
+- type: point
+  title: The cover *swings open*
+  body: Pages turn. Two-page spreads, sideways.
+  say: The cover swings open, the pages turn, and you get two-page spreads, sideways, with several notes on one page,
+- type: point
+  title: '*Free-form* pages'
+  body: Notes, captions, stickers, doodles and a pen. Undo and redo.
+  say: Every page is free-form, so you can add captions, stickers, doodles, even draw with a pen, and undo it if it goes wrong,
+- type: big
+  title: 8 covers. 13 fonts. *24 doodles.*
+  say: There are eight cover looks, thirteen fonts and twenty-four doodles, and it exports a print-ready PDF.
+- type: cta
+  title: Slipnote, *in development*
+  body: Waitlist link in my bio
+  say: It's called Slipnote, it's still in development, and the waitlist link is on my profile.
+video:
+  kind: slides
+  tone: story
+  seconds_per_slide: 3.2

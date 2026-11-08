@@ -1,0 +1,34 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-13T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  A push notification has to carry everything the widget needs.
+
+  In Slipnote, boomerangs (a short bouncing clip) looked broken on the widget until I opened the app. The cause was one missing number in the push. The widget updates while the app is closed, and without that number it couldn't draw the clip correctly.
+
+  The rule I wrote down after: a push must carry everything a widget needs to draw itself. Don't count on the app being open to fill the gap.
+
+  Small bug, clear rule. Slipnote is in development, and the waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #android #widgets #buildinpublic
+slides:
+- type: cover
+  kicker: Build log
+  title: A *push* has to carry everything the widget needs
+- type: point
+  number: 1
+  title: The *bug*
+  body: Boomerangs looked broken on the widget until I opened the app.
+- type: point
+  number: 2
+  title: The *cause*
+  body: The push left out one number the widget needed to draw the clip.
+- type: point
+  number: 3
+  title: The *rule*
+  body: A push must carry everything a widget needs to draw itself.
+- type: cta
+  title: Follow the *build*
+  body: Slipnote is in development

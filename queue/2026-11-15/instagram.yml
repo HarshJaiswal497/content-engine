@@ -1,0 +1,34 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-15T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  The four rules behind every weight Setalytix picks for you. Save this for your next workout.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #workoutplan #strengthtraining #gymlife #fitnesstips #buildinpublic
+slides:
+- type: cover
+  kicker: How it picks
+  title: The *4 rules* behind your next weight
+- type: point
+  number: 1
+  title: Same weight, *one more rep*
+  body: Until every working set hits the rep goal.
+- type: point
+  number: 2
+  title: Hit every set, *add weight*
+  body: The weight goes up one step (2.5 kg by default) and the rep goal drops.
+- type: point
+  number: 3
+  title: Away 21+ days? *Repeat*
+  body: After a long break it repeats your last weight.
+- type: point
+  number: 4
+  title: Warm-ups *never count*
+  body: Warm-up, drop and failure sets are left out.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

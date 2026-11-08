@@ -1,0 +1,47 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-10T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Slip and Me, episode 1. You sealed a note for later and now you want to peek. Slip says no.
+
+  Time capsules are one of the new things Slip can do in Slipnote. It's in development, waitlist link in bio.
+
+  #slipnote #slipandme #handwrittennotes #androidapp #widgets #buildinpublic #indiedev
+video:
+  kind: skit
+  tone: playful
+  title: Slip & Me · 1
+  beats:
+  - who: slip
+    pose: surprised
+    text: Stop! *Don't peek!*
+    seconds: 1.8
+    other_pose: idle
+    sfx: pop
+  - who: human
+    pose: shocked
+    text: It's *my* note! I wrote it!
+    seconds: 2.6
+    other_pose: surprised
+  - who: slip
+    pose: think
+    text: Sealed until the day you picked. That's the rule.
+    seconds: 3.0
+  - who: human
+    pose: sad
+    text: What did I even write...?
+    seconds: 2.4
+    other_pose: think
+    sfx: dun
+  - who: slip
+    pose: happy
+    text: That's the fun. You *wait*.
+    seconds: 2.2
+    other_pose: happy
+  - who: slip
+    pose: cheer
+    text: Time capsules. In development. *Waitlist in bio!*
+    seconds: 3.0
+    sfx: ping

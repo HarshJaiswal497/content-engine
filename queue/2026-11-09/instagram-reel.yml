@@ -1,0 +1,38 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-09T12:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  Can an app choose your weights? I followed Setalytix's pick on almost every set for about a month. About 400 sets in, here's the catch: when it says go heavier, that first session is the hard one.
+
+  Episode 1. Follow for the next one. Free at app.setalytix.in, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #workoutlog #buildinpublic #indiedev #gymlife #strengthtraining
+slides:
+- type: cover
+  kicker: Episode 1
+  title: Can an app pick *every weight* you lift?
+  say: Can an app pick every weight you lift? I let one do it for about a month,
+- type: point
+  title: '*One rule*, about 400 sets'
+  body: Same weight, one more rep. Hit every rep goal and it adds weight.
+  say: The rule is simple, same weight and one more rep, and when I hit every rep goal, it adds weight. I followed it on almost every one of about four hundred sets.
+- type: point
+  title: Every set *pre-filled*
+  body: Weight and reps are already there.
+  screen: workout-targets
+  focus: target
+  label: Pre-filled target
+  say: Every set opens with the weight and reps already filled in, so I never had to guess.
+- type: big
+  title: Hit the target on about *7 in 10* sets
+  say: I hit or beat the target on about seven in ten sets. But when it told me to go heavier, I hit it on only about one set in three.
+- type: cta
+  title: Episode 2 *next Monday*
+  body: Free at app.setalytix.in
+  say: So the catch is the first session after the weight goes up. Episode two is next Monday, and Setalytix is free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2

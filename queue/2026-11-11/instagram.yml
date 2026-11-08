@@ -1,0 +1,50 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-11T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Slip lives on a Play screen in every circle, and there are a lot of ways to play.
+
+  Eight new things you can do in Slipnote, swipe through. It's in development. Waitlist link in bio.
+
+  #slipnote #handwrittennotes #doodle #androidapp #widgets #games #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote
+  title: '*8 ways* to play with Slip'
+- type: point
+  number: 1
+  title: Finish my doodle
+  body: Ask a friend to finish your sketch.
+- type: point
+  number: 2
+  title: Guess the doodle
+  body: Slip deals 3 words. Friends pick from 4, one guess each.
+- type: point
+  number: 3
+  title: Time capsule
+  body: Seal a note until a day and time you choose. No peeking.
+- type: point
+  number: 4
+  title: Thinking of you
+  body: A one-tap sticker poke that's never stored.
+- type: point
+  number: 5
+  title: Daily sticker pack
+  body: One sticker featured each day.
+- type: point
+  number: 6
+  title: Daily prompt
+  body: Answer it in your circles, with a reminder at a time you choose.
+- type: point
+  number: 7
+  title: Boomerangs
+  body: A short bouncing clip that flips like a flipbook on the widget.
+- type: point
+  number: 8
+  title: Video notes
+  body: Up to 10 seconds, with sound.
+- type: cta
+  title: Slipnote, *in development*
+  body: Waitlist link in my bio
