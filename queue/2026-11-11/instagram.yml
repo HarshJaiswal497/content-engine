@@ -13,37 +13,37 @@ slides:
 - type: cover
   kicker: Slipnote
   title: '*8 ways* to play with Slip'
-- type: point
-  number: 1
-  title: Finish my doodle
+- type: image
+  image: assets/screens/slipnote/finish-ask.png
+  title: 1. Finish my doodle
   body: Ask a friend to finish your sketch.
-- type: point
-  number: 2
-  title: Guess the doodle
+- type: image
+  image: assets/screens/slipnote/guess-friend.png
+  title: 2. Guess the doodle
   body: Slip deals 3 words. Friends pick from 4, one guess each.
-- type: point
-  number: 3
-  title: Time capsule
+- type: image
+  image: assets/screens/slipnote/capsule-seal.png
+  title: 3. Time capsule
   body: Seal a note until a day and time you choose. No peeking.
-- type: point
-  number: 4
-  title: Thinking of you
+- type: image
+  image: assets/screens/slipnote/thinking-of-you.png
+  title: 4. Thinking of you
   body: A one-tap sticker poke that's never stored.
-- type: point
-  number: 5
-  title: Daily sticker pack
+- type: image
+  image: assets/screens/slipnote/sticker-day.png
+  title: 5. Daily sticker pack
   body: One sticker featured each day.
-- type: point
-  number: 6
-  title: Daily prompt
+- type: image
+  image: assets/screens/slipnote/daily-prompt-list.png
+  title: 6. Daily prompt
   body: Answer it in your circles, with a reminder at a time you choose.
-- type: point
-  number: 7
-  title: Boomerangs
+- type: image
+  image: assets/screens/slipnote/boomerang-note.png
+  title: 7. Boomerangs
   body: A short bouncing clip that flips like a flipbook on the widget.
-- type: point
-  number: 8
-  title: Video notes
+- type: image
+  image: assets/screens/slipnote/video-record.png
+  title: 8. Video notes
   body: Up to 10 seconds, with sound.
 - type: cta
   title: Slipnote, *in development*

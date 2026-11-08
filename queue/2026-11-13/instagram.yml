@@ -13,21 +13,21 @@ slides:
 - type: cover
   kicker: Slipnote photobook
   title: A photobook that *opens like a book*
-- type: point
-  number: 1
-  title: The cover *swings open*
-  body: Pages turn, and the spreads run sideways, two pages at a time.
-- type: point
-  number: 2
-  title: Several notes *per page*
-  body: A month or a year of notes, laid out like a scrapbook.
-- type: point
-  number: 3
+- type: image
+  image: assets/screens/slipnote/photobook-spread.png
+  title: Pages *turn*, spreads run sideways
+  body: Several notes per page, two pages at a time.
+- type: image
+  image: assets/screens/slipnote/photobook-cover.png
+  title: '*8* cover looks'
+  body: Pick one and it sets the cover, the font and the pages.
+- type: image
+  image: assets/screens/slipnote/photobook-page.png
   title: Free-form pages
-  body: Add notes, captions, stickers, doodles and a pen. Tidy up, undo and redo.
+  body: Notes, captions, stickers, doodles and a pen. Undo and redo.
 - type: point
   number: 4
-  title: '*8* covers, *13* fonts, *24* doodles'
+  title: '*24* doodles, *13* fonts'
   body: Zoom in up to 5×.
 - type: point
   number: 5

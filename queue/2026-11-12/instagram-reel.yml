@@ -15,15 +15,25 @@ slides:
   title: A *scrapbook* that opens like a real book
   say: I wanted my notes to open like a real scrapbook, not scroll past like a slideshow, and it took me three tries in one day,
 - type: point
-  title: The cover *swings open*
-  body: Pages turn. Two-page spreads, sideways.
+  title: Pages *turn*
+  body: Two-page spreads, sideways.
+  screen: photobook-spread
+  focus: spread
+  label: Two-page spreads
   say: The cover swings open, the pages turn, and you get two-page spreads, sideways, with several notes on one page,
 - type: point
   title: '*Free-form* pages'
-  body: Notes, captions, stickers, doodles and a pen. Undo and redo.
+  body: Notes, captions, stickers, doodles and a pen.
+  screen: photobook-page
+  focus: tools
+  label: Notes, stickers, pen
   say: Every page is free-form, so you can add captions, stickers, doodles, even draw with a pen, and undo it if it goes wrong,
-- type: big
-  title: 8 covers. 13 fonts. *24 doodles.*
+- type: point
+  title: '*8 covers*, 13 fonts, 24 doodles'
+  body: And a print-ready PDF.
+  screen: photobook-cover
+  focus: looks
+  label: 8 cover looks
   say: There are eight cover looks, thirteen fonts and twenty-four doodles, and it exports a print-ready PDF.
 - type: cta
   title: Slipnote, *in development*

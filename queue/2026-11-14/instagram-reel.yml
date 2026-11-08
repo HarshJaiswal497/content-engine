@@ -16,21 +16,25 @@ slides:
   say: You only get one guess at your friend's doodle, so make it count,
 - type: point
   title: Slip deals *three words*
-  body: Your friend picks one and draws it.
-  screen: slipnote/slip-peeks
-  focus: slip
-  label: Meet Slip
+  body: Pick one to draw.
+  screen: guess-pick-word
+  focus: cards
+  label: Pick a word
   say: Slip deals your friend three words, from about three hundred, and they pick one to draw,
 - type: point
-  title: Real pens
-  body: Pen, marker, highlighter, pencil.
-  screen: slipnote/composer
-  focus: shelf
-  label: Draw it
-  say: They draw it with real pens, and send it to your circle,
-- type: big
-  title: 4 options. *1 guess.*
-  say: Everyone in the circle sees four options, and each of them gets exactly one guess.
+  title: Four options. *One guess.*
+  body: No second tries.
+  screen: guess-friend
+  focus: options
+  label: One guess each
+  say: Everyone in the circle sees the doodle with four options, and each of them gets exactly one guess,
+- type: point
+  title: See who *got it*
+  body: Every guess, ticked or crossed.
+  screen: guess-results
+  focus: guesses
+  label: Who guessed
+  say: And when they've all guessed, you see who got it.
 - type: cta
   title: Slipnote, *in development*
   body: Waitlist link in my bio
