@@ -420,11 +420,19 @@ def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None
     silent; the clip's own speech (loudness-normalised) is laid back on with ffmpeg."""
     from .hyperframes import render_talking
     info = probe(src)
-    duration = min(info["duration"], MAX_SECONDS)
     words = transcribe(src, script, fixes) if info["has_audio"] else []
     if words:
         (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
     with tempfile.TemporaryDirectory() as tmp:
+        # start on the first spoken word (viewers leave in the first second): cut the dead air before it
+        if words and words[0]["start"] > 0.3:
+            cut = words[0]["start"] - 0.1
+            trimmed = Path(tmp) / "trimmed.mp4"
+            _run(["ffmpeg", "-y", "-hide_banner", "-ss", f"{cut:.3f}", "-i", str(src), *ENC, str(trimmed)])
+            src = trimmed
+            words = [{**w, "start": max(w["start"] - cut, 0), "end": max(w["end"] - cut, 0)} for w in words]
+            info = probe(src)
+        duration = min(info["duration"], MAX_SECONDS)
         silent = Path(tmp) / "picture.mp4"
         render_talking(src, words, hook, app, duration, silent, Path(tmp), inserts,
                        portrait=info["height"] >= info["width"] * 1.6, emphasis=emphasis)
