@@ -60,3 +60,5 @@
 {"id": "queue/2026-11-07/instagram-reel", "status": "published", "at": "2026-11-07T07:01:01+00:00", "remote_id": "18120463754050386", "url": "https://www.instagram.com/reel/DfbmEzGE83x/", "note": null, "attempts": 1}
 {"id": "queue/2026-11-07/instagram-reel#facebook", "status": "published", "at": "2026-11-07T07:01:09+00:00", "remote_id": "1141958088370856", "url": "https://www.facebook.com/1141958088370856", "attempts": 1}
 {"id": "queue/2026-11-08/linkedin", "status": "published", "at": "2026-11-08T03:45:12+00:00", "remote_id": "urn:li:ugcPost:7525040704423841792", "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7525040704423841792/", "note": null, "attempts": 1}
+{"id": "queue/2026-11-08/instagram-reel", "status": "published", "at": "2026-11-08T07:01:13+00:00", "remote_id": "18119021120090574", "url": "https://www.instagram.com/reel/DfeK79ZgAkD/", "note": null, "attempts": 1}
+{"id": "queue/2026-11-08/instagram-reel#facebook", "status": "published", "at": "2026-11-08T07:01:18+00:00", "remote_id": "29746231358294840", "url": "https://www.facebook.com/29746231358294840", "attempts": 1}
