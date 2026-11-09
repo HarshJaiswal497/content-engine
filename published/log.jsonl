@@ -68,3 +68,4 @@
 {"id": "queue/2026-11-13/youtube", "status": "handoff", "at": "2026-11-08T19:03:55+00:00", "remote_id": "17", "note": "weekly upload issue opened", "attempts": 1}
 {"id": "queue/2026-11-14/youtube", "status": "handoff", "at": "2026-11-08T19:03:55+00:00", "remote_id": "17", "note": "weekly upload issue opened", "attempts": 1}
 {"id": "queue/2026-11-15/youtube", "status": "handoff", "at": "2026-11-08T19:03:55+00:00", "remote_id": "17", "note": "weekly upload issue opened", "attempts": 1}
+{"id": "queue/2026-11-09/linkedin", "status": "published", "at": "2026-11-09T03:45:02+00:00", "remote_id": "urn:li:share:7525403046739251200", "url": "https://www.linkedin.com/feed/update/urn:li:share:7525403046739251200/", "note": null, "attempts": 1}
