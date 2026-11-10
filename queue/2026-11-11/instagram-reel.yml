@@ -14,12 +14,15 @@ video:
   source: inbox/2026-11-11-guest-mode.mp4
   hook: 10k pageviews, almost no signups
   captions: true
+  fixes:
+    experts: dashboard
+    "528": "558"
   emphasis:
   - bots
   - wall
   - first
   inserts:
-  - at: 16
+  - at: 25
     dur: 4.5
     screen: welcome
     focus: starters
