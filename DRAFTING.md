@@ -31,10 +31,22 @@ Next Monday → Sunday. One post per platform per day at the slot times in `cale
   `video.post: instagram-reel`.
 - Every slide video gets a voiceover: give each slide a `say:` line (one or two short spoken
   sentences, first person as Harsh, conversational, numbers written as words, no hashtags or
-  emoji). Line one is the hook. The last line is a platform-neutral CTA ("try it free at
+  emoji). Line one is the hook. Write the lines so the talk flows into the next scene: end a line on a comma or a connecting
+  word ("and", "so", "then") when the next line continues the thought, vary the length of the lines, and use at most one
+  question per video. The pictures change while the voice is still finishing, so lines that each end like a full stop sound robotic. The last line is a platform-neutral CTA ("try it free at
   app.setalytix.in" / "the waitlist link is on my profile"), never "link in description" or
   "link in bio", because Reels reuse the Short. Set `video.tone`: upbeat (Setalytix tips),
   story (Slipnote build moments) or calm. Same rules as captions: no pricing, legal or competitors.
+
+### Phone screens in faceless Reels
+`brand/screens.yml` lists the real app screens you can show (files in `assets/screens/<app>/`). On a middle slide of a
+`video.kind: slides` post, add `screen: <name>` and the slide becomes a phone scene: the phone rises in with a tilt, then the
+camera zooms to the part that matters.
+- `focus: <region>` (a region named in the catalog, or a box `{x, y, w, h}` as fractions of the screen) sets where it zooms and draws a ring.
+- `label: <up to four words>` adds a small pill pointing at the ring. Skip the `body` on those slides (the picture says it).
+- Use 2-3 phone slides per Reel, only when a screen shows exactly what the voice line says. Other slides stay as before.
+- Use a screen of the post's own app by its plain name (`today`), or `slipnote/composer` for the other app. Only screens in the
+  catalog (they show cleared features). Never describe a screen as something it does not show. If no screen fits, use a normal slide.
 
 ## 3. Write the files
 Folder per day: `queue/YYYY-MM-DD/` with `linkedin.yml`, `instagram-reel.yml`, `youtube.yml`, and `instagram.yml` (the carousel) on the four carousel days.
@@ -57,6 +69,27 @@ Hard rules:
 - YouTube is posted by Harsh by hand: one GitHub issue per week lists every Short with its schedule time,
   title, description and tags, so write each `youtube.title` and `youtube.description` ready to paste.
 - YouTube: `youtube.title` ≤ 60 chars, `youtube.description` 1–3 lines + hashtags, 5–10 tags.
+
+## The first second (Insights: viewers leave Reels in 1–2 s; about 80% of views come cold from the Reels tab)
+
+- The hook is the first thing seen AND heard at frame 0: full hook text on screen, something moving, the voice on the first word (no breath, no logo, no "hey guys"). The cover template already shows its words and a hit sound at frame 0.
+- Reels run 15–25 s. Change the picture every 2–3 s (scene, zoom, insert). Talking heads start on the first spoken word and stay under about 30 s.
+- Pick one hook formula per Reel, written for a stranger, not a follower:
+  1. Open question you pay off at the end ("Can an app pick my weights for 4 weeks?").
+  2. "Do NOT let [audience] see this" (a thing they should not miss).
+  3. Desire plus a relatable character ("I wanted a gym app that remembers me, so I built one").
+  4. Result at the end: set up an experiment, give the number last.
+  5. Confession ("I tracked every set for 29 workouts and this is what I got wrong").
+- Every video has one job: views (broad hook), followers (series, "follow for next week") or leads (waitlist/sign-in).
+- Name and number series so people can binge: S1 "Can an app choose my weights for 4 weeks?" (Setalytix, real weekly data; recommended-vs-actual numbers are approximate, say "about") and L1 "Slip & Me" (Slipnote skit episodes, at most one a week). One interactive Reel a week (guess the next weight, comment a word for Slip to doodle, guess the doodle). Same title card every episode.
+- Sound: earshot library clips are placed automatically (hit at frame 0, whoosh on scene changes, pop/ping/dun per skit beat). Do not add sound to the YAML unless a skit beat needs `sfx:`.
+
+## Video types you can use (all rendered free by HyperFrames)
+
+- **Faceless Reel** (`kind: slides`): narrated scenes, with phone screens (see "Phone screens" above).
+- **Talking head** (`kind: talking_head`): Harsh's clip gets highlight captions, zooms and a hook pill. Optional `inserts:` (phone screen at a time) and `emphasis:` words; see `hf/README.md`.
+- **Skit** (`kind: skit`): Slip (the Slipnote mascot) and a human talk in bubbles. Use at most one a week, for Slipnote, 4–6 beats, 12–16 seconds,
+  light and warm, never sarcastic. Same fact rules as any post: Slip may only say things from the fact sheet. Copy `hf/skit/example.yml`.
 
 ## 4. Ship the drafts
 ```bash

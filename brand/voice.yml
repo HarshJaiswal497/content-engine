@@ -11,3 +11,10 @@ narrator: am_michael
 pronounce:
   Setalytix: Setalytics
   app.setalytix.in: app dot setalytics dot in
+
+# Slip, the mascot in skits: Chatterbox copying Kokoro's sweet af_heart voice, delivered lively (picked 4 Nov).
+# exaggeration: 0.85 lively, 1.1 very excited. voice: any Kokoro voice (af_bella, af_nicole, ...).
+slip:
+  voice: af_heart
+  exaggeration: 0.85
+  cfg_weight: 0.3

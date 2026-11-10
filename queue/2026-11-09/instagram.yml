@@ -1,0 +1,34 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-09T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  You used to hit a sign-in wall before you saw anything. Not anymore.
+
+  Setalytix now lets you in first: pick a starter split, edit it, set up cardio, and only make an account when you start your first workout. Free at app.setalytix.in, link in bio.
+
+  #setalytix #workoutapp #gymtracker #pwa #buildinpublic #indiedev #fitnessapp #progressiveoverload
+slides:
+- type: cover
+  kicker: New in Setalytix
+  title: Try the app *before* you sign up
+- type: point
+  number: 1
+  title: You land *inside the app*
+  body: No sign-in wall. Open Setalytix and you're in.
+- type: image
+  image: assets/screens/setalytix/welcome.png
+  title: Pick a *starter split*
+  body: Push/Pull/Legs, Upper/Lower or Full Body. Or build your own.
+- type: image
+  image: assets/screens/setalytix/edit-split.png
+  title: Make it *yours*
+  body: Edit splits and exercises, set up cardio. It all saves on your phone.
+- type: point
+  number: 4
+  title: Account when you lift
+  body: Your first Start workout asks you to create one, and your setup copies over.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

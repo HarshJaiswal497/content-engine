@@ -21,6 +21,23 @@ MUSIC_WITH_VOICE = 0.45     # music bed before ducking; it ducks hard while the 
 APP_MOOD = {"setalytix": "upbeat", "slipnote": "story"}
 
 
+VIDEO_STYLES = ROOT / "brand" / "video-styles.yml"
+
+
+def video_style(spec: dict, day: str | None = None) -> str:
+    """'motion' (HyperFrames) or 'slides' (classic). A post's own video.style wins; otherwise
+    brand/video-styles.yml: `motion_from` (a date) makes posts for that day and later motion, else `slides_style`."""
+    if spec.get("style") in ("motion", "slides"):
+        return spec["style"]
+    if VIDEO_STYLES.exists():
+        import yaml
+        cfg = yaml.safe_load(VIDEO_STYLES.read_text()) or {}
+        if day and cfg.get("motion_from") and str(day) >= str(cfg["motion_from"]):
+            return "motion"
+        return cfg.get("slides_style", "slides")
+    return "slides"
+
+
 def mood_for(tone: str | None, app: str | None) -> str:
     return tone or APP_MOOD.get(app or "", "calm")
 
@@ -140,6 +157,86 @@ def slides_to_video(images: list[Path], out: Path, seconds: list[float] | float 
         last = f"x{i}"
     cmd += ["-filter_complex", ";".join(parts), "-map", f"[{last}]", "-map", "[aout]",
             "-t", f"{total:.3f}", *ENC, str(out)]
+    _run(cmd)
+    return out
+
+
+# ---- motion video (HyperFrames picture) + the same voice and music ----------------
+def plan_seconds(count: int, seconds: list[float] | float, voice: list[Path | None] | None, fade: float,
+                 lead: float = VOICE_LEAD, tail: float = VOICE_TAIL) -> list[float]:
+    """Per-slide durations: the narration sets the pace when there is a voice. The voice of slide i starts
+    `lead` after its scene starts, and the next scene starts `tail` after the line ends (negative = the
+    picture changes before the sentence finishes, which keeps the talk flowing)."""
+    if isinstance(seconds, (int, float)):
+        seconds = [float(seconds)] * count
+    seconds = [max(s, fade + 0.5) for s in seconds]
+    clips = list(voice or [])[:count] + [None] * (count - len(list(voice or [])[:count]))
+    if any(clips):
+        seconds = [max(lead + audio_seconds(c) + tail + fade, 1.6) if c else min(s, 2.2)
+                   for s, c in zip(seconds, clips)]
+    return seconds
+
+
+def _whoosh_filter(label: str = "sw") -> str:
+    """A soft synthetic whoosh (filtered pink noise), no audio file needed."""
+    return (f"anoisesrc=color=pink:duration=0.6:amplitude=0.6:sample_rate=44100,highpass=f=350,lowpass=f=5500,"
+            f"afade=t=in:d=0.22,afade=t=out:st=0.24:d=0.36,volume=0.55,aformat=channel_layouts=stereo[{label}]")
+
+
+def mux_audio(video: Path, out: Path, seconds: list[float], fade: float, voice: list[Path | None] | None,
+              mood: str | None, key: str, lead: float = VOICE_LEAD, sfx: bool = False) -> Path:
+    """Add the voiceover (music ducks under it) or just music to a silent video of the same length.
+    With sfx, a soft whoosh plays at each scene change."""
+    total = sum(seconds) - fade * (len(seconds) - 1)
+    clips = list(voice or [])[:len(seconds)]
+    clips += [None] * (len(seconds) - len(clips))
+    starts, t = [], 0.0
+    for d in seconds:
+        starts.append(t)
+        t += d - fade
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(video)]
+    if any(clips):
+        audio_in, music_f = _music_input(key, total, 1, "music", MUSIC_WITH_VOICE, mood)
+        cmd += audio_in
+        parts, labels, idx = [music_f], [], 2
+        for i, c in enumerate(clips):
+            if c:
+                cmd += ["-i", str(c)]
+                ms = int((starts[i] + lead) * 1000)
+                parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,"
+                             f"aresample=44100,adelay={ms}|{ms}[vo{i}]")
+                labels.append(f"[vo{i}]")
+                idx += 1
+        parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0,"
+                     f"apad=whole_dur={total:.3f},atrim=0:{total:.3f},asplit=2[voice][key]")
+        parts.append("[music][key]sidechaincompress=threshold=0.015:ratio=12:attack=15:release=450:makeup=1[bed]")
+        parts.append("[bed][voice]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
+    else:
+        audio_in, audio_f = _music_input(key, total, 1, "mixed", mood=mood)
+        cmd += audio_in
+        parts = [audio_f]
+    final = "[mixed]"
+    if sfx and len(starts) > 1:
+        from . import sfx as sfxlib
+        next_in = 2 + sum(1 for c in clips if c)
+        args, sparts, labels = sfxlib.add_to_graph(sfxlib.cues_for_scenes(starts, total, hook=True), next_in, total)
+        if labels:
+            cmd += args
+            parts += sparts
+            parts.append(f"[mixed]{''.join(labels)}amix=inputs={len(labels) + 1}:duration=first:normalize=0,"
+                         f"alimiter=limit=0.95[withsfx]")
+        else:   # no library files: the old synthetic whoosh
+            n = len(starts) - 1
+            parts.append(_whoosh_filter("sw0"))
+            parts.append(f"[sw0]asplit={n}" + "".join(f"[sx{i}]" for i in range(n)))
+            for i in range(n):
+                ms = max(int((starts[i + 1] - 0.05) * 1000), 0)
+                parts.append(f"[sx{i}]adelay={ms}|{ms}[sd{i}]")
+            parts.append(f"[mixed]{''.join(f'[sd{i}]' for i in range(n))}amix=inputs={n + 1}:duration=first:normalize=0,"
+                         f"alimiter=limit=0.95[withsfx]")
+        final = "[withsfx]"
+    cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", final, "-t", f"{total:.3f}",
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
     _run(cmd)
     return out
 
@@ -314,3 +411,129 @@ def caption_video(src: Path, out: Path, hook: str | None = None, accent: str = "
 
 def have_ffmpeg() -> bool:
     return shutil.which("ffmpeg") is not None
+
+
+def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None, mood: str | None = None,
+                         script: str | None = None, fixes: dict | None = None, inserts: list[dict] | None = None,
+                         emphasis: list[str] | None = None) -> Path:
+    """Talking-head clip with HyperFrames captions, zooms, hook and phone inserts. The picture is rendered
+    silent; the clip's own speech (loudness-normalised) is laid back on with ffmpeg."""
+    from .hyperframes import render_talking
+    info = probe(src)
+    words = transcribe(src, script, fixes) if info["has_audio"] else []
+    if words:
+        (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
+    with tempfile.TemporaryDirectory() as tmp:
+        # start on the first spoken word (viewers leave in the first second): cut the dead air before it
+        if words and words[0]["start"] > 0.3:
+            cut = words[0]["start"] - 0.1
+            trimmed = Path(tmp) / "trimmed.mp4"
+            _run(["ffmpeg", "-y", "-hide_banner", "-ss", f"{cut:.3f}", "-i", str(src), *ENC, str(trimmed)])
+            src = trimmed
+            words = [{**w, "start": max(w["start"] - cut, 0), "end": max(w["end"] - cut, 0)} for w in words]
+            info = probe(src)
+        duration = min(info["duration"], MAX_SECONDS)
+        silent = Path(tmp) / "picture.mp4"
+        render_talking(src, words, hook, app, duration, silent, Path(tmp), inserts,
+                       portrait=info["height"] >= info["width"] * 1.6, emphasis=emphasis)
+        cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(silent)]
+        if info["has_audio"]:
+            cmd += ["-i", str(src), "-filter_complex", "[1:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]",
+                    "-map", "0:v", "-map", "[aout]"]
+        else:
+            audio_in, audio_f = _music_input("/".join(out.parts[-4:-1]), duration, 1, mood=mood)
+            cmd += [*audio_in, "-filter_complex", audio_f, "-map", "0:v", "-map", "[aout]"]
+        cmd += ["-t", f"{duration:.3f}", *ENC, str(out)]
+        _run(cmd)
+    return out
+
+
+def _sfx_filter(kind: str, label: str) -> str:
+    """Tiny synthetic sound effects (no audio files): pop, ping (happy), dun (sad/shock)."""
+    if kind == "ping":
+        return (f"aevalsrc='0.35*sin(2*PI*1568*t)*exp(-9*t)+0.25*sin(2*PI*2093*t)*exp(-11*t)':d=0.5:s=44100,"
+                f"aformat=channel_layouts=stereo[{label}]")
+    if kind == "dun":
+        return f"aevalsrc='0.5*sin(2*PI*(170-60*t)*t)*exp(-6*t)':d=0.6:s=44100,aformat=channel_layouts=stereo[{label}]"
+    return (f"aevalsrc='0.5*sin(2*PI*(520+900*t)*t)*exp(-28*t)':d=0.25:s=44100,aformat=channel_layouts=stereo[{label}]")   # pop
+
+
+def skit_audio(video: Path, out: Path, starts: list[float], total: float, beats: list[dict], mood: str | None, key: str,
+               voice: list[Path | None] | None = None, lead: float = 0.18) -> Path:
+    """Music bed (ducked under speech), each beat's voice, and a small sound effect per beat
+    (beat `sfx`: pop (default), ping, dun, none)."""
+    audio_in, music_f = _music_input(key, total, 1, "music", MUSIC_WITH_VOICE if voice and any(voice) else MUSIC_VOLUME, mood)
+    cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(video), *audio_in]
+    parts, vlabels, idx = [music_f], [], 2
+    for i, c in enumerate(voice or []):
+        if c:
+            cmd += ["-i", str(c)]
+            ms = int((starts[i] + lead) * 1000)
+            parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-1.5,aresample=44100,adelay={ms}|{ms}[vo{i}]")
+            vlabels.append(f"[vo{i}]")
+            idx += 1
+    from . import sfx as sfxlib
+    sx = []
+    n_in = idx
+    for i, b in enumerate(beats):
+        kind = str(b.get("sfx") or "pop")
+        if kind == "none":
+            continue
+        take = sfxlib.pick(kind if kind in ("pop", "ping", "dun", "tap", "hit", "tick") else "pop", i)
+        if take:
+            start = max(starts[i] + sfxlib.LIGHT_AFTER_SOUND - take["peak"], 0.0)
+            ms = int(start * 1000)
+            cmd += ["-i", str(sfxlib.DIR / take["file"])]
+            parts.append(f"[{n_in}:a]aresample=44100,aformat=channel_layouts=stereo,"
+                         f"volume={0.5 if vlabels else 0.8},adelay={ms}|{ms}[d{i}]")
+            n_in += 1
+        else:
+            ms = int(starts[i] * 1000)
+            parts.append(_sfx_filter(kind, f"e{i}"))
+            parts.append(f"[e{i}]volume={0.35 if vlabels else 0.6},adelay={ms}|{ms}[d{i}]")
+        sx.append(f"[d{i}]")
+    if vlabels:
+        parts.append(f"{''.join(vlabels)}amix=inputs={len(vlabels)}:duration=longest:normalize=0,apad=whole_dur={total:.3f},"
+                     f"atrim=0:{total:.3f},asplit=2[voice][key]")
+        parts.append("[music][key]sidechaincompress=threshold=0.015:ratio=12:attack=15:release=450:makeup=1[bed]")
+        mix = ["[bed]", "[voice]", *sx]
+    else:
+        mix = ["[music]", *sx]
+    parts.append(f"{''.join(mix)}amix=inputs={len(mix)}:duration=first:normalize=0,alimiter=limit=0.95[mixed]")
+    cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[mixed]", "-t", f"{total:.3f}",
+            "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-movflags", "+faststart", str(out)]
+    _run(cmd)
+    return out
+
+
+def _wav_seconds(path: Path) -> float:
+    return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
+                                capture_output=True, text=True, check=True).stdout.strip() or 0)
+
+
+def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: str | None = None,
+               voices: bool = True, voice_files: list[Path | None] | None = None) -> Path:
+    """Render a skit. With voices, each beat lasts as long as its line (plus a breath) and the sound is mixed in."""
+    from .hyperframes import render_skit
+    with tempfile.TemporaryDirectory() as tmp:
+        files = voice_files
+        if files is None and voices:
+            try:
+                from .tts import skit_voices
+                files = skit_voices(beats, Path(tmp) / "voice")
+            except Exception:   # no voice engine available: a silent skit still ships
+                import traceback
+                print(f"skit voices failed, continuing without\n{traceback.format_exc()[-1200:]}", flush=True)
+                files = None
+        timed = []
+        for i, b in enumerate(beats):
+            b = dict(b)
+            f = files[i] if files and i < len(files) else None
+            if f:
+                b["seconds"] = round(max(1.6, _wav_seconds(f) + 0.18 + 0.4), 2)
+            timed.append(b)
+        silent = Path(tmp) / "picture.mp4"
+        _, marks = render_skit(timed, app, silent, Path(tmp), title)
+        total = marks[-1] + 0.4
+        skit_audio(silent, out, marks[:-1], total, timed, mood, "/".join(out.parts[-4:-1]), voice=files)
+    return out

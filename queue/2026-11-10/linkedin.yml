@@ -1,0 +1,39 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-10T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  A "2×2" widget is not one shape.
+
+  On one of my test phones, the same 2×2 widget came out wide. On the other, it came out tall. Same grid size, two different boxes. I only found out because I tried two different phones instead of one.
+
+  The fix was to stop trusting the grid size. Slipnote's widget now reads the real size it was given and picks its layout from that.
+
+  Three habits came out of it:
+  1. Test on two different phones, not one.
+  2. Take the shape from the real size, never from the grid size.
+  3. If a layout looks right on your phone, you've checked one phone.
+
+  Slipnote is in development. The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #android #flutter #buildinpublic
+slides:
+- type: cover
+  kicker: Build log
+  title: The same *2×2 widget* is wide on one phone and tall on another
+- type: point
+  number: 1
+  title: Grid size *lies*
+  body: Android calls it 2×2 on both. One phone draws it wide, the other tall.
+- type: point
+  number: 2
+  title: Read the *real size*
+  body: The widget now picks its layout from the size it was actually given.
+- type: point
+  number: 3
+  title: Test on *two phones*
+  body: I only saw it because I tried two different phones.
+- type: cta
+  title: Follow the *build*
+  body: Slipnote is in development

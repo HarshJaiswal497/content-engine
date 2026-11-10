@@ -1,0 +1,39 @@
+<template>
+  <style>
+{{BASE_CSS}}
+    #{{ID}}-stamp { position: absolute; top: 215px; left: 0; right: 0; display: flex; justify-content: center; }
+    #{{ID}}-stamp span { width: 112px; height: 112px; border-radius: 50%; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 58px; display: flex; align-items: center; justify-content: center; opacity: 0; }
+    #{{ID}}-title { top: 380px; height: 520px; font-size: {{TITLE_SIZE}}px; }
+    #{{ID}}-ghost { position: absolute; right: -40px; top: 1010px; font-size: 1000px; font-weight: 900; line-height: .8; color: {{INK}}; opacity: 0; letter-spacing: -0.06em; }
+    #{{ID}}-card { position: absolute; left: 90px; right: 90px; top: 960px; min-height: 360px; border-radius: 44px; background: {{CARD}}; box-shadow: 0 30px 80px rgba(0,0,0,.18); padding: 54px 56px; display: flex; align-items: center; justify-content: center; opacity: 0; }
+    #{{ID}}-card p { font-size: 58px; font-weight: 700; line-height: 1.25; text-align: center; color: {{INK}}; }
+    #{{ID}}-bar { position: absolute; left: 90px; top: 960px; width: 18px; height: 360px; border-radius: 9px; background: {{ACCENT}}; transform-origin: top; transform: scaleY(0); }
+  </style>
+  <div id="root" data-composition-id="{{ID}}" data-width="1080" data-height="1920">
+    <div id="{{ID}}-wrap" class="wrap">
+    <div class="tex"></div>
+    <div id="{{ID}}-ghost">{{N}}</div>
+    <div id="{{ID}}-stamp"><span>{{N}}</span></div>
+    <div id="{{ID}}-title" class="title">{{TITLE_HTML}}</div>
+    <div id="{{ID}}-card"><p>{{BODY}}</p></div>
+    <div id="{{ID}}-bar"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const dir = {{DIR}};
+    const words = gsap.utils.toArray("#{{ID}}-title .w");
+    tl.fromTo("#{{ID}}-wrap", { xPercent: dir * 100, boxShadow: "0 0 90px rgba(0,0,0,.35)" }, { xPercent: 0, duration: 0.5, ease: "power3.inOut" }, 0);
+    tl.fromTo("#{{ID}}-ghost", { opacity: 0, y: 120 }, { opacity: 0.07, y: 0, duration: 0.7, ease: "power3.out" }, 0.3);
+    tl.fromTo("#{{ID}}-stamp span", { opacity: 0, scale: 0.2, rotate: -20 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.5, ease: "back.out(2)" }, 0.35);
+    words.forEach((w, i) => {
+      tl.fromTo(w, { opacity: 0, x: -dir * 60, filter: "blur(10px)" },
+        { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "power4.out" }, 0.45 + i * 0.08);
+    });
+    const t1 = 0.45 + words.length * 0.08 + 0.2;
+    gsap.utils.toArray("#{{ID}}-title .hl").forEach((h, i) => { tl.to(h, { scaleX: 1, duration: 0.4, ease: "power3.out" }, t1 + i * 0.1); tl.to(h.parentNode, { color: "{{ON_ACCENT}}", duration: 0.25 }, t1 + 0.1 + i * 0.1); });
+    tl.fromTo("#{{ID}}-card", { opacity: 0, y: 90, rotate: dir * 3 }, { opacity: 1, y: 0, rotate: 0, duration: 0.55, ease: "expo.out" }, t1 + 0.1);
+    tl.to("#{{ID}}-bar", { scaleY: 1, duration: 0.45, ease: "power3.out" }, t1 + 0.35);
+    window.__timelines["{{ID}}"] = tl;
+  </script>
+</template>

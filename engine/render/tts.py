@@ -68,6 +68,17 @@ def _kokoro():
     return KPipeline(lang_code=voice[0]), voice
 
 
+def _trim_silence(path: Path) -> None:
+    """Cut the silence the voice model leaves before and after a line, so lines can follow each other naturally."""
+    tmp = path.with_suffix(".trim.wav")
+    cut = "silenceremove=start_periods=1:start_duration=0:start_threshold=-45dB"
+    r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", f"{cut},areverse,{cut},areverse", str(tmp)],
+                       capture_output=True)
+    if r.returncode == 0 and tmp.exists() and tmp.stat().st_size > 1000:
+        tmp.replace(path)
+    tmp.unlink(missing_ok=True)
+
+
 def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Path | None]:
     """Write one WAV per non-empty line into out_dir; returns paths (None for empty lines)."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -97,6 +108,7 @@ def synthesize(lines: list[str], out_dir: Path, tone: str = "story") -> list[Pat
                 if ref:
                     kw["audio_prompt_path"] = str(ref)
                 torchaudio.save(str(out), model.generate(line, **kw), model.sr)
+            _trim_silence(out)
             paths.append(out)
     return paths
 
@@ -106,3 +118,69 @@ def voice_fingerprint() -> str:
     ref = hashlib.sha256(REFERENCE.read_bytes()).hexdigest()[:8] if REFERENCE.exists() else "-"
     cfg = hashlib.sha256(CONFIG.read_bytes()).hexdigest()[:8] if CONFIG.exists() else "-"
     return f"{cfg}:{ref}"
+
+
+def _cute(path: Path, pitch: float, speed: float) -> None:
+    if pitch == 1.0 and speed == 1.0:
+        return
+    """Make a voice smaller and sweeter: raise pitch (asetrate), keep it light on speed."""
+    tmp = path.with_suffix(".cute.wav")
+    sr = 24000
+    af = f"asetrate={int(sr * pitch)},aresample=24000,atempo={speed / pitch:.4f}"
+    r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-af", af, str(tmp)], capture_output=True)
+    if r.returncode == 0 and tmp.exists() and tmp.stat().st_size > 1000:
+        tmp.replace(path)
+    tmp.unlink(missing_ok=True)
+
+
+SLIP_REF_LINES = ["Hi! I'm Slip! Let's fix that!", "Don't text! Doodle!"]
+
+
+def _slip_reference(tmp: Path, voice: str) -> Path:
+    """A short clip of Kokoro's preset girl voice, used as the sound for Chatterbox to copy."""
+    import numpy as np
+    import soundfile as sf
+    from kokoro import KPipeline
+    pipe = KPipeline(lang_code=voice[0])
+    audio = np.concatenate([a for line in SLIP_REF_LINES for _, _, a in pipe(line, voice=voice, speed=1.05)])
+    ref = tmp / "slip-ref.wav"
+    sf.write(ref, audio, 24000)
+    return ref
+
+
+def skit_voices(beats: list[dict], out_dir: Path) -> list[Path | None]:
+    """One WAV per beat. The human speaks in Harsh's cloned voice. Slip is Chatterbox copying Kokoro's sweet
+    `af_heart` voice with a lively, excited delivery (picked by Harsh, 4 Nov: "C chatterbox heart lively").
+    Tune in brand/voice.yml -> slip: {voice, exaggeration}."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    cfg = config()
+    slip = {"voice": "af_heart", "exaggeration": 0.85, "cfg_weight": 0.3, **(cfg.get("slip") or {})}
+    human_ex = float(cfg.get("exaggeration") if cfg.get("exaggeration") is not None else 0.5)
+    paths: list[Path | None] = []
+    import torchaudio
+    with tempfile.TemporaryDirectory() as tmp:
+        ref = _decrypt_reference(Path(tmp))
+        slip_ref = _slip_reference(Path(tmp), str(slip["voice"])) if any(b.get("who") == "slip" for b in beats) else None
+        print(f"skit voices: human={'Harsh’s voice sample' if ref else 'default'}, slip=chatterbox copying {slip['voice']}", flush=True)
+        model = _chatterbox()
+        for i, b in enumerate(beats):
+            line = re.sub(r"[*_]", "", str(b.get("say") or b.get("text") or "")).strip()
+            if not line or b.get("voice") is False:
+                paths.append(None)
+                continue
+            for word, spoken in (cfg.get("pronounce") or {}).items():
+                line = re.sub(rf"\b{re.escape(word)}\b", spoken, line)
+            out = out_dir / f"beat-{i + 1}.wav"
+            if b.get("who") == "slip":
+                line = re.sub(r"\.(\s|$)", r"!\1", line)   # Slip is excited: full stops become exclamations
+                wav = model.generate(line, audio_prompt_path=str(slip_ref), exaggeration=float(slip["exaggeration"]),
+                                     cfg_weight=float(slip["cfg_weight"]))
+            else:
+                kw = {"exaggeration": human_ex, "cfg_weight": 0.4}
+                if ref:
+                    kw["audio_prompt_path"] = str(ref)
+                wav = model.generate(line, **kw)
+            torchaudio.save(str(out), wav, model.sr)
+            _trim_silence(out)
+            paths.append(out)
+    return paths

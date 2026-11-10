@@ -1,0 +1,42 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-15T12:30:00+05:30'
+app: setalytix
+pillar: lessons
+text: |
+  Your gym machine doesn't have a 17.5 kg setting, so your app shouldn't ask for one. Setalytix lets each exercise have its own weight steps, including real machine stacks.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #progressiveoverload #gymlife #buildinpublic #indiedev #strengthtraining
+slides:
+- type: cover
+  kicker: Small detail
+  title: Your gym machine has no *17.5 kg* setting
+  say: Your gym machine doesn't have a seventeen and a half kilo setting, so your app shouldn't ask for one,
+- type: point
+  title: Real *weight lists*
+  body: Every exercise has its own steps. Machines can use the real stack.
+  screen: exercises
+  focus: list
+  label: Weight steps
+  say: In Setalytix, every exercise has its own weight steps, and machines can use the real stack, like nine, fourteen, sixteen, nineteen,
+- type: point
+  title: Assisted lifts
+  body: Less assistance counts as progress.
+  say: Assisted pull-ups work the way you'd expect, less assistance counts as progress,
+- type: point
+  title: The next weight *fits*
+  body: It's one your machine actually has.
+  screen: workout-targets
+  focus: target
+  label: Next weight
+  say: So the next weight you're asked to lift is one your machine actually has.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free. Try it at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2

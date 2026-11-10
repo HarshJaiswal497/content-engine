@@ -1,0 +1,110 @@
+# App screens available to videos (files in assets/screens/<app>/<slug>.png, added with tools/add_screens.py).
+# Use in a slide:   screen: today            (or "slipnote/composer" if the name exists in both apps; plain names use the post's app)
+# Optional zoom:    focus: start-button      (a region below, or a box {x, y, w, h} as fractions 0-1 of the screen)
+#                   label: Tap to start      (a small pill that points at the focus)
+# Only screens showing features Harsh has cleared are listed here. This file and the images are public.
+setalytix:
+  today:
+    shows: Today tab with the next workout card (Push), exercise list and the Start workout button
+    regions: {card: {x: .04, y: .24, w: .92, h: .38}, start-button: {x: .05, y: .645, w: .9, h: .075}}
+  today-no-split:
+    shows: Today before any split exists, with "Pick a starter" and "Build my own"
+    regions: {pick-starter: {x: .09, y: .205, w: .55, h: .065}}
+  today-cardio:
+    shows: Today with the cardio weekly-minutes card under the next workout
+    regions: {cardio-card: {x: .04, y: .86, w: .92, h: .13}}
+  welcome:
+    shows: New-user welcome with the starter splits (Push/Pull/Legs, Upper/Lower, Full Body)
+    regions: {starters: {x: .04, y: .41, w: .92, h: .32}}
+  workout-logging:
+    shows: Logging a set with the rest timer running, a green target box and ticked sets
+    regions: {target: {x: .07, y: .31, w: .86, h: .12}, ticks: {x: .6, y: .44, w: .32, h: .2}, rest-timer: {x: .05, y: .895, w: .9, h: .09}}
+  workout-targets:
+    shows: A workout before logging, with the target pre-filled and empty set circles
+    regions: {target: {x: .07, y: .31, w: .86, h: .12}}
+  splits:
+    shows: Splits list with the active Push Pull Legs split
+    regions: {active-split: {x: .04, y: .175, w: .92, h: .085}}
+  edit-split:
+    shows: Editing a split's days and exercises
+    regions: {exercise: {x: .04, y: .255, w: .92, h: .17}}
+  exercises:
+    shows: Built-in exercise list with weight steps
+    regions: {list: {x: .04, y: .2, w: .92, h: .4}}
+  cardio-setup:
+    shows: Cardio tab with the weekly goal and weekly plan
+    regions: {goal: {x: .04, y: .15, w: .92, h: .18}}
+  how-it-works:
+    shows: The in-app guide, "Every workout, in 3 steps"
+    regions: {steps: {x: .04, y: .15, w: .92, h: .45}}
+slipnote:
+  circle-home:
+    shows: A circle's home with the latest note from a friend and the "Doodle back" button
+    regions: {note: {x: .06, y: .26, w: .88, h: .5}, doodle-back: {x: .05, y: .895, w: .9, h: .085}}
+  composer:
+    shows: The composer, a doodle on paper with the tool shelf and the Send button
+    regions: {shelf: {x: 0, y: .72, w: 1, h: .17}, send: {x: .05, y: .905, w: .9, h: .075}}
+  composer-tools:
+    shows: Drawing tools in detail (pen, marker, highlighter, pencil, eraser) and the stroke stabiliser
+    regions: {ink-and-size: {x: .03, y: .54, w: .94, h: .17}, tools: {x: .03, y: .84, w: .94, h: .14}}
+  note-react:
+    shows: A received note with the reaction row and "Doodle back"
+    regions: {reactions: {x: .05, y: .53, w: .9, h: .11}, note: {x: .08, y: .12, w: .84, h: .3}}
+  add-widget:
+    shows: Adding the widget, with the small, medium and large sizes
+    regions: {preview: {x: .05, y: .14, w: .9, h: .4}, sizes: {x: .05, y: .5, w: .9, h: .07}, add-button: {x: .05, y: .825, w: .9, h: .075}}
+  circle-theme:
+    shows: Choosing a theme for a circle
+    regions: {themes: {x: .04, y: .49, w: .92, h: .27}}
+  slip-peeks:
+    shows: The Slip mascot peeking over the corner of the composer
+    regions: {slip: {x: .72, y: .105, w: .2, h: .1}}
+  history:
+    shows: History, a grid of past notes
+    regions: {grid: {x: .04, y: .2, w: .92, h: .5}}
+  # --- Phase 9 screens (added 8 Nov 2026): the new play features, photobook, memory lane ---
+  guess-pick-word:
+    shows: Pick a word to draw (three words dealt, friends guess from four, only you see it)
+    regions: {cards: {x: .05, y: .72, w: .9, h: .2}}
+  guess-friend:
+    shows: Guessing a friend's doodle, four options, one guess each
+    regions: {doodle: {x: .06, y: .13, w: .88, h: .33}, options: {x: .05, y: .51, w: .9, h: .17}}
+  guess-results:
+    shows: Who guessed your doodle, with each friend's guess ticked or crossed
+    regions: {guesses: {x: .05, y: .59, w: .9, h: .27}}
+  capsule-seal:
+    shows: Sealing a time capsule, choosing the day it opens
+    regions: {when: {x: .04, y: .4, w: .92, h: .2}, seal-button: {x: .05, y: .9, w: .9, h: .075}}
+  photobook-cover:
+    shows: The photobook cover looks (scrapbook, cheerful, classic and more), everything editable
+    regions: {cover: {x: .06, y: .07, w: .88, h: .4}, looks: {x: .02, y: .72, w: .96, h: .18}}
+  photobook-page:
+    shows: Editing a photobook page, with undo and redo and the tools row
+    regions: {page: {x: .04, y: .1, w: .92, h: .42}, tools: {x: .04, y: .6, w: .92, h: .09}, undo-redo: {x: .03, y: .02, w: .35, h: .06}}
+  photobook-spread:
+    shows: Turning a photobook page, and the book lying open as two-page spreads sideways
+    regions: {page: {x: .05, y: .1, w: .9, h: .52}, spread: {x: .04, y: .76, w: .92, h: .19}}
+  play-home:
+    shows: A circle's home with the Play button (badge shows what is waiting)
+    regions: {play-button: {x: .62, y: .85, w: .34, h: .13}}
+  daily-prompt-list:
+    shows: Today's prompt card on the circles list
+    regions: {prompt: {x: .04, y: .33, w: .92, h: .15}}
+  sticker-day:
+    shows: The daily sticker pack, today's sticker and the 30 to collect
+    regions: {today: {x: .04, y: .29, w: .92, h: .12}, grid: {x: .04, y: .44, w: .92, h: .38}}
+  thinking-of-you:
+    shows: Thinking of you, send a one-tap sticker poke
+    regions: {stickers: {x: .04, y: .53, w: .92, h: .2}}
+  video-record:
+    shows: Recording a video note, up to 10 seconds, with sound
+    regions: {clip: {x: .04, y: .1, w: .92, h: .43}, record: {x: .3, y: .58, w: .4, h: .17}}
+  boomerang-note:
+    shows: A received boomerang note (a short bouncing clip) with the reaction row
+    regions: {note: {x: .05, y: .11, w: .9, h: .45}}
+  finish-ask:
+    shows: The composer with "Ask them to finish it" ticked
+    regions: {ask: {x: .06, y: .05, w: .5, h: .08}}
+  memory-lane-story:
+    shows: A memory lane story, "Chai crew's October", scroll to remember
+    regions: {title: {x: .1, y: .18, w: .8, h: .12}, stack: {x: .15, y: .3, w: .7, h: .38}}

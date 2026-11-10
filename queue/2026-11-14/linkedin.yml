@@ -1,0 +1,40 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-14T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  My release builds went from 40+ minutes to about 6, and I made the machine slower on purpose.
+
+  I build Slipnote on an 8 GB PC. I'd given the build tool most of the memory (8 GB), and the whole machine slowed to a crawl. Releases took most of an afternoon.
+
+  I gave it less: 3 GB, then 5 GB. After a memory fix in the app too, a release build took 367.8 seconds, about six minutes.
+
+  The lesson: fit the tool to the machine. More memory for a tool is not always faster, because the machine still needs some for itself.
+
+  Slipnote is in development. The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #buildinpublic #android #developerproductivity
+slides:
+- type: cover
+  kicker: Lesson
+  title: 'Release builds: *40+ minutes* to about 6'
+- type: point
+  number: 1
+  title: The setup
+  body: An 8 GB PC, and I gave the build tool 8 GB of memory.
+- type: point
+  number: 2
+  title: The crawl
+  body: The whole machine slowed down. A release took most of an afternoon.
+- type: point
+  number: 3
+  title: The fix
+  body: 'I gave it less: 3 GB, then 5 GB.'
+- type: point
+  number: 4
+  title: The result
+  body: A release build took 367.8 seconds, about six minutes.
+- type: cta
+  title: Fit the tool to the *machine*
+  body: Slipnote is in development

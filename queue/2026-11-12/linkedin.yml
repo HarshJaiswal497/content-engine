@@ -1,0 +1,21 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-12T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  I rebuilt the same feature three times in one day, and the tests were green every time.
+
+  The feature was Slipnote's photobook: a month or a year of notes turned into a scrapbook. My first version worked. Then I held it in my hands and said it wasn't what I meant. I wanted a real scrapbook that opens like a book, with several notes on one page.
+
+  So the cover now swings open, the pages turn, and the spreads run sideways. Pages are free-form, with notes, captions, stickers, doodles and a pen, plus undo and redo, and it exports a print-ready PDF.
+
+  The lesson I keep relearning: a feature isn't done when it passes. It's done when you've used it like a normal person and it feels right. The first build is a question. Using it is the answer.
+
+  Slipnote is still in development.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #buildinpublic #flutter #productdesign

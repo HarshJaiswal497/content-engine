@@ -15,7 +15,7 @@ from pathlib import Path
 from .. import github, state
 from ..post import Post, all_posts, load
 from .slides import THEMES, render_post_slides
-from .video import caption_video, mood_for, slides_to_video
+from .video import caption_video, caption_video_motion, skit_video, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
 
 
 def _clean(asset_dir: Path) -> None:
@@ -59,20 +59,48 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
         mp4 = post.asset_dir / "video.mp4"
         if kind == "slides":
             with tempfile.TemporaryDirectory() as tmp:
-                imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
                 secs = [float(s.get("seconds", spec.get("seconds_per_slide", 3.2))) for s in slides]
                 lines = [str(s.get("say") or "") for s in slides]
                 voice = None
                 if any(lines) and spec.get("voice", True):
                     from .tts import synthesize
                     voice = synthesize(lines, Path(tmp) / "voice", spec.get("tone", "story"))
-                slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
+                done = False
+                if video_style(spec, post.path.parent.name) == "motion":   # HyperFrames picture + the same voice and music
+                    try:
+                        from .hyperframes import FADE, LEAD, TAIL, render_motion
+                        mseconds = plan_seconds(len(slides), secs, voice, FADE, LEAD, TAIL)
+                        silent = Path(tmp) / "picture.mp4"
+                        render_motion(slides, post.app, mseconds, FADE, silent, Path(tmp))
+                        mux_audio(silent, mp4, mseconds, FADE, voice, mood_for(spec.get("tone"), post.app),
+                                  "/".join(mp4.parts[-4:-1]), lead=LEAD, sfx=True)
+                        done = True
+                    except Exception:   # never lose a post over the fancy renderer: fall back to the classic look
+                        print(f"{post.id}: motion render failed, using classic slides\n{traceback.format_exc()[-1500:]}", flush=True)
+                if not done:
+                    imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
+                    slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
+            _finish_video(post, mp4, upload)
+        elif kind == "skit":
+            skit_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("title"),
+                       voices=spec.get("voice", True))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
-            caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
-                          captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app),
-                          script=spec.get("script"), fixes=spec.get("caption_fixes"))
+            done = False
+            if spec.get("captions", True) and video_style(spec, post.path.parent.name) == "motion":
+                try:
+                    caption_video_motion(post.video_source(), mp4, post.app, hook=spec.get("hook"),
+                                         mood=mood_for(spec.get("tone"), post.app), script=spec.get("script"),
+                                         fixes=spec.get("caption_fixes"), inserts=spec.get("inserts"),
+                                         emphasis=spec.get("emphasis"))
+                    done = True
+                except Exception:   # fall back to the classic caption burn-in
+                    print(f"{post.id}: motion captions failed, using classic\n{traceback.format_exc()[-1500:]}", flush=True)
+            if not done:
+                caption_video(post.video_source(), mp4, hook=spec.get("hook"), accent=accent,
+                              captions=spec.get("captions", True), mood=mood_for(spec.get("tone"), post.app),
+                              script=spec.get("script"), fixes=spec.get("caption_fixes"))
             _finish_video(post, mp4, upload)
         elif kind == "same_as":
             sib_path = post.path.parent / f"{spec['post']}.yml"

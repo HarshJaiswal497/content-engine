@@ -198,3 +198,57 @@ def test_youtube_weekly_issue_is_one_issue(monkeypatch):
     assert number == 9 and len(made) == 1 and len(lines) == 3
     title, body = made[0]
     assert "(3)" in title and body.count("- [ ] Uploaded and scheduled") == 3 and "IST" in body
+
+
+def test_motion_project_is_built_from_slides(tmp_path):
+    from engine.render import hyperframes as hf
+    slides = [{"type": "cover", "title": "One tap *logs a set*"}, {"type": "point", "title": "Fast", "body": "Tap the tick."},
+              {"type": "cta", "title": "Try *Setalytix*", "body": "Free at app.setalytix.in"}]
+    proj = hf.build_project(slides, "setalytix", [3.0, 3.0, 3.0], 0.45, tmp_path / "p")
+    index = (proj / "index.html").read_text()
+    assert index.count("data-composition-src") == 3 and 'data-duration="8.100"' in index
+    assert "{{" not in "".join(p.read_text() for p in (proj / "compositions").glob("*.html"))
+    assert hf._title_html("a *b c* d").count("hl") == 1   # neighbouring accent words share one pill
+
+
+def test_motion_style_switches_on_by_date():
+    from engine.render.video import video_style
+    assert video_style({}, "2026-11-08") == "slides" and video_style({}, "2026-11-09") == "motion"
+    assert video_style({"style": "slides"}, "2026-12-01") == "slides" and video_style({"style": "motion"}, "2026-11-01") == "motion"
+
+
+def test_phone_scene_and_screen_validation(tmp_path):
+    from engine.render import hyperframes as hf
+    slides = [{"type": "cover", "title": "Hi"},
+              {"type": "point", "title": "Prefilled", "screen": "workout-targets", "focus": "target", "label": "Pre-filled"},
+              {"type": "cta", "title": "Try it", "body": "Free"}]
+    proj = hf.build_project(slides, "setalytix", [3.0, 4.0, 3.0], 0.45, tmp_path / "p")
+    assert (proj / "assets" / "setalytix-workout-targets.png").exists()
+    scene = (proj / "compositions" / "s1.html").read_text()
+    assert "{{" not in scene and "Pre-filled" in scene and "setalytix-workout-targets.png" in scene
+    import pytest
+    with pytest.raises(ValueError):
+        hf.resolve_screen("nope", "setalytix")
+    with pytest.raises(ValueError):
+        hf._focus_box("nope", hf.resolve_screen("today", "setalytix")[2])
+
+
+def test_talking_project_builds(tmp_path):
+    from engine.render.hyperframes import build_talking_project
+    clip = tmp_path / "c.mp4"
+    clip.write_bytes(b"x")
+    words = [{"word": w, "start": i * 0.4, "end": i * 0.4 + 0.3} for i, w in enumerate("So I fixed it. Now it works.".split())]
+    proj = build_talking_project(clip, words, "My hook", "setalytix", 4.0, tmp_path / "p",
+                                 inserts=[{"at": 1, "dur": 2, "screen": "today", "focus": "start-button", "label": "Resume"}])
+    page = (proj / "compositions" / "th.html").read_text()
+    assert 'id="cap0w0"' in page and 'id="ins0"' in page and "Resume" in page and "My hook" in page
+
+
+def test_skit_project_builds(tmp_path):
+    from engine.render.hyperframes import build_skit_project, skit_beats_ok
+    beats = [{"who": "human", "pose": "phone", "text": "It *vanished*?!"}, {"who": "slip", "pose": "wave", "text": "Hi, I'm Slip."}]
+    assert skit_beats_ok(beats) == []
+    assert skit_beats_ok([{"who": "robot", "text": "x"}])
+    proj, marks = build_skit_project(beats, "slipnote", tmp_path / "p")
+    page = (proj / "compositions" / "skit.html").read_text()
+    assert 'id="b0"' in page and 'id="slip-wave"' in page and 'id="human-phone"' in page and len(marks) == 3

@@ -1,0 +1,34 @@
+<template>
+  <style>
+{{BASE_CSS}}
+    #{{ID}}-title { top: 330px; height: 640px; font-size: {{TITLE_SIZE}}px; }
+    #{{ID}}-pill { position: absolute; left: 0; right: 0; top: 1040px; display: flex; justify-content: center; }
+    #{{ID}}-pill span { font-size: 50px; font-weight: 800; padding: 28px 56px; border-radius: 999px; background: {{INK}}; color: {{BG}}; opacity: 0; }
+    #{{ID}}-handle { position: absolute; left: 0; right: 0; top: 1210px; text-align: center; font-size: 38px; font-weight: 600; color: {{MUTED}}; opacity: 0; }
+    #{{ID}}-orb { position: absolute; left: 50%; top: 880px; width: 1500px; height: 1500px; margin-left: -750px; border-radius: 50%; border: 18px solid {{ACCENT}}; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="{{ID}}" data-width="1080" data-height="1920">
+    <div id="{{ID}}-wrap" class="wrap">
+    <div class="tex"></div>
+    <div id="{{ID}}-orb"></div>
+    <div id="{{ID}}-title" class="title">{{TITLE_HTML}}</div>
+    <div id="{{ID}}-pill"><span>{{BODY}}</span></div>
+    <div id="{{ID}}-handle">{{HANDLE}}</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const words = gsap.utils.toArray("#{{ID}}-title .w");
+    tl.fromTo("#{{ID}}-wrap", { clipPath: "circle(0% at 50% 56%)" }, { clipPath: "circle(150% at 50% 56%)", duration: 0.65, ease: "power3.inOut" }, 0);
+    tl.fromTo("#{{ID}}-orb", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 0.3, duration: 0.8, ease: "power3.out" }, 0.25);
+    words.forEach((w, i) => {
+      tl.fromTo(w, { opacity: 0, y: 60, scale: 0.88, filter: "blur(10px)" },
+        { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.34, ease: "back.out(1.6)" }, 0.4 + i * 0.1);
+    });
+    const t1 = 0.4 + words.length * 0.1 + 0.25;
+    gsap.utils.toArray("#{{ID}}-title .hl").forEach((h, i) => { tl.to(h, { scaleX: 1, duration: 0.4, ease: "power3.out" }, t1 + i * 0.1); tl.to(h.parentNode, { color: "{{ON_ACCENT}}", duration: 0.25 }, t1 + 0.1 + i * 0.1); });
+    tl.fromTo("#{{ID}}-pill span", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.2)" }, t1 + 0.1);
+    tl.fromTo("#{{ID}}-handle", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, t1 + 0.4);
+    window.__timelines["{{ID}}"] = tl;
+  </script>
+</template>
