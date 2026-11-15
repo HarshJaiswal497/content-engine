@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-18T17:45:00+05:30'
+app: slipnote
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: My first themes looked ugly, so I started over
+  description: |
+    Slipnote has eight themes, each built as a real thing, not a colour swap. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #design
+  tags:
+  - slipnote
+  - build in public
+  - app design
+  - themes
+  - indie developer
+  - android app

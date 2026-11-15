@@ -1,0 +1,37 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-16T12:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  The app held the same weight for about four weeks, and it was right. Episode 2: pec-dec fly at 29 kg.
+
+  When it says hold, it means earn the next step. Free at app.setalytix.in, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #workoutlog #buildinpublic #indiedev #strengthtraining #gymlife
+slides:
+- type: cover
+  kicker: Episode 2
+  title: The app held *29 kg* for about 4 weeks
+  say: The app held the same weight for about four weeks, and it was right,
+- type: big
+  title: '*24 kg* to *29 kg*'
+  say: I hit every rep goal on the pec-dec fly at twenty-four kilos, so it moved me up to twenty-nine,
+- type: point
+  title: Then it *held*
+  body: First set hit. The rest missed by one or two reps.
+  screen: workout-logging
+  focus: ticks
+  label: Hit or miss
+  say: And then it held that weight, session after session. I'd hit the first set, and miss the rest by a rep or two,
+- type: big
+  title: Set two hit *9 reps*
+  say: Until the seventh of November, when my second set finally hit nine reps. The app didn't move the weight until I'd earned the next step.
+- type: cta
+  title: Episode 3 *next Monday*
+  body: Free at app.setalytix.in
+  say: Next Monday, the times I overruled it. Setalytix is free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2

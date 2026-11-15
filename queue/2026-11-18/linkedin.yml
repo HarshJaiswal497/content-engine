@@ -1,0 +1,23 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-18T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  My first set of app themes looked ugly, and Slipnote now has eight good ones.
+
+  The first version of the themes only swapped colours on the same screens. I looked at it and said it plainly: "basic, unintentional, quite ugly." It was a recolour, and recolours don't feel like anything.
+
+  So I redesigned them one at a time, each as a real thing. Fridge Door is an enamel fridge door with a chrome handle and letter magnets, your note held by one red magnet, moving in a breeze. Groove is a vinyl listening room, and the note sits in a record sleeve. Love Letter is a red thread on an old book's page with pressed flowers and a wax seal. Midnight is a rainy window with fairy lights and tonight's real moon.
+
+  Each person picks their own theme in every circle. A test renders every screen in every theme and checks the text is readable, and it found a crash before anyone hit it.
+
+  The lesson: a theme feels special when it's a real thing, not a new set of colours.
+
+  Slipnote is still in development.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #buildinpublic #design #flutter

@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-21T17:45:00+05:30'
+app: slipnote
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: It took me several tries to get Slip to sit on a button
+  description: |
+    Slip climbs out from behind the Google button and waves. Getting there took several tries. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #buildinpublic #indiedev
+  tags:
+  - slipnote
+  - build in public
+  - mascot
+  - app design
+  - onboarding
+  - indie developer

@@ -1,0 +1,38 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-17T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  500 emoji passed the box. The rules refused them.
+
+  I added a feedback box to Slipnote with a limit of 1,000 characters. In testing, 500 emoji went through the box and then got refused by the database rules. Same limit, two answers.
+
+  The app counts what you see: an emoji is one character. The rules count UTF-16 units: an emoji is two. So 500 emoji looked like 500 to the app and 1,000 to the rules, and anything near the limit got turned away without the person knowing why.
+
+  The fix was to make the box count the way the rules do. Now what you see on the counter is what the rules see.
+
+  The lesson: whenever two places enforce one limit, make them count in the same unit, and test the limit with emoji.
+
+  Slipnote is in development. The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #android #flutter #buildinpublic
+slides:
+- type: cover
+  kicker: Build log
+  title: '*500 emoji* passed the box. The rules refused them.'
+- type: point
+  number: 1
+  title: Two ways to count
+  body: 'The app counts what you see: an emoji is 1. The rules count UTF-16 units: an emoji is 2.'
+- type: point
+  number: 2
+  title: The *gap*
+  body: Near the limit, the app said yes and the rules said no.
+- type: point
+  number: 3
+  title: The *fix*
+  body: The box now counts the way the rules do.
+- type: cta
+  title: One limit, *one unit*
+  body: Test limits with emoji

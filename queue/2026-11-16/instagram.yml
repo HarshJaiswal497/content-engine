@@ -1,0 +1,46 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-16T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Eight circle themes, and each one is a real thing: a fridge door, a record sleeve, an old book's page, a rainy window at night.
+
+  Everyone picks their own theme in every circle. Slipnote is in development. Waitlist link in bio.
+
+  #slipnote #themes #handwrittennotes #androidapp #widgets #aesthetic #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote
+  title: '*8 themes*, and each is a real thing'
+- type: point
+  number: 1
+  title: '*Fridge Door*'
+  body: Enamel, a chrome handle, letter magnets, and your note held by one red magnet.
+- type: point
+  number: 2
+  title: '*Sticker Pop*'
+  body: A lemon sheet of real vinyl stickers with black outlines.
+- type: point
+  number: 3
+  title: '*Groove*'
+  body: A vinyl listening room on dark walnut. The note sits in a record sleeve.
+- type: point
+  number: 4
+  title: '*Love Letter*'
+  body: A red thread of fate on an old book's page, with a wax seal.
+- type: point
+  number: 5
+  title: '*Midnight*'
+  body: A rainy window at night, fairy lights, and tonight's real moon.
+- type: point
+  number: 6
+  title: '*Golden Luxe* and *Timeless Classic*'
+  body: Minimal and classic. A shaded page, one bar beside each note.
+- type: point
+  number: 7
+  title: '*Paper & Ink*'
+  body: The plain one.
+- type: cta
+  title: '*You* pick yours'
+  body: Everyone chooses their own theme in every circle

@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-17T17:45:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 'Slip & Me 2: Slip gets dressed for the theme'
+  description: |
+    Slipnote has eight themes, and everyone picks their own in every circle. In development. Waitlist: https://harshjaiswal497.github.io/content-engine/slipnote/
+    #Shorts #slipnote #themes
+  tags:
+  - slipnote
+  - slip and me
+  - themes
+  - handwritten notes
+  - android widget
+  - indie developer

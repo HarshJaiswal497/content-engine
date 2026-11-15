@@ -1,0 +1,46 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-17T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Slip and Me, episode 2. Slip gets dressed for the theme. Fridge magnet today, lantern in the rain tonight.
+
+  Eight themes, and everyone picks their own in every circle. Slipnote is in development. Waitlist link in bio.
+
+  #slipnote #slipandme #handwrittennotes #androidapp #widgets #themes #buildinpublic #indiedev
+video:
+  kind: skit
+  tone: playful
+  title: Slip & Me · 2
+  beats:
+  - who: slip
+    pose: happy
+    text: Ta-da! Today I'm a *fridge magnet!*
+    seconds: 2.4
+    other_pose: idle
+    sfx: pop
+  - who: human
+    pose: shocked
+    text: Wait. You change *outfits?*
+    seconds: 2.2
+    other_pose: happy
+  - who: slip
+    pose: sleepy
+    text: Tonight I'm Midnight. A lantern, fairy lights... *yawn.*
+    seconds: 3.4
+  - who: human
+    pose: think
+    text: Can I pick a different one than my friend?
+    seconds: 2.8
+    other_pose: think
+  - who: slip
+    pose: cheer
+    text: Yes! Everyone picks their *own*, in every circle.
+    seconds: 3.0
+    other_pose: happy
+  - who: slip
+    pose: wave
+    text: That's *Slipnote*. In development. *Waitlist in bio!*
+    seconds: 3.0
+    sfx: ping

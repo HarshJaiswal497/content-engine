@@ -1,0 +1,38 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-18T19:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  Pec-dec fly at 29 kg, session by session. The app moved me up once, then held the weight for about four weeks until I earned the next step.
+
+  Episode 2 of letting an app pick my weights. Free at app.setalytix.in, link in bio.
+
+  #setalytix #progressiveoverload #gymtracker #workoutlog #buildinpublic #pecdec #gymlife #strengthtraining
+slides:
+- type: cover
+  kicker: Episode 2
+  title: The app held *29 kg* for about 4 weeks
+- type: point
+  number: 1
+  title: '*5 Oct*: 24 kg'
+  body: Every set hit 12. Every rep goal reached, so the app moves the weight up.
+- type: point
+  number: 2
+  title: '*10 Oct*: 29 kg'
+  body: Target 9 reps. I hit 10, then 8, then 8. Two sets missed by one.
+- type: point
+  number: 3
+  title: '*14 to 27 Oct*: hold'
+  body: 'Same 29 kg. Most sessions: first set hit, later sets short by one or two.'
+- type: point
+  number: 4
+  title: '*1 Nov*: hold'
+  body: Same 29 kg again. 12, then 8, then 7.
+- type: point
+  number: 5
+  title: '*7 Nov*: closer'
+  body: Second set hit 9. The third still missed by one.
+- type: cta
+  title: Hold means *earn it*
+  body: Free at app.setalytix.in

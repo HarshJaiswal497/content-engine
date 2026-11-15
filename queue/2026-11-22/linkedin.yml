@@ -1,0 +1,22 @@
+platform: linkedin
+format: video
+scheduled_at: '2026-11-22T09:15:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  One tap saves the set and starts the rest timer. Tap it again and it undoes.
+
+  That's the whole interaction in Setalytix when you're in the middle of a workout. The default rest is 90 seconds, and each exercise can have its own. The reason it's one tap is that I log sets between lifts, with my phone in one hand and a chalky other hand, and every extra tap is a reason to stop logging.
+
+  The undo matters as much as the timer. If you tap by accident, you tap again, and it's gone, no menu and no confirmation.
+
+  I think most of what makes a logging app good is the small interactions you do 25 times a workout.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #pwa #ux
+video:
+  kind: same_as
+  post: instagram-reel

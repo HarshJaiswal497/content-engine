@@ -37,6 +37,12 @@ setalytix:
   how-it-works:
     shows: The in-app guide, "Every workout, in 3 steps"
     regions: {steps: {x: .04, y: .15, w: .92, h: .45}}
+  workout-done:
+    shows: The Workout done summary with confetti, sets logged, volume, time and the lifts that moved
+    regions: {stats: {x: .05, y: .28, w: .9, h: .24}, lifts: {x: .05, y: .5, w: .9, h: .12}}
+  progress-charts:
+    shows: Progress charts, "same workout, session by session" with the volume line
+    regions: {chart: {x: .04, y: .5, w: .92, h: .2}, summary: {x: .04, y: .75, w: .92, h: .09}}
 slipnote:
   circle-home:
     shows: A circle's home with the latest note from a friend and the "Doodle back" button
