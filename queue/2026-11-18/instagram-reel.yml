@@ -18,6 +18,19 @@ video:
   - ugly
   - real
   - eight
+  inserts:
+  - at: 13
+    dur: 3
+    screen: theme-fridge
+    label: Fridge Door
+  - at: 16.5
+    dur: 3
+    screen: theme-groove
+    label: Groove
+  - at: 20
+    dur: 3
+    screen: theme-love-letter
+    label: Love Letter
   script: |-
     My first set of themes looked ugly. I'd only swapped the colours on the same screens.
 

@@ -25,10 +25,14 @@ slides:
 - type: point
   title: '*A quick sketch* fixed it'
   body: Legs bent, hands on the button, a small seat shadow.
+  screen: slip-sitting
+  label: Slip on the button
   say: A quick sketch of the legs fixed it. Now Slip sits on the button, with its legs bent and a little shadow, and waves,
 - type: cta
   title: Tap Slip for *a 5-page tour*
   body: Slipnote is in development. Waitlist link in my bio
+  screen: tour-1
+  label: Slip's tour
   say: Tap Slip, and a five page tour opens. Slipnote is in development, and the waitlist link is on my profile.
 video:
   kind: slides

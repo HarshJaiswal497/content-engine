@@ -114,3 +114,51 @@ slipnote:
   memory-lane-story:
     shows: A memory lane story, "Chai crew's October", scroll to remember
     regions: {title: {x: .1, y: .18, w: .8, h: .12}, stack: {x: .15, y: .3, w: .7, h: .38}}
+  theme-fridge:
+    shows: Fridge Door theme, circle home on a cream enamel fridge door, note held by one red magnet, polaroids on fruit magnets
+  theme-sticker-pop:
+    shows: Sticker Pop theme, circle home on a lemon desk with die-cut vinyl stickers and bubble-letter circle name
+  theme-groove:
+    shows: Groove theme, circle home on dark walnut with the note in a cream record sleeve and a record sliding out
+  theme-love-letter:
+    shows: Love Letter theme, circle home on an old book page with a red thread, a jar of tiny scrolls and a wax-seal Draw a note button
+  theme-midnight:
+    shows: Midnight theme, circle home as a rainy night window with fairy lights, the note hung by a peg, a candle
+  theme-golden-luxe:
+    shows: Golden Luxe theme, circle home in dark with a gold bar beside the note and small-caps buttons
+  theme-timeless:
+    shows: Timeless Classic theme, circle home in deep green with a gold bar beside the note
+  tour-1:
+    shows: Slip's tour page 1, "Draw it. Send it. It lands on their home screen." with a home screen widget
+  tour-2:
+    shows: Slip's tour page 2, ways to say it, photo + doodle, boomerang, video note, brushes, stickers, themes
+  tour-3:
+    shows: Slip's tour page 3, games, guess the doodle, finish my doodle, thinking of you, daily prompt
+  tour-4:
+    shows: Slip's tour page 4, little surprises, time capsule, memory lane, photobook, never deleted
+  tour-5:
+    shows: Slip's tour page 5, circles, pairs and groups, with the Let's go button
+  welcome:
+    shows: The Welcome screen with Slipnote title, a miss-you note, a photo and Mum's ladoo card, and the Continue with Google button
+  welcome-slip-hint:
+    shows: Slip sitting on the Continue with Google button with the handwritten hint "Tap me to know about Slipnote!"
+  slip-sitting:
+    shows: Slip sitting on the button, curious face, legs bent, hands on the edge
+  slip-waving:
+    shows: Slip sitting on the button and waving with one hand
+  hi-name-year:
+    shows: Slip on a paper plane saying Hi, "What should your best friend call you?", name, colour and a year wheel
+  send-feedback:
+    shows: The Send feedback form, kind chips, a text box with a 1000 limit counter, an email-me-back tick and Send
+  layers-row:
+    shows: A drawing of a house with the Layer row under the tool options
+  layers-sheet:
+    shows: The Layers sheet, Grass, House at 85% opacity and Sky, with eye, lock and a New layer button
+  brushes-jar:
+    shows: The Brushes sheet, nine brushes, crayon, watercolour, brush pen, neon glow, spray, glitter, chalk, dotted, rainbow, and the jar on the tool shelf
+  paper-kraft:
+    shows: A wide note drawn on kraft paper
+  stickers-genz:
+    shows: A sticker pack grid, lettering-led slang doodles
+  stickers-sizes:
+    shows: Seven stickers at sticker size on paper and on a dark theme

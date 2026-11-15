@@ -21,6 +21,10 @@ slides:
 - type: cover
   kicker: Build log
   title: '*500 emoji* passed the box. The rules refused them.'
+- type: image
+  image: assets/screens/slipnote/send-feedback.png
+  title: The *box*
+  body: Settings, About, Send feedback. 1,000 characters.
 - type: point
   number: 1
   title: Two ways to count

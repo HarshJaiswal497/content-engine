@@ -13,20 +13,20 @@ slides:
 - type: cover
   kicker: Slipnote
   title: Decorate a note *4 new ways*
-- type: point
-  number: 1
+- type: image
+  image: assets/screens/slipnote/stickers-sizes.png
   title: '*7* sticker packs'
   body: 221 stickers, drawn in code, so widgets show them offline.
-- type: point
-  number: 2
+- type: image
+  image: assets/screens/slipnote/brushes-jar.png
   title: '*9* brushes'
-  body: Pick them from a brush jar.
-- type: point
-  number: 3
+  body: Crayon, watercolour, neon, glitter, rainbow and more, from a brush jar.
+- type: image
+  image: assets/screens/slipnote/paper-kraft.png
   title: '*6* papers'
-  body: The brushes react to the paper you draw on.
-- type: point
-  number: 4
+  body: Kraft, watercolour, cardboard, envelope. Brushes react to the paper.
+- type: image
+  image: assets/screens/slipnote/layers-sheet.png
   title: Up to *5 layers*
   body: Hide, fade, lock, reorder, merge. Stickers stay on top.
 - type: cta

@@ -23,8 +23,16 @@ slides:
   title: One more *hint*
   body: It lives on an old book's page.
   say: One more hint. It lives on an old book's page, with pressed flowers.
-- type: big
+- type: point
   title: It's *Love Letter*
+  body: A red thread of fate on an old book's page.
+  screen: theme-love-letter
+  focus:
+    x: 0
+    y: 0.08
+    w: 1
+    h: 0.56
+  label: Love Letter
   say: It's C, Love Letter, a red thread of fate on an old book's page.
 - type: cta
   title: Which one *next?*
