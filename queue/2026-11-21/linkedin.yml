@@ -1,0 +1,42 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-21T09:15:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  A 2.5 kg step is nothing on a barbell and a lot on a 5 kg dumbbell.
+
+  Setalytix moves your weight up by one step when you hit every rep goal. The default step is 2.5 kg. That's right for a barbell. On a dumbbell curl it takes you from 5 kg to 7.5 kg, which is a 50% jump.
+
+  I overruled the app on this several times. On preacher curls, incline dumbbell curls and lateral raises, it said go to 7.5 kg, and I stayed at 5. On assisted pull-ups I went the other way and used less assistance than it suggested.
+
+  I don't think the app is wrong to offer the step. I think it's useful to know where the same rule feels different, and I'm still deciding what to do about it. A rule that works on a barbell doesn't automatically work on a 5 kg dumbbell.
+
+  (Numbers are from my own log and approximate.)
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #progressiveoverload #pwa
+slides:
+- type: cover
+  kicker: Episode 3 preview
+  title: '*2.5 kg* is nothing on a barbell. On a 5 kg dumbbell, it''s *50%*.'
+- type: point
+  number: 1
+  title: The *rule*
+  body: Hit every rep goal and the weight goes up one step. The default step is 2.5 kg.
+- type: point
+  number: 2
+  title: The *problem*
+  body: 'On a dumbbell curl that takes you from 5 kg to 7.5 kg: a 50% jump.'
+- type: point
+  number: 3
+  title: What I *did*
+  body: I stayed at 5 kg on preacher curls, incline curls and lateral raises.
+- type: point
+  number: 4
+  title: The *other way*
+  body: On assisted pull-ups I used less assistance than it suggested.
+- type: cta
+  title: Episode 3 *next Monday*
+  body: Free at app.setalytix.in

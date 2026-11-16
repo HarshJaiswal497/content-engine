@@ -1,0 +1,40 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-19T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: |
+  A test that renders every screen in every theme found a crash.
+
+  Slipnote has eight themes now, and I didn't want to check each screen by eye. So there's a test that renders every in-circle screen in every theme and checks that the text is readable (4.5:1 contrast, at 1.15 times text size).
+
+  I built it for contrast. It also found a crash: the "Thinking of you" sheet broke on themes that have six colours. It would have hit someone the first time they opened that sheet in that theme. I found it before anyone did, on the day I wrote the test.
+
+  The lesson: if your app has a matrix (screens by themes, by sizes, by languages), test the whole matrix automatically. Looking at three combinations by eye misses the fourth.
+
+  Slipnote is in development. The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #android #flutter #buildinpublic
+slides:
+- type: cover
+  kicker: Build log
+  title: A test of *every screen* in *every theme* found a crash
+- type: point
+  number: 1
+  title: The *matrix*
+  body: 8 themes. Every in-circle screen. Too many to check by eye.
+- type: point
+  number: 2
+  title: The *test*
+  body: It renders each screen in each theme and checks the text is readable.
+- type: point
+  number: 3
+  title: The *crash*
+  body: The Thinking of you sheet broke on themes with six colours.
+- type: point
+  number: 4
+  title: The *lesson*
+  body: Test the whole matrix, not the three combinations you looked at.
+- type: cta
+  title: Follow the *build*
+  body: Slipnote is in development

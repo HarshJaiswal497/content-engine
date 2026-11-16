@@ -1,0 +1,45 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-19T12:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Finish a workout in Setalytix and it throws confetti, then tells you what moved: sets, volume, time, and which lifts went up.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #progressiveoverload #gymlife #strengthtraining #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Small detail
+  title: Finish a workout. *Get confetti.*
+  say: Finish a workout in Setalytix, and it throws confetti,
+- type: point
+  title: '*Sets*, volume, time'
+  body: All saved. One tap to finish.
+  screen: workout-done
+  focus: stats
+  label: Your workout, summed up
+  say: Then it shows you the sets you logged, the volume and the time,
+- type: point
+  title: Which lifts *moved*
+  body: It flags lifts that went up, and new best 1RMs.
+  screen: workout-done
+  focus: lifts
+  label: What moved
+  say: And which lifts moved, including a new best one rep max,
+- type: point
+  title: Next time, *filled in*
+  body: Your target and boxes are ready.
+  screen: workout-targets
+  focus: target
+  label: Next target
+  say: And next time you train that day, your target and the boxes are already filled in.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2

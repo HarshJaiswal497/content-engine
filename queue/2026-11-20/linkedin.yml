@@ -1,0 +1,19 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-20T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  It took me several tries to get a mascot to sit on a button.
+
+  Slip is the little paper note that lives in Slipnote. On the Welcome screen, Slip climbs out from behind the Google button, sits on it and waves. Tap it and a five-page tour opens.
+
+  It looked wrong at first. Peeking up from behind the button didn't work. Sitting with straight legs looked stiff. I tried to describe what I wanted, and the description didn't fix it. A quick sketch of how the legs should bend did. In the end Slip sits with its lower body behind the button, hands on it, legs bent, with a small seat shadow.
+
+  The lesson I keep relearning: when the idea is a shape, show the shape. A rough drawing is faster than three paragraphs.
+
+  Slipnote is in development.
+
+  The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #buildinpublic #design #flutter

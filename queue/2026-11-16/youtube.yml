@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-16T17:45:00+05:30'
+app: setalytix
+pillar: build-in-public
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: The app held my weight for 4 weeks (Ep 2)
+  description: |
+    Episode 2: Setalytix held 29 kg on the pec-dec fly for about four weeks, until I earned the next step. Try it free: https://app.setalytix.in
+    #Shorts #gym #progressiveoverload
+  tags:
+  - setalytix
+  - progressive overload
+  - pec dec fly
+  - workout tracker
+  - gym app
+  - build in public

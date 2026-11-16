@@ -1,0 +1,44 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-20T12:30:00+05:30'
+app: slipnote
+pillar: community
+text: |
+  Guess the Slipnote theme. A red thread, a wax seal, a jar of tiny scrolls. A, B, C or D? Tell me what you picked.
+
+  Eight themes in Slipnote, and everyone picks their own in every circle. In development. Waitlist link in bio.
+
+  #slipnote #guessthetheme #themes #handwrittennotes #androidapp #design #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Guess the theme
+  title: A red thread. A wax seal. *A jar of tiny scrolls.*
+  say: Guess the Slipnote theme. A red thread, a wax seal, and a jar of tiny scrolls.
+- type: point
+  title: Pick *one*
+  body: 'A: Fridge Door. B: Groove. C: Love Letter. D: Midnight.'
+  say: Is it A, Fridge Door? B, Groove? C, Love Letter? Or D, Midnight? Pick one,
+  seconds: 5
+- type: point
+  title: One more *hint*
+  body: It lives on an old book's page.
+  say: One more hint. It lives on an old book's page, with pressed flowers.
+- type: point
+  title: It's *Love Letter*
+  body: A red thread of fate on an old book's page.
+  screen: theme-love-letter
+  focus:
+    x: 0
+    y: 0.08
+    w: 1
+    h: 0.56
+  label: Love Letter
+  say: It's C, Love Letter, a red thread of fate on an old book's page.
+- type: cta
+  title: Which one *next?*
+  body: Slipnote is in development. Waitlist link in my bio
+  say: Which theme should I show next? Tell me in the comments. Slipnote is in development, and the waitlist link is on my profile.
+video:
+  kind: slides
+  tone: playful
+  seconds_per_slide: 3.2

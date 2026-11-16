@@ -1,0 +1,38 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-22T12:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Tap the tick and the rest timer starts itself. 90 seconds by default, and you can set it per exercise. Tapped by mistake? Tap again to undo.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #resttimer #gymlife #progressiveoverload #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Small detail
+  title: Tap ✓. *The rest timer starts itself.*
+  say: Tap the tick, and the rest timer starts itself,
+- type: point
+  title: Tap to log
+  body: Saves the set and starts the timer.
+  screen: workout-logging
+  focus: rest-timer
+  label: Rest timer
+  say: One tap saves the set and starts the timer. The default is ninety seconds, and you can set it per exercise,
+- type: point
+  title: Tapped by *mistake?*
+  body: Tap again to undo.
+  screen: workout-logging
+  focus: ticks
+  label: Tap again to undo
+  say: Tapped it by mistake? Tap it again to undo.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
+  say: It's called Setalytix, and it's free at app.setalytix.in.
+video:
+  kind: slides
+  tone: upbeat
+  seconds_per_slide: 3.2

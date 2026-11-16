@@ -1,0 +1,41 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-18T12:30:00+05:30'
+app: slipnote
+pillar: lessons
+text: |
+  My first set of themes looked ugly. So I started over and made each one a real thing: a fridge door, a record sleeve, an old book's page.
+
+  Eight themes, and everyone picks their own in every circle. Slipnote is in development. Waitlist link in bio.
+
+  #slipnote #buildinpublic #indiedev #indiehacker #androidapp #design #themes #handwrittennotes
+video:
+  kind: talking_head
+  source: inbox/2026-11-18-themes.mp4
+  hook: My first themes looked ugly
+  captions: true
+  emphasis:
+  - ugly
+  - real
+  - eight
+  inserts:
+  - at: 13
+    dur: 3
+    screen: theme-fridge
+    label: Fridge Door
+  - at: 16.5
+    dur: 3
+    screen: theme-groove
+    label: Groove
+  - at: 20
+    dur: 3
+    screen: theme-love-letter
+    label: Love Letter
+  script: |-
+    My first set of themes looked ugly. I'd only swapped the colours on the same screens.
+
+    So I started over, and made each theme a real thing. A fridge door, with magnets and a breeze. A record sleeve, with the record sliding out. An old book's page, with a wax seal.
+
+    Now there are eight, and everyone picks their own in every circle.
+
+    Slipnote is still in development, and the waitlist link is in my bio.

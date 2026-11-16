@@ -1,0 +1,34 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-20T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Stickers, brushes, papers and layers: the new things to decorate a note with in Slipnote.
+
+  7 sticker packs, 9 brushes, 6 papers that the brushes react to, and up to 5 layers per note. In development. Waitlist link in bio.
+
+  #slipnote #stickers #brushes #digitalart #handwrittennotes #androidapp #buildinpublic #indiedev
+slides:
+- type: cover
+  kicker: Slipnote
+  title: Decorate a note *4 new ways*
+- type: image
+  image: assets/screens/slipnote/stickers-sizes.png
+  title: '*7* sticker packs'
+  body: 221 stickers, drawn in code, so widgets show them offline.
+- type: image
+  image: assets/screens/slipnote/brushes-jar.png
+  title: '*9* brushes'
+  body: Crayon, watercolour, neon, glitter, rainbow and more, from a brush jar.
+- type: image
+  image: assets/screens/slipnote/paper-kraft.png
+  title: '*6* papers'
+  body: Kraft, watercolour, cardboard, envelope. Brushes react to the paper.
+- type: image
+  image: assets/screens/slipnote/layers-sheet.png
+  title: Up to *5 layers*
+  body: Hide, fade, lock, reorder, merge. Stickers stay on top.
+- type: cta
+  title: Slipnote, *in development*
+  body: Waitlist link in my bio
