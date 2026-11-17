@@ -18,17 +18,18 @@ video:
   - ugly
   - real
   - eight
+  zoom: false
   inserts:
-  - at: 13
-    dur: 3
+  - at: 11.8
+    dur: 2.6
     screen: theme-fridge
     label: Fridge Door
-  - at: 16.5
-    dur: 3
+  - at: 14.4
+    dur: 3.6
     screen: theme-groove
     label: Groove
-  - at: 20
-    dur: 3
+  - at: 18.4
+    dur: 4.2
     screen: theme-love-letter
     label: Love Letter
   script: |-

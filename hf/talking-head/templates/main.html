@@ -7,10 +7,11 @@
     #th-hook span { font-weight: 900; font-size: 74px; letter-spacing: -0.02em; line-height: 1.1; text-align: center; padding: 22px 40px; border-radius: 28px; background: {{ACCENT}}; color: {{ON_ACCENT}}; box-shadow: 0 18px 50px rgba(0,0,0,.35); }
     .cap { position: absolute; left: 50px; right: 50px; top: {{CAP_TOP}}px; display: flex; justify-content: center; gap: 0 18px; flex-wrap: wrap; opacity: 0; }
     .cap .cw { font-weight: 900; font-size: 96px; letter-spacing: -0.02em; line-height: 1.1; color: #fff; padding: 2px 18px 8px; border-radius: 18px; text-shadow: 0 5px 18px rgba(0,0,0,.65), 0 0 3px rgba(0,0,0,.9); }
-    .ins { position: absolute; width: 300px; height: 650px; right: 28px; top: {{INS_TOP}}px; border-radius: 42px; background: #0d0d10; padding: 9px; box-shadow: 0 30px 80px rgba(0,0,0,.5); opacity: 0; }
+    .ins { position: absolute; width: 380px; height: 823px; right: 24px; top: 190px; border-radius: 42px; background: #0d0d10; padding: 9px; box-shadow: 0 30px 80px rgba(0,0,0,.5); opacity: 0; }
     .ins .scr { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #000; }
     .ins img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
     .ins .ring { position: absolute; border: 6px solid {{ACCENT}}; border-radius: 20px; opacity: 0; box-shadow: 0 0 0 4px rgba(0,0,0,.25); }
+    .ins .ring, .ins .lab { z-index: 2; }
     .ins .lab { position: absolute; left: -26px; padding: 12px 22px; border-radius: 16px; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 28px; white-space: nowrap; opacity: 0; }
   </style>
   <div id="root" data-composition-id="th" data-width="1080" data-height="1920">
@@ -25,7 +26,7 @@
     const tl = gsap.timeline({ paused: true });
     // punch-in zooms: [time, scale]
     const zooms = {{ZOOMS}};
-    if (!zooms.length || zooms[0][0] > 0.4) tl.fromTo("#th-stage", { scale: 1.14 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 0);
+    if (({{ZOOM_ON}}) && (!zooms.length || zooms[0][0] > 0.4)) tl.fromTo("#th-stage", { scale: 1.14 }, { scale: 1, duration: 0.35, ease: "power2.out" }, 0);
     zooms.forEach(([t, s]) => tl.to("#th-stage", { scale: s, duration: 0.28, ease: "power2.inOut" }, t));
     // hook
     const hookOn = {{HOOK_ON}};
@@ -50,7 +51,11 @@
     const ins = {{INSERTS}};
     ins.forEach((p, i) => {
       const el = "#ins" + i;
-      tl.fromTo(el, { opacity: 0, x: 360, rotate: 8 }, { opacity: 1, x: 0, rotate: 0, duration: 0.5, ease: "expo.out" }, p.s);
+      tl.fromTo(el, { opacity: 0, x: 420, rotate: 8 }, { opacity: 1, x: 0, rotate: 0, duration: 0.55, ease: "expo.out" }, p.s);
+      tl.to(el, { y: -14, duration: Math.max(p.e - p.s - 0.6, 0.5), ease: "sine.inOut" }, p.s + 0.5);
+      // the screen pushes in on what matters
+      tl.set(el + " img", { transformOrigin: p.ox + "% " + p.oy + "%" }, 0);
+      tl.fromTo(el + " img", { scale: 1 }, { scale: p.z, duration: Math.max(p.e - p.s - 0.9, 0.6), ease: "power2.inOut" }, p.s + 0.55);
       if (p.ring) {
         tl.fromTo(el + " .ring", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, p.s + 0.7);
         tl.fromTo(el + " .lab", { opacity: 0, xPercent: -100 }, { opacity: 1, xPercent: -100, duration: 0.3 }, p.s + 0.9);

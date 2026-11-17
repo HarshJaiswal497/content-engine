@@ -261,7 +261,7 @@ def _caption_chunks(words: list[dict], dur: float) -> list[dict]:
 
 def build_talking_project(src: Path, words: list[dict], hook: str | None, app: str, dur: float,
                           out_dir: Path, inserts: list[dict] | None = None, portrait: bool = True,
-                          emphasis: list[str] | None = None) -> Path:
+                          emphasis: list[str] | None = None, zoom: bool = True) -> Path:
     """HyperFrames project for a talking-head clip: the clip (muted; audio is muxed later), word-highlight
     captions, punch-in zooms at sentence starts, a hook pill, and phone-screen inserts."""
     theme = THEMES.get(app, THEMES["personal"])
@@ -288,6 +288,8 @@ def build_talking_project(src: Path, words: list[dict], hook: str | None, app: s
             zooms.append([round(w["start"] - 0.05, 3), 1.26])
             zooms.append([round(w["end"] + 0.35, 3), 1.0])
     zooms.sort()
+    if not zoom:          # `zoom: false` on the post: the speaker never punches in; only the screens move
+        zooms = []
 
     ins_html, ins_data = [], []
     for i, ins in enumerate(inserts or []):
@@ -304,7 +306,11 @@ def build_talking_project(src: Path, words: list[dict], hook: str | None, app: s
         at = float(ins["at"])
         end = min(at + float(ins.get("dur", 3.5)), dur)
         ins_html.append(f'    <div class="ins" id="ins{i}"><div class="scr"><img src="assets/{owner}-{slug}.png" alt="">{ring}</div>{lab}</div>')
-        ins_data.append({"s": round(at, 3), "e": round(end, 3), "ring": bool(box)})
+        # the screen slowly pushes in on what matters: the focus box, else the top of the screen (where the note is)
+        fx, fy = (box["x"] + box["w"] / 2, box["y"] + box["h"] / 2) if box else (.5, .33)
+        zs = min(1.6, max(1.25, 0.55 / max(box['w'], box['h']))) if box else 1.22
+        ins_data.append({"s": round(at, 3), "e": round(end, 3), "ring": bool(box),
+                         "ox": round(fx * 100, 1), "oy": round(fy * 100, 1), "z": round(zs, 3)})
 
     hook_end = 2.8
     tokens = {
@@ -313,7 +319,7 @@ def build_talking_project(src: Path, words: list[dict], hook: str | None, app: s
         "CAP_TOP": 1120, "INS_TOP": 230,
         "HOOK": html.escape(hook or ""), "HOOK_ON": "true" if hook else "false", "HOOK_END": hook_end,
         "CAPS_HTML": "\n".join(caps_html), "INSERTS_HTML": "\n".join(ins_html),
-        "ZOOMS": json.dumps(zooms), "CAPS": json.dumps(chunks), "INSERTS": json.dumps(ins_data),
+        "ZOOMS": json.dumps(zooms), "ZOOM_ON": "true" if zoom else "false", "CAPS": json.dumps(chunks), "INSERTS": json.dumps(ins_data),
     }
     (comps / "th.html").write_text(_fill((HF / "talking-head" / "templates" / "main.html").read_text(), tokens))
     (out_dir / "index.html").write_text(f"""<!doctype html>
@@ -343,8 +349,8 @@ def build_talking_project(src: Path, words: list[dict], hook: str | None, app: s
 
 def render_talking(src: Path, words: list[dict], hook: str | None, app: str, dur: float, out: Path, work: Path,
                    inserts: list[dict] | None = None, portrait: bool = True, emphasis: list[str] | None = None,
-                   quality: str = "looks") -> Path:
-    proj = build_talking_project(src, words, hook, app, dur, work / "hf-th", inserts, portrait, emphasis)
+                   quality: str = "looks", zoom: bool = True) -> Path:
+    proj = build_talking_project(src, words, hook, app, dur, work / "hf-th", inserts, portrait, emphasis, zoom)
     return render_project(proj, out, quality)
 
 

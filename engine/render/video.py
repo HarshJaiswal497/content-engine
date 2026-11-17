@@ -415,7 +415,7 @@ def have_ffmpeg() -> bool:
 
 def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None, mood: str | None = None,
                          script: str | None = None, fixes: dict | None = None, inserts: list[dict] | None = None,
-                         emphasis: list[str] | None = None) -> Path:
+                         emphasis: list[str] | None = None, zoom: bool = True) -> Path:
     """Talking-head clip with HyperFrames captions, zooms, hook and phone inserts. The picture is rendered
     silent; the clip's own speech (loudness-normalised) is laid back on with ffmpeg."""
     from .hyperframes import render_talking
@@ -423,6 +423,8 @@ def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None
     words = transcribe(src, script, fixes) if info["has_audio"] else []
     if words:
         (out.parent / "captions.txt").write_text(" ".join(w["word"] for w in words) + "\n", encoding="utf-8")
+        import json as _json   # word times in the source clip, so inserts can be timed to what was said
+        (out.parent / "captions.json").write_text(_json.dumps([[round(w["start"], 2), w["word"]] for w in words]), encoding="utf-8")
     with tempfile.TemporaryDirectory() as tmp:
         # start on the first spoken word (viewers leave in the first second): cut the dead air before it
         if words and words[0]["start"] > 0.3:
@@ -435,7 +437,7 @@ def caption_video_motion(src: Path, out: Path, app: str, hook: str | None = None
         duration = min(info["duration"], MAX_SECONDS)
         silent = Path(tmp) / "picture.mp4"
         render_talking(src, words, hook, app, duration, silent, Path(tmp), inserts,
-                       portrait=info["height"] >= info["width"] * 1.6, emphasis=emphasis)
+                       portrait=info["height"] >= info["width"] * 1.6, emphasis=emphasis, zoom=zoom)
         cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(silent)]
         if info["has_audio"]:
             cmd += ["-i", str(src), "-filter_complex", "[1:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]",
