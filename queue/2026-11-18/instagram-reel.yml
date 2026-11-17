@@ -19,19 +19,26 @@ video:
   - real
   - eight
   zoom: false
+  fixes:
+    everyone likes: nobody likes
+    ugly theme: ugly themes
   inserts:
-  - at: 11.8
-    dur: 2.6
+  - at: 12.3
+    dur: 2.4
     screen: theme-fridge
     label: Fridge Door
-  - at: 14.4
-    dur: 3.6
+  - at: 14.95
+    dur: 2.4
     screen: theme-groove
     label: Groove
-  - at: 18.4
-    dur: 4.2
+  - at: 17.55
+    dur: 2.6
     screen: theme-love-letter
     label: Love Letter
+  - at: 20.4
+    dur: 2.4
+    screen: theme-midnight
+    label: Midnight
   script: |-
     My first set of themes looked ugly. I'd only swapped the colours on the same screens.
 
