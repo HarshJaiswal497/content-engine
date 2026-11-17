@@ -19,7 +19,7 @@ video:
   - real
   - eight
   zoom: false
-  fixes:
+  caption_fixes:
     everyone likes: nobody likes
     ugly theme: ugly themes
   inserts:
