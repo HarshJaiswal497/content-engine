@@ -93,7 +93,7 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                     caption_video_motion(post.video_source(), mp4, post.app, hook=spec.get("hook"),
                                          mood=mood_for(spec.get("tone"), post.app), script=spec.get("script"),
                                          fixes=spec.get("caption_fixes"), inserts=spec.get("inserts"),
-                                         emphasis=spec.get("emphasis"))
+                                         emphasis=spec.get("emphasis"), zoom=spec.get("zoom", True))
                     done = True
                 except Exception:   # fall back to the classic caption burn-in
                     print(f"{post.id}: motion captions failed, using classic\n{traceback.format_exc()[-1500:]}", flush=True)
