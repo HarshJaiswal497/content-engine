@@ -64,12 +64,39 @@ def _wait(container_id: str, minutes: int = 10) -> None:
     raise PublishError(f"Instagram container {container_id} not ready after {minutes} min")
 
 
-def _publish(uid: str, container_id: str) -> str:
+def find_recent(uid: str, caption: str, within_minutes: int = 180) -> str | None:
+    """Id of a media on the account with this exact caption posted in the last few hours, else None.
+    Instagram sometimes answers media_publish with "Application request limit reached" (HTTP 403) AFTER it
+    has created the post; retrying then publishes duplicates (the 18 Nov carousel went out three times)."""
+    from datetime import datetime, timedelta, timezone
+    try:
+        r = requests.get(f"{_base()}/{uid}/media", params={"fields": "id,caption,timestamp", "limit": 12,
+                                                           "access_token": _token()}, timeout=30)
+        if r.status_code >= 400:
+            return None
+        cutoff = datetime.now(timezone.utc) - timedelta(minutes=within_minutes)
+        for m in r.json().get("data", []):
+            ts = datetime.strptime(m["timestamp"], "%Y-%m-%dT%H:%M:%S%z")
+            if ts >= cutoff and (m.get("caption") or "").strip() == caption.strip():
+                return m["id"]
+    except Exception:
+        pass
+    return None
+
+
+def _publish(uid: str, container_id: str, caption: str = "") -> str:
     _wait(container_id)
-    data = _check(requests.post(f"{_base()}/{uid}/media_publish",
-                                data={"creation_id": container_id, "access_token": _token()}, timeout=60),
-                  "media_publish")
-    return data["id"]
+    r = requests.post(f"{_base()}/{uid}/media_publish",
+                      data={"creation_id": container_id, "access_token": _token()}, timeout=60)
+    if r.status_code >= 400:
+        # Did it publish anyway? Look for it before declaring failure (and being retried into a duplicate).
+        for _ in range(4):
+            time.sleep(20)
+            found = find_recent(uid, caption) if caption else None
+            if found:
+                return found
+        raise PublishError(f"Instagram media_publish failed: {r.status_code} {r.text[:500]}")
+    return r.json()["id"]
 
 
 def _reel_container(uid: str, caption: str, video_url: str) -> str:
@@ -92,6 +119,9 @@ def publish(post, dry_run: bool = False) -> Result:
         return Result("published", note=f"[dry-run] Instagram {post.format}, caption {len(caption)} chars, {n} media")
 
     uid = user_id()
+    already = find_recent(uid, caption)       # a retry after a false failure must not post it again
+    if already:
+        return Result("published", already, None, "found already posted on Instagram; not re-posted")
     if post.format == "image":
         cid = _container(uid, image_url=raw_url(post.images()[0]), caption=caption)
     elif post.format == "carousel":
@@ -106,7 +136,7 @@ def publish(post, dry_run: bool = False) -> Result:
     else:
         raise PublishError(f"unsupported Instagram format {post.format}")
 
-    media_id = _publish(uid, cid)
+    media_id = _publish(uid, cid, caption)
     link = None
     try:
         link = requests.get(f"{_base()}/{media_id}", params={"fields": "permalink", "access_token": _token()},
