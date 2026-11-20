@@ -161,8 +161,6 @@ DEMOS = {
                   "side": "right", "screen": "setalytix/workout-done", "mascot": "bo:flex", "kicker": "build in public"},
     "at-my-desk": {"app": "slipnote", "layout": "scene", "scene": "working-on-laptop-3", "words": ["I built this", "*WHOLE APP*", "alone"],
                    "screen": "slipnote/theme-love-letter", "mascot": "slip:cheer", "kicker": "from this corner"},
-    "yt-desk": {"app": "setalytix", "size": "yt", "layout": "scene", "scene": "working-on-laptop-2-me-looking-at-camera-2",
-                "scene_pos": "50% 30%", "words": ["I built a", "*FREE*", "gym app"], "mascot": "bo:flex", "side": "right"},
     "yt-wide": {"app": "slipnote", "size": "yt", "layout": "face", "words": ["Why I'm", "*BUILDING*", "Slipnote"], "pose": "thinking",
                 "side": "right", "mascot": "slip:wave", "kicker": "the real reason"},
 }
