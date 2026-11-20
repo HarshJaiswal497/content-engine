@@ -15,7 +15,7 @@ from pathlib import Path
 from .. import github, state
 from ..post import Post, all_posts, load
 from .slides import THEMES, render_post_slides
-from .video import caption_video, caption_video_motion, skit_video, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
+from .video import caption_video, caption_video_motion, skit_video, story_video, mood_for, mux_audio, plan_seconds, slides_to_video, video_style
 
 
 def _clean(asset_dir: Path) -> None:
@@ -84,6 +84,17 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
         elif kind == "skit":
             skit_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("title"),
                        voices=spec.get("voice", True))
+            _finish_video(post, mp4, upload)
+        elif kind == "story":
+            sp = None
+            if spec.get("speaker"):
+                from ..config import ROOT
+                sp = ROOT / spec["speaker"]
+                if not sp.exists():
+                    return f"waiting for the speaker clip {spec['speaker']}"
+            story_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app),
+                        spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
+                        script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent

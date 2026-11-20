@@ -469,3 +469,169 @@ def render_skit(beats: list[dict], app: str, out: Path, work: Path, title: str |
                 quality: str = "looks") -> tuple[Path, list[float]]:
     proj, marks = build_skit_project(beats, app, work / "hf-skit", title)
     return render_project(proj, out, quality), marks
+
+
+# ---------------------------------------------------------------- story ("I built X": steps, real screens, speaker window, mascot)
+
+MASCOT_POSES = {"slip": ["idle", "happy", "wave", "surprised", "think", "write", "sleepy", "sad", "peek", "cheer"],
+                "bo": ["idle", "happy", "wave", "flex", "surprised", "think", "tick", "sleepy", "sad", "cheer"]}
+
+
+def _story_words(text: str) -> list[tuple[str, bool]]:
+    """'Nobody likes *ugly* themes' -> [(Nobody, False), (likes, False), (ugly, True), (themes, False)]. Neighbouring
+    *accent* words stay separate pills (they animate one after the other)."""
+    out = []
+    for word in _words(text):
+        if word[0][0] == "\n":
+            continue
+        out.append(("".join(t for t, _ in word), any(a for _, a in word)))
+    return out
+
+
+def story_beats_ok(beats: list[dict], app: str) -> list[str]:
+    errs = []
+    if not beats:
+        return ["story needs beats"]
+    for i, b in enumerate(beats, 1):
+        if not str(b.get("head") or "").strip():
+            errs.append(f"beat {i}: head is empty")
+        if b.get("layout") not in (None, "full", "stack"):
+            errs.append(f"beat {i}: layout must be 'full' or 'stack'")
+        if b.get("layout") == "full" and (b.get("screen") or b.get("big")):
+            errs.append(f"beat {i}: a full-screen beat shows only you (screens and big words need layout: stack)")
+        if b.get("screen"):
+            try:
+                resolve_screen(b["screen"], app)
+            except ValueError as e:
+                errs.append(f"beat {i}: {e}")
+    return errs
+
+
+def _cap_accent(theme) -> str:
+    """Caption highlight: the app accent, or a warm yellow when the accent is too dark to read on the outline."""
+    h = theme.accent.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return theme.accent if (0.299 * r + 0.587 * g + 0.114 * b) > 150 else "#FFD23F"
+
+
+def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str | None = "slip",
+                        speaker: Path | None = None, words: list[dict] | None = None,
+                        emphasis: list[str] | None = None) -> tuple[Path, float]:
+    """HyperFrames project for a story video. Two layouts that morph into each other:
+    `full` (you fill the screen) and `stack` (a framed band of you at the bottom, motion above: a real app screen
+    that pushes in on the focus box, a big word). The numbered progress bar and the headline stay on screen in both.
+    Captions follow your words; the mascot changes pose per beat. Returns (project, total seconds). Picture only."""
+    errs = story_beats_ok(beats, app)
+    if errs:
+        raise ValueError("; ".join(errs))
+    theme = THEMES.get(app, THEMES["personal"])
+    (out_dir / "assets").mkdir(parents=True, exist_ok=True)
+    (out_dir / "compositions").mkdir(parents=True, exist_ok=True)
+    shutil.copy(HF / "shared" / "gsap.min.js", out_dir / "gsap.min.js")
+    (out_dir / "hyperframes.json").write_text((HF / "story" / "hyperframes.json").read_text())
+
+    durs = [float(b.get("seconds") or 4.0) for b in beats]
+    starts, t = [], 0.0
+    for d in durs:
+        starts.append(round(t, 3)); t += d
+    total = round(t, 3)
+    n = len(beats)
+
+    html_beats, data, used = [], [], []
+    for i, b in enumerate(beats):
+        step = b.get("step", i + 1)
+        tag = html.escape(str(b.get("tag") or "").upper())
+        hw = _story_words(str(b["head"]))
+        wspans = "".join(f'<span class="hw{" em" if em else ""}" id="bt{i}w{j}">{"<i class=pill></i>" if em else ""}{html.escape(w)}</span>'
+                         for j, (w, em) in enumerate(hw))
+        layout = b.get("layout") or ("stack" if (b.get("screen") or b.get("big")) else "full")
+        if not speaker:
+            layout = "stack"
+        phone = big = ""
+        d = {"s": starts[i], "e": round(starts[i] + durs[i], 3), "screen": False, "em": [em for _, em in hw],
+             "ring": False, "ox": 50, "oy": 33, "z": 1.2, "big": False, "layout": layout}
+        if b.get("screen"):
+            owner, slug, entry = resolve_screen(b["screen"], app)
+            shutil.copy(ROOT / "assets" / "screens" / owner / f"{slug}.png", out_dir / "assets" / f"{owner}-{slug}.png")
+            box = _focus_box(b.get("focus"), entry)
+            ring = lab = ""
+            if box:
+                ring = (f'<div class="ring" style="left:{(box["x"]-.015)*100:.2f}%;top:{(box["y"]-.008)*100:.2f}%;'
+                        f'width:{(box["w"]+.03)*100:.2f}%;height:{(box["h"]+.016)*100:.2f}%"></div>')
+                if b.get("label"):
+                    lab = f'<div class="lab" style="top:{max(box["y"]*100-2, 1):.1f}%">{html.escape(str(b["label"]))}</div>'
+                d.update(ring=True, ox=round((box["x"] + box["w"] / 2) * 100, 1), oy=round((box["y"] + box["h"] / 2) * 100, 1),
+                         z=round(min(1.6, max(1.25, 0.55 / max(box["w"], box["h"]))), 3))
+            else:
+                d["z"] = 1.18
+            phone = f'<div class="ph"><div class="scr"><img src="assets/{owner}-{slug}.png" alt="">{ring}</div>{lab}</div>'
+            d["screen"] = True
+        if b.get("big"):
+            big = f'<div class="big">{html.escape(str(b["big"]))}</div>'
+            d["big"] = True
+        cls = "full" if layout == "full" else ("" if b.get("screen") else "solo")
+        html_beats.append(f'    <div class="beat {cls}" id="bt{i}"><div class="badge"><span class="num">{html.escape(str(step))}</span>'
+                          f'{"<span class=tag>" + tag + "</span>" if tag else ""}</div><div class="head">{wspans}</div>{phone}{big}</div>')
+        pose = b.get("pose") or ("wave" if i == 0 else "happy" if i == n - 1 else "think" if i % 2 else "idle")
+        if mascot and mascot != "none" and pose not in MASCOT_POSES.get(mascot, []):
+            raise ValueError(f"beat {i+1}: {mascot} has no pose '{pose}' ({', '.join(MASCOT_POSES[mascot])})")
+        d["mp"] = pose
+        used.append(pose); data.append(d)
+
+    mascot_html, poses = "", []
+    if mascot and mascot != "none":
+        poses = sorted(set(used) | {"idle"})
+        for k, p in enumerate(poses):
+            shutil.copy(CHARS / mascot / f"{p}.png", out_dir / "assets" / f"mascot-{p}.png")
+            mascot_html += f'      <img{" class=first" if k == 0 else ""} id="mp{p}" src="assets/mascot-{p}.png" alt="">\n'
+
+    if speaker:
+        shutil.copy(speaker, out_dir / "assets" / "speaker.mp4")
+    else:   # no clip: a stack beat with the band left empty
+        (out_dir / "assets" / "speaker.mp4").write_bytes(b"")
+    _norm = lambda x: re.sub(r"\W", "", x.lower())
+    emph = {_norm(e) for e in (emphasis or [])}
+    chunks = _caption_chunks(words or [], total) if speaker else []
+    caps_html = []
+    for i, c in enumerate(chunks):
+        spans = "".join(f'<span class="cw{" emph" if _norm(w[2]) in emph else ""}" id="cap{i}w{j}">{html.escape(w[2])}</span>'
+                        for j, w in enumerate(c["w"]))
+        caps_html.append(f'      <div class="cap" id="cap{i}">{spans}</div>')
+    prog = "".join(f'<i><b id="pg{i}"></b></i>' for i in range(n))
+    tokens = {"BG": theme.bg, "INK": theme.ink, "ACCENT": theme.accent, "ON_ACCENT": theme.on_accent, "CARD": theme.card,
+              "ACCENT_CAP": _cap_accent(theme), "BAND_BG": "#15151c" if theme.bg.lower() > "#888888" else theme.card,
+              "TEXTURE": _texture(theme.texture, theme.ink), "PROG": prog, "BEATS": "\n".join(html_beats),
+              "CAPS_HTML": "\n".join(caps_html), "MASCOT": mascot_html,
+              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks})}
+    (out_dir / "compositions" / "story.html").write_text(_fill((HF / "story" / "templates" / "main.html").read_text(), tokens))
+    (out_dir / "index.html").write_text(f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width={W}, height={H}" />
+    <script src="gsap.min.js"></script>
+    <style>
+      * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+      html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; background: {theme.bg}; }}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{total:.3f}" data-width="{W}" data-height="{H}" data-fps="{FPS}">
+      <div id="story" data-composition-id="story" data-composition-src="compositions/story.html" data-start="0" data-duration="{total:.3f}" data-track-index="1" data-track-kind="graphics" data-width="{W}" data-height="{H}"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({{ paused: true }});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
+""")
+    return out_dir, total
+
+
+def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str | None = "slip",
+                 speaker: Path | None = None, quality: str = "looks", words: list[dict] | None = None,
+                 emphasis: list[str] | None = None) -> float:
+    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis)
+    render_project(proj, out, quality)
+    return total

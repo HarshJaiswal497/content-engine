@@ -19,7 +19,7 @@ FORMATS = {
     "instagram": {"image", "carousel", "reel"},
     "youtube": {"short"},
 }
-VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "same_as"}
+VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "story", "same_as"}
 APPS = {"slipnote", "setalytix", "personal"}
 
 # Hard limits from brand/founder.md. Each entry: (regex, message). Matches are errors.
@@ -170,6 +170,12 @@ class Post:
             if self.video_spec.get("voice", True):
                 from .render.tts import voice_fingerprint
                 relevant["_voice"] = voice_fingerprint()
+        if self.video_spec.get("kind") == "story":   # a changed template, mascot or screen re-renders
+            files = [f for d in (ROOT / "assets" / "characters", ROOT / "hf" / "story") for f in sorted(d.rglob("*")) if f.is_file() and f.suffix in (".png", ".html")]
+            relevant["_story"] = hashlib.sha256(b"".join(f.read_bytes() for f in files)).hexdigest()[:8]
+            if self.video_spec.get("voice", True) and not self.video_spec.get("speaker"):
+                from .render.tts import voice_fingerprint
+                relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):
             sib = self.path.parent / f"{self.video_spec['post']}.yml"
             if sib.exists() and sib != self.path:  # re-copy whenever the sibling's video changes
@@ -287,6 +293,11 @@ def validate(post: Post) -> None:
             if not beats:
                 e.append("video.kind 'skit' needs video.beats")
             e += skit_beats_ok(beats)
+        if kind == "story":
+            from .render.hyperframes import story_beats_ok
+            e += story_beats_ok(post.video_spec.get("beats") or [], post.app)
+            if len(post.video_spec.get("beats") or []) > 8:
+                w.append("story has more than 8 beats; keep Reels under about 45 s")
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):
             e.append("video.source (file in inbox/) is required for recording/talking_head")
         if kind == "talking_head" and not post.video_spec.get("script"):
