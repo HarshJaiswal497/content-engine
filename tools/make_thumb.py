@@ -100,7 +100,7 @@ def build_html(spec: dict) -> tuple[str, int, int]:
     else:
         css_pos = f"""
         .words {{ left: 50px; right: 50px; top: 230px; }}
-        .ln {{ font-size: {150 if layout == 'scene' else 176}px; }}
+        .ln {{ font-size: {spec.get('font') or (150 if layout == 'scene' else 176)}px; }}
         .person {{ height: 960px; bottom: 270px; {'left' if side == 'left' else 'right'}: -40px; }}
         .phone {{ width: 330px; height: 710px; {'right' if side == 'left' else 'left'}: 34px; bottom: 330px; transform: rotate(7deg); }}
         .mascot {{ width: 250px; {'right' if side == 'left' else 'left'}: 60px; top: 1500px; }}
@@ -145,7 +145,9 @@ def render(spec: dict, out: Path) -> Path:
     from playwright.sync_api import sync_playwright
     page, w, h = build_html(spec)
     with sync_playwright() as p:
-        b = p.chromium.launch()
+        import os
+        exe = os.environ.get("HYPERFRAMES_BROWSER_PATH")
+        b = p.chromium.launch(executable_path=exe) if exe else p.chromium.launch()
         pg = b.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
         pg.set_content(page)
         pg.wait_for_timeout(400)

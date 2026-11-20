@@ -99,10 +99,11 @@ def _publish(uid: str, container_id: str, caption: str = "") -> str:
     return r.json()["id"]
 
 
-def _reel_container(uid: str, caption: str, video_url: str) -> str:
+def _reel_container(uid: str, caption: str, video_url: str, cover_url: str | None = None) -> str:
     """Reels with Instagram Login must be fetched by Instagram from a public URL (the resumable
     upload route only exists for Facebook Login apps). Videos are public assets of the media release."""
-    return _container(uid, media_type="REELS", video_url=video_url, caption=caption, share_to_feed="true")
+    extra = {"cover_url": cover_url} if cover_url else {}   # the thumbnail made at render time
+    return _container(uid, media_type="REELS", video_url=video_url, caption=caption, share_to_feed="true", **extra)
 
 
 def reel_url(post) -> str:
@@ -132,7 +133,8 @@ def publish(post, dry_run: bool = False) -> Result:
             children.append(child)
         cid = _container(uid, media_type="CAROUSEL", children=",".join(children), caption=caption)
     elif post.format == "reel":
-        cid = _reel_container(uid, caption, reel_url(post))
+        cover = post.asset_dir / "cover.jpg"
+        cid = _reel_container(uid, caption, reel_url(post), raw_url(cover) if cover.exists() else None)
     else:
         raise PublishError(f"unsupported Instagram format {post.format}")
 

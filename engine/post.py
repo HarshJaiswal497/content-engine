@@ -130,6 +130,8 @@ class Post:
     def render_hash(self) -> str:
         """Changes when anything that affects rendered media changes."""
         relevant = {k: self.data.get(k) for k in ("format", "app", "slides", "video", "theme")}
+        if self.data.get("cover"):   # a cover spec change re-makes the cover; posts without one keep their hash
+            relevant["_cover"] = self.data["cover"]
         handles = ROOT / "brand" / "handles.yml"
         if handles.exists():  # the handle is printed on every slide
             relevant["_handles"] = hashlib.sha256(handles.read_bytes()).hexdigest()[:8]
