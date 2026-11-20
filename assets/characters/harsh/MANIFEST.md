@@ -49,3 +49,10 @@ Cleaned (edge fringe removed), 1000 px WebP with transparency. `tools/prepare_ma
 | `gestures/point_down.webp` | (attached) pointing_down.png | looking down and pointing down, mouth open |  |
 | `gestures/point_up.webp` | (attached) pointing_up.png | looking up and pointing up with one finger |  |
 | `gestures/wave.webp` | (attached) Joyful_Wave_in_Black_Hoodie.png | waving, big smile |  |
+
+## Full body (`fullbody/`)
+
+| File | Original name | What it shows | Note |
+|---|---|---|---|
+| `fullbody/desk_coding_scene.webp` | fullbody--Cozy_Dark-Themed_Coding_Studio.png | seated at a standing desk typing on a laptop, dark coding studio around him | a finished scene with its own background (not a cut-out); edge noise cropped; built by `tools/prepare_fullbody.py` |
+| `fullbody/presenter_standing.webp` | fullbody-Friendly_Presenter_in_Black_Streetwear.png | standing, both hands out presenting, mid-sentence | cut out of the baked glow and background; 673x1515 |
