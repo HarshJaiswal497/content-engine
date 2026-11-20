@@ -5,7 +5,7 @@ from pathlib import Path
 import math, sys
 
 OUT = Path(__file__).resolve().parent.parent / "assets" / "characters" / "harsh"
-SKIN, SEDGE, HAIR, HEDGE = "#C98F63", "#7A4B2C", "#2B1F1B", "#120C0A"
+SKIN, SEDGE, HAIR, HEDGE = "#E0AA7E", "#8A5733", "#3A2A24", "#1A100D"
 TEE, TEDGE, GLASS, INK, BLUSH = "#2D2D36", "#14141A", "#93A8C0", "#2A1B16", "#E0795F"
 SW = 7
 LIP = ["tiny", "mid", "open"]
@@ -24,11 +24,11 @@ def blob(cs):
     return s + "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r - 2}" fill="{HAIR}"/>' for x, y, r in cs)
 
 
-HAIR_BACK = blob(curls(160, 100, 84, 78, 165, 375, 15, 25))
-HAIR_FRONT = blob(curls(160, 62, 64, 16, 195, 345, 9, 22))
+HAIR_BACK = blob(curls(160, 98, 82, 74, 160, 380, 12, 27) + [(72, 140, 20), (248, 140, 20), (96, 40, 24), (226, 38, 22)])
+HAIR_FRONT = blob([(112, 58, 20), (140, 48, 22), (170, 46, 22), (198, 52, 21), (226, 66, 18), (92, 78, 16), (126, 74, 14), (176, 72, 13)])
 
 
-def eye(cx, cy, px=0, py=0, shut=None, r=11):
+def eye(cx, cy, px=0, py=0, shut=None, r=13):
     if shut == "arc":
         return f'<path d="M{cx-r} {cy+3} Q{cx} {cy-r-2} {cx+r} {cy+3}" fill="none" stroke="{INK}" stroke-width="6" stroke-linecap="round"/>'
     return (f'<ellipse cx="{cx}" cy="{cy}" rx="{r}" ry="{r+1}" fill="#fff"/><circle cx="{cx+px}" cy="{cy+py}" r="{r*.55:.1f}" fill="{INK}"/>'
@@ -50,10 +50,10 @@ def brows(kind):
             f'<path d="M172 {y} Q196 {y-9} 220 {y}" fill="none" stroke="{HEDGE}" stroke-width="7" stroke-linecap="round"/>')
 
 
-def mouth(kind, cx=160, cy=186):
+def mouth(kind, cx=160, cy=196):
     m = {
-        "tiny": f'<path d="M{cx-13} {cy} Q{cx} {cy+5} {cx+13} {cy}" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
-        "mid": f'<ellipse cx="{cx}" cy="{cy+3}" rx="14" ry="8" fill="{INK}"/>',
+        "tiny": f'<path d="M{cx-15} {cy-2} Q{cx} {cy+10} {cx+15} {cy-2}" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
+        "mid": f'<path d="M{cx-17} {cy-3} Q{cx} {cy+19} {cx+17} {cy-3} Z" fill="{INK}"/><path d="M{cx-14} {cy-2} H{cx+14} V{cy+3} H{cx-14} Z" fill="#fff"/>',
         "open": (f'<path d="M{cx-20} {cy-4} Q{cx} {cy+34} {cx+20} {cy-4} Z" fill="{INK}"/>'
                  f'<path d="M{cx-17} {cy-3} H{cx+17} V{cy+4} H{cx-17} Z" fill="#fff"/>'
                  f'<path d="M{cx-10} {cy+16} Q{cx} {cy+8} {cx+10} {cy+16} Q{cx} {cy+26} {cx-10} {cy+16} Z" fill="{BLUSH}"/>'),
@@ -65,10 +65,11 @@ def mouth(kind, cx=160, cy=186):
     return m[kind]
 
 
-BEARD = (f'<path d="M90 156 Q92 238 160 244 Q228 238 230 156 Q218 170 200 172 Q160 164 120 172 Q102 170 90 156 Z" '
-         f'fill="{HAIR}" stroke="{HEDGE}" stroke-width="{SW}" stroke-linejoin="round"/>')
-STACHE_PATCH = f'<ellipse cx="160" cy="190" rx="27" ry="17" fill="#9C6644"/>'
-FACE = f'<ellipse cx="160" cy="138" rx="72" ry="82" fill="{SKIN}" stroke="{SEDGE}" stroke-width="{SW}"/>'
+BEARD = (f'<path d="M90 146 Q94 214 160 224 Q226 214 230 146" fill="none" stroke="{HAIR}" stroke-width="24" stroke-linecap="round"/>'
+         f'<path d="M126 178 Q142 166 160 174 Q178 166 194 178 Q178 184 160 180 Q142 184 126 178 Z" fill="{HAIR}"/>'
+         f'<ellipse cx="160" cy="214" rx="14" ry="7" fill="{HAIR}"/>')
+STACHE_PATCH = ''
+FACE = f'<ellipse cx="160" cy="138" rx="74" ry="80" fill="{SKIN}" stroke="{SEDGE}" stroke-width="{SW}"/>'
 EARS = (f'<ellipse cx="86" cy="140" rx="11" ry="17" fill="{SKIN}" stroke="{SEDGE}" stroke-width="5"/>'
         f'<ellipse cx="234" cy="140" rx="11" ry="17" fill="{SKIN}" stroke="{SEDGE}" stroke-width="5"/>')
 NECK = f'<rect x="132" y="210" width="56" height="40" fill="{SKIN}" stroke="{SEDGE}" stroke-width="{SW}"/>'
@@ -101,11 +102,11 @@ def build(p):
     if isinstance(eyes, str):
         e = eye(124, 127, shut=eyes) + eye(196, 127, shut=eyes)
     else:
-        r = eyes[2] if len(eyes) > 2 else 11
+        r = eyes[2] if len(eyes) > 2 else 13
         e = eye(124, 127, eyes[0], eyes[1], r=r) + eye(196, 127, eyes[0], eyes[1], r=r)
     arms = "".join(arm(*a, *b) for a, b in p["arms"])
     inner = (f'<g transform="rotate({p.get("rot", 0)} 160 250)">' + HAIR_BACK + TORSO + NECK + EARS + FACE + BEARD + STACHE_PATCH
-             + glasses() + e + brows(p["brow"]) + mouth(p["mouth"]) + HAIR_FRONT + arms + "</g>" + p.get("extra", ""))
+             + f'<ellipse cx="104" cy="170" rx="13" ry="8" fill="{BLUSH}" opacity=".45"/><ellipse cx="216" cy="170" rx="13" ry="8" fill="{BLUSH}" opacity=".45"/>' + glasses() + e + brows(p["brow"]) + mouth(p["mouth"]) + HAIR_FRONT + arms + "</g>" + p.get("extra", ""))
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340" width="320" height="340">{inner}</svg>\n'
 
 
