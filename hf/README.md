@@ -46,3 +46,11 @@ video:
 ```
 `*word*` gets the accent highlight. Slip poses: idle happy wave surprised think write sleepy sad peek cheer.
 Human poses: idle talk shocked happy sad phone think. Skits are not date-gated: a post opts in with `kind: skit`.
+
+## Story (hf/story/)
+
+`video.kind: story`: "I built X" videos. A numbered-step motion canvas on top (headline with highlighted words, a real
+app screen that pushes in on the focus box, optional big word), an optional framed speaker window below, and the Slip/Bo
+mascot changing pose per beat. See `hf/story/example.yml`. Beat fields: `tag`, `head` (`*word*` highlights), `screen`,
+`focus`, `label`, `big`, `pose`, `seconds`, `say`. With a `speaker` clip its audio is the sound; without one, `say` lines
+are spoken over music.

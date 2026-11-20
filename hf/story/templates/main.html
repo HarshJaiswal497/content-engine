@@ -1,0 +1,79 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; background: {{BG}}; color: {{INK}}; }
+    .tex { position: absolute; inset: 0; {{TEXTURE}} }
+    .blob { position: absolute; border-radius: 50%; background: {{CARD}}; opacity: .9; }
+    .prog { position: absolute; left: 60px; right: 60px; top: 150px; display: flex; gap: 10px; }
+    .prog i { flex: 1; height: 12px; border-radius: 8px; background: rgba(128,128,128,.28); overflow: hidden; position: relative; }
+    .prog i b { position: absolute; inset: 0; background: {{ACCENT}}; transform-origin: 0 50%; transform: scaleX(0); border-radius: 8px; }
+    .beat { position: absolute; inset: 0; opacity: 0; }
+    .badge { position: absolute; left: 60px; top: 190px; display: flex; align-items: center; gap: 16px; }
+    .badge .num { width: 72px; height: 72px; border-radius: 50%; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 40px; display: grid; place-items: center; }
+    .badge .tag { font-weight: 900; font-size: 32px; letter-spacing: .16em; padding: 12px 24px; border-radius: 999px; background: {{INK}}; color: {{BG}}; }
+    .head { position: absolute; left: 60px; width: 560px; top: 300px; display: flex; flex-wrap: wrap; gap: 6px 16px; font-weight: 900; font-size: 88px; line-height: 1.04; letter-spacing: -.02em; }
+    .head .hw { position: relative; display: inline-block; opacity: 0; padding: 0 4px; }
+    .head .hw.em { color: {{ON_ACCENT}}; padding: 0 18px 6px; }
+    .head .hw { isolation: isolate; }
+    .head .hw .pill { position: absolute; inset: 4px 0 0 0; background: {{ACCENT}}; border-radius: 18px; z-index: -1; transform-origin: 0 50%; }
+    .solo .head { left: 60px; right: 60px; width: auto; justify-content: center; text-align: center; font-size: 118px; top: 360px; }
+    .ph { position: absolute; width: 380px; height: 823px; right: 36px; top: 215px; border-radius: 44px; background: #0d0d10; padding: 9px; box-shadow: 0 30px 70px rgba(0,0,0,.45); transform: rotate(3deg); }
+    .ph .scr { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: #000; }
+    .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .ph .ring { position: absolute; border: 6px solid {{ACCENT}}; border-radius: 20px; opacity: 0; box-shadow: 0 0 0 4px rgba(0,0,0,.25); }
+    .ph .lab { position: absolute; left: -40px; padding: 12px 22px; border-radius: 16px; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 28px; white-space: nowrap; opacity: 0; z-index: 3; }
+    .big { position: absolute; left: 40px; right: 40px; top: 560px; text-align: center; font-weight: 900; font-size: 250px; line-height: 1; letter-spacing: -.04em; color: {{ACCENT}}; text-shadow: 0 10px 0 rgba(0,0,0,.14); opacity: 0; }
+    .m-nospk .ph { width: 440px; height: 953px; top: 330px; right: 30px; }
+    .m-nospk .head { top: 420px; }
+    .m-nospk .badge { top: 200px; }
+    .spk { position: absolute; left: 60px; width: 960px; height: 540px; top: 1075px; border-radius: 40px; overflow: hidden; border: 9px solid {{ACCENT}}; box-shadow: 0 24px 60px rgba(0,0,0,.4); background: #000; }
+    .spk video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+    .mas { position: absolute; width: {{MAS_W}}px; left: {{MAS_L}}px; top: {{MAS_T}}px; }
+    .mas img { position: absolute; left: 0; top: 0; width: 100%; opacity: 0; }
+    .mas img.first { position: relative; }
+  </style>
+  <div id="root" data-composition-id="story" data-width="1080" data-height="1920" class="{{MODE}}">
+    <div class="tex"></div>
+    <div class="blob" id="blob1" style="width:520px;height:520px;left:-170px;top:620px"></div>
+    <div class="blob" id="blob2" style="width:380px;height:380px;right:-120px;top:120px"></div>
+    <div class="prog">{{PROG}}</div>
+{{BEATS}}
+{{SPEAKER}}
+    <div class="mas" id="mas">
+{{MASCOT}}
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const D = {{DATA}};
+    tl.to("#blob1", { x: 60, y: -40, duration: D.total, ease: "sine.inOut" }, 0);
+    tl.to("#blob2", { x: -50, y: 50, duration: D.total, ease: "sine.inOut" }, 0);
+    D.beats.forEach((b, i) => {
+      const el = "#bt" + i;
+      tl.fromTo("#pg" + i, { scaleX: 0 }, { scaleX: 1, duration: Math.max(b.e - b.s, .3), ease: "none" }, b.s);
+      tl.set(el, { opacity: 1 }, b.s);
+      tl.fromTo(el + " .badge", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "expo.out" }, b.s);
+      b.em.forEach((isEm, j) => {
+        const t = b.s + .12 + j * .09, w = el + "w" + j;
+        tl.fromTo(w, { y: 46, opacity: 0, scale: .88 }, { y: 0, opacity: 1, scale: 1, duration: .36, ease: "back.out(2.2)" }, t);
+        if (isEm) tl.fromTo(w + " .pill", { scaleX: 0 }, { scaleX: 1, duration: .3, ease: "power3.out" }, t + .12);
+      });
+      if (b.screen) {
+        tl.fromTo(el + " .ph", { x: 460, rotate: 12, opacity: 0 }, { x: 0, rotate: 3, opacity: 1, duration: .6, ease: "expo.out" }, b.s + .15);
+        tl.to(el + " .ph", { y: -14, duration: Math.max(b.e - b.s - .8, .5), ease: "sine.inOut" }, b.s + .6);
+        tl.set(el + " .ph img", { transformOrigin: b.ox + "% " + b.oy + "%" }, 0);
+        tl.fromTo(el + " .ph img", { scale: 1 }, { scale: b.z, duration: Math.max(b.e - b.s - 1.1, .6), ease: "power2.inOut" }, b.s + .7);
+        if (b.ring) {
+          tl.fromTo(el + " .ring", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: .35, ease: "back.out(2)" }, b.s + .9);
+          tl.fromTo(el + " .lab", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: .3, ease: "back.out(2)" }, b.s + 1.05);
+        }
+      }
+      if (b.big) tl.fromTo(el + " .big", { opacity: 0, scale: .5, rotate: -6 }, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: "back.out(2.4)" }, b.s + .25);
+      // the mascot reacts: swap pose, little hop
+      tl.set("#mp" + b.mp, { opacity: 1 }, b.s);
+      D.poses.forEach(p => { if (p !== b.mp) tl.set("#mp" + p, { opacity: 0 }, b.s); });
+      tl.fromTo("#mas", { y: 40, scale: .9 }, { y: 0, scale: 1, duration: .45, ease: "back.out(3)" }, b.s + .05);
+      if (i < D.beats.length - 1) tl.to(el, { opacity: 0, y: -24, duration: .28, ease: "power2.in" }, b.e - .28);
+    });
+    window.__timelines["story"] = tl;
+  </script>
+</template>

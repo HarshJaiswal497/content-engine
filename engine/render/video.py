@@ -539,3 +539,40 @@ def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: 
         total = marks[-1] + 0.4
         skit_audio(silent, out, marks[:-1], total, timed, mood, "/".join(out.parts[-4:-1]), voice=files)
     return out
+
+
+def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot: str | None = "slip",
+                speaker: Path | None = None, voices: bool = True) -> Path:
+    """'I built X' story: numbered-step motion canvas with real app screens, an optional framed speaker window
+    (its own speech is the sound), and a mascot. Without a speaker, each beat's `say` line is spoken (if voices)
+    over a music bed; beats last as long as their line."""
+    from .hyperframes import render_story
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_p = Path(tmp)
+        secs = [float(b.get("seconds") or 4.0) for b in beats]
+        voice = None
+        if speaker is None and voices and any(b.get("say") for b in beats):
+            try:
+                from .tts import synthesize
+                voice = synthesize([str(b.get("say") or "") for b in beats], tmp_p / "voice", "story")
+                secs = plan_seconds(len(beats), secs, voice, 0.0, 0.2, 0.2)
+            except Exception:
+                import traceback
+                print(f"story voices failed, continuing without\n{traceback.format_exc()[-1200:]}", flush=True)
+                voice = None
+        timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
+        total = sum(secs)
+        clip = None
+        if speaker is not None:
+            clip = tmp_p / "speaker.mp4"
+            _run(["ffmpeg", "-y", "-hide_banner", "-t", f"{total:.3f}", "-i", str(speaker), *ENC, str(clip)])
+        silent = tmp_p / "picture.mp4"
+        render_story(timed, app, silent, tmp_p, mascot, clip)
+        key = "/".join(out.parts[-4:-1])
+        if clip is not None and probe(clip)["has_audio"]:
+            _run(["ffmpeg", "-y", "-hide_banner", "-i", str(silent), "-i", str(clip), "-filter_complex",
+                  "[1:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]", "-map", "0:v", "-map", "[aout]",
+                  "-t", f"{total:.3f}", *ENC, str(out)])
+        else:
+            mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=0.2, sfx=True)
+    return out

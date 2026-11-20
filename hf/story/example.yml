@@ -1,0 +1,10 @@
+# "I built X" story: numbered steps over your real app screens, optional speaker window, mascot reacting.
+# A post opts in with video.kind: story. Screens come from brand/screens.yml.
+video:
+  kind: story
+  mascot: slip            # slip | bo | none (default: slip for Slipnote, bo for Setalytix)
+  speaker: inbox/2026-11-18-themes.mp4   # optional: your clip in a framed window; its audio is the sound
+  beats:                  # `seconds` per beat; without a speaker, `say:` is spoken and sets the length
+    - {tag: the problem, head: "Nobody likes *ugly* themes", screen: slipnote/theme-midnight, seconds: 4.4, pose: surprised}
+    - {tag: the fix, head: "Each theme is a *real thing*", screen: slipnote/theme-fridge, focus: {x: .12, y: .18, w: .76, h: .28}, label: Fridge door, seconds: 4.3, pose: happy}
+    - {tag: so I, head: "Started *over*", big: v2, seconds: 3.5, pose: cheer}
