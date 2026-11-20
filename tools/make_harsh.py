@@ -24,8 +24,25 @@ def blob(cs):
     return s + "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r - 2}" fill="{HAIR}"/>' for x, y, r in cs)
 
 
-HAIR_BACK = blob(curls(160, 98, 82, 74, 160, 380, 12, 27) + [(72, 140, 20), (248, 140, 20), (96, 40, 24), (226, 38, 22)])
-HAIR_FRONT = blob([(112, 58, 20), (140, 48, 22), (170, 46, 22), (198, 52, 21), (226, 66, 18), (92, 78, 16), (126, 74, 14), (176, 72, 13)])
+def _lock(d):
+    return f'<path d="{d}" fill="{HAIR}" stroke="{HEDGE}" stroke-width="{SW}" stroke-linejoin="round"/>' + f'<path d="{d}" fill="{HAIR}"/>'
+
+
+HAIR_BACK = (
+    # side and back lengths down to the jaw, flicking out at the ends
+    _lock("M92 70 Q62 110 68 190 Q70 210 86 206 Q96 160 104 112 Z")
+    + _lock("M228 70 Q258 110 252 190 Q250 210 234 206 Q224 160 216 112 Z")
+    + blob([(66, 204, 14), (52, 194, 10), (254, 204, 14), (268, 194, 10)])
+    + blob(curls(160, 94, 78, 70, 168, 372, 11, 26) + [(80, 60, 22), (240, 58, 22), (120, 22, 22), (160, 14, 24), (204, 22, 22)])
+)
+HAIR_FRONT = (
+    # layered wolf fringe: wispy pieces sweeping across the forehead, tips curling
+    _lock("M104 50 Q90 80 106 90 Q122 80 134 54 Z")
+    + _lock("M128 44 Q116 74 134 84 Q150 74 156 46 Z")
+    + _lock("M152 44 Q150 72 168 80 Q184 68 184 44 Z")
+    + _lock("M178 46 Q186 74 204 80 Q220 70 216 50 Z")
+    + _lock("M206 54 Q214 80 228 86 Q240 72 232 58 Z")
+)
 
 
 def eye(cx, cy, px=0, py=0, shut=None, r=13):
@@ -36,9 +53,11 @@ def eye(cx, cy, px=0, py=0, shut=None, r=13):
 
 
 def glasses():
-    f = f'fill="#DDEBFA" fill-opacity=".28" stroke="{GLASS}" stroke-width="5"'
-    return (f'<rect x="96" y="104" width="56" height="46" rx="14" {f}/><rect x="168" y="104" width="56" height="46" rx="14" {f}/>'
-            f'<path d="M152 120 H168" stroke="{GLASS}" stroke-width="5"/>')
+    def lens(x):
+        return (f'<rect x="{x}" y="104" width="56" height="46" rx="14" fill="#FFFFFF" fill-opacity=".07" stroke="#8A97A6" stroke-width="9"/>'
+                f'<rect x="{x}" y="104" width="56" height="46" rx="14" fill="none" stroke="#FFFFFF" stroke-width="5.5"/>'
+                f'<path d="M{x+10} {106+34} L{x+26} {106+10}" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/>')
+    return (lens(96) + lens(168) + f'<path d="M152 122 H168" stroke="#8A97A6" stroke-width="8"/><path d="M152 122 H168" stroke="#fff" stroke-width="4.5"/>')
 
 
 def brows(kind):
@@ -50,7 +69,7 @@ def brows(kind):
             f'<path d="M172 {y} Q196 {y-9} 220 {y}" fill="none" stroke="{HEDGE}" stroke-width="7" stroke-linecap="round"/>')
 
 
-def mouth(kind, cx=160, cy=196):
+def mouth(kind, cx=160, cy=204):
     m = {
         "tiny": f'<path d="M{cx-15} {cy-2} Q{cx} {cy+10} {cx+15} {cy-2}" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
         "mid": f'<path d="M{cx-17} {cy-3} Q{cx} {cy+19} {cx+17} {cy-3} Z" fill="{INK}"/><path d="M{cx-14} {cy-2} H{cx+14} V{cy+3} H{cx-14} Z" fill="#fff"/>',
@@ -65,10 +84,20 @@ def mouth(kind, cx=160, cy=196):
     return m[kind]
 
 
-BEARD = (f'<path d="M90 146 Q94 214 160 224 Q226 214 230 146" fill="none" stroke="{HAIR}" stroke-width="24" stroke-linecap="round"/>'
-         f'<path d="M126 178 Q142 166 160 174 Q178 166 194 178 Q178 184 160 180 Q142 184 126 178 Z" fill="{HAIR}"/>'
-         f'<ellipse cx="160" cy="214" rx="14" ry="7" fill="{HAIR}"/>')
+def _strands(pts):
+    return "".join(f'<path d="M{x} {y} l{dx} {dy}" stroke="#5B433A" stroke-width="2.6" stroke-linecap="round" opacity=".8"/>' for x, y, dx, dy in pts)
+
+
+BEARD = (
+    # fuller jaw-and-chin beard, joined to the sideburns
+    f'<path d="M90 146 Q90 224 160 240 Q230 224 230 146 Q220 160 212 172 Q196 212 160 216 Q124 212 108 172 Q100 160 90 146 Z" fill="{HAIR}" stroke="{HEDGE}" stroke-width="{SW}" stroke-linejoin="round"/>'
+    + _strands([(104, 190, 4, 10), (116, 206, 4, 10), (132, 222, 3, 11), (150, 232, 1, 10), (170, 232, -1, 10), (188, 222, -3, 11), (204, 206, -4, 10), (216, 190, -4, 10), (96, 168, 3, 12), (224, 168, -3, 12)])
+    # moustache angled down and out, pointed ends, strand detail
+    + f'<path d="M160 176 Q146 168 128 172 Q112 176 106 196 Q126 188 144 188 Q154 188 160 184 Q166 188 176 188 Q194 188 214 196 Q208 176 192 172 Q174 168 160 176 Z" fill="{HAIR}" stroke="{HEDGE}" stroke-width="4" stroke-linejoin="round"/>'
+    + _strands([(150, 176, -8, 6), (138, 178, -8, 7), (126, 182, -7, 8), (170, 176, 8, 6), (182, 178, 8, 7), (194, 182, 7, 8)])
+)
 STACHE_PATCH = ''
+LIPS = f'<ellipse cx="160" cy="204" rx="26" ry="14" fill="{SKIN}"/>'
 FACE = f'<ellipse cx="160" cy="138" rx="74" ry="80" fill="{SKIN}" stroke="{SEDGE}" stroke-width="{SW}"/>'
 EARS = (f'<ellipse cx="86" cy="140" rx="11" ry="17" fill="{SKIN}" stroke="{SEDGE}" stroke-width="5"/>'
         f'<ellipse cx="234" cy="140" rx="11" ry="17" fill="{SKIN}" stroke="{SEDGE}" stroke-width="5"/>')
@@ -105,7 +134,7 @@ def build(p):
         r = eyes[2] if len(eyes) > 2 else 13
         e = eye(124, 127, eyes[0], eyes[1], r=r) + eye(196, 127, eyes[0], eyes[1], r=r)
     arms = "".join(arm(*a, *b) for a, b in p["arms"])
-    inner = (f'<g transform="rotate({p.get("rot", 0)} 160 250)">' + HAIR_BACK + TORSO + NECK + EARS + FACE + BEARD + STACHE_PATCH
+    inner = (f'<g transform="rotate({p.get("rot", 0)} 160 250)">' + HAIR_BACK + TORSO + NECK + EARS + FACE + BEARD + LIPS
              + f'<ellipse cx="104" cy="170" rx="13" ry="8" fill="{BLUSH}" opacity=".45"/><ellipse cx="216" cy="170" rx="13" ry="8" fill="{BLUSH}" opacity=".45"/>' + glasses() + e + brows(p["brow"]) + mouth(p["mouth"]) + HAIR_FRONT + arms + "</g>" + p.get("extra", ""))
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340" width="320" height="340">{inner}</svg>\n'
 
