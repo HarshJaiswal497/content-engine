@@ -7,7 +7,7 @@ spec.yml:
     size: reel            # reel = 1080x1920 (Instagram cover, key content inside the middle 1080x1350)
                           # yt = 1280x720 (YouTube)
     app: slipnote         # colours: slipnote | setalytix | personal
-    layout: face          # face (you + words + screen) | mascot (mascot + words + screen) | word (giant words only)
+    layout: scene         # scene (you at your desk, the default and the house style) | face (sticker cut-out, not used)
     words: [Nobody likes, "*UGLY*", themes]     # one *highlighted* word; one line per entry
     pose: surprised       # a file in assets/people/harsh/ (without -sticker.png): surprised, shocked, thinking, ...
     side: left            # which side you stand on (face layout)
@@ -51,7 +51,7 @@ def build_html(spec: dict) -> tuple[str, int, int]:
     t = THEMES[app]
     w, h = SIZES[spec.get("size", "reel")]
     land = w > h
-    layout = spec.get("layout", "face")
+    layout = spec.get("layout", "scene")
     side = spec.get("side", "left")
     words = spec.get("words") or []
     lines = []
@@ -60,7 +60,7 @@ def build_html(spec: dict) -> tuple[str, int, int]:
         lines.append(f'<div class="ln hl"><span>{html.escape(m.group(1))}</span></div>' if m
                      else f'<div class="ln"><span>{html.escape(str(ln))}</span></div>')
     person = ""
-    scene = spec.get("scene")
+    scene = spec.get("scene", "working-on-laptop-3")
     if layout == "scene":
         sp = ROOT / "assets" / "people" / "harsh" / "scenes" / f"{scene}.png"
         if not sp.exists():
@@ -155,16 +155,10 @@ def render(spec: dict, out: Path) -> Path:
 
 
 DEMOS = {
-    "ugly-themes": {"app": "slipnote", "layout": "face", "words": ["Nobody likes", "*UGLY*", "themes"], "pose": "surprised",
-                    "screen": "slipnote/theme-fridge", "mascot": "slip:happy", "kicker": "so I rebuilt them"},
-    "setalytix": {"app": "setalytix", "layout": "face", "words": ["I built a", "*FREE*", "gym app"], "pose": "happy-with-teeth",
-                  "side": "right", "screen": "setalytix/workout-done", "mascot": "bo:flex", "kicker": "build in public"},
     "at-my-desk": {"app": "slipnote", "layout": "scene", "scene": "working-on-laptop-3", "words": ["I built this", "*WHOLE APP*", "alone"],
                    "screen": "slipnote/theme-love-letter", "mascot": "slip:cheer", "kicker": "from this corner"},
     "yt-desk": {"app": "setalytix", "size": "yt", "layout": "scene", "scene": "working-on-laptop-2-me-looking-at-camera-2",
                 "scene_pos": "50% 30%", "words": ["I built a", "*FREE*", "gym app"], "mascot": "bo:flex", "side": "right"},
-    "yt-wide": {"app": "slipnote", "size": "yt", "layout": "face", "words": ["Why I'm", "*BUILDING*", "Slipnote"], "pose": "thinking",
-                "side": "right", "mascot": "slip:wave", "kicker": "the real reason"},
 }
 
 if __name__ == "__main__":
