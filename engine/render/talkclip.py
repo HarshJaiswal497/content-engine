@@ -92,6 +92,29 @@ class Source:
         return (1 - a) * wa + a * wb
 
 
+REACT_DIR = ROOT / "assets" / "characters" / "harsh" / "reactions"
+REACT_SECONDS = 1.25     # one gesture cycle of the reaction videos (they loop seamlessly)
+
+
+def reaction_video(name: str) -> Path | None:
+    f = REACT_DIR / f"{name}.mp4"
+    return f if f.exists() else None
+
+
+class Reaction:
+    """A green-screen reaction video played 1:1 (same crop and key as the talking source)."""
+    def __init__(self, workdir: Path, video: Path):
+        raw = workdir / f"react-{video.stem}.raw"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video), "-vf", f"crop={SIZE}:{SIZE}:{CROP_X}:0",
+                        "-f", "rawvideo", "-pix_fmt", "rgb24", str(raw)], check=True)
+        n = raw.stat().st_size // (SIZE * SIZE * 3)
+        self.mm = np.memmap(raw, np.uint8, "r", shape=(n, SIZE, SIZE, 3))
+        self.n = n
+
+    def frame(self, i: int) -> np.ndarray:
+        return key(np.asarray(self.mm[int(np.clip(i, 0, self.n - 1))]))
+
+
 def voice_openness(wav: Path, total: float, fps: int = FPS) -> np.ndarray:
     """Target mouth opening per frame (0 shut .. 1 wide) from the loudness of the voice."""
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(wav), "-ac", "1", "-ar", "16000", "-f", "f32le", "-"],
@@ -162,9 +185,12 @@ def render_clip(src: Source, pos: np.ndarray, out: Path, accent: str, shade: str
     """impacts: [{t, d, image: Path}] reaction images popped in over the talker (with a flash and a small shake)."""
     impacts = impacts or []
     bg = _bg(accent, shade)
-    imgs = {}
+    imgs, vids = {}, {}
     for x in impacts:
-        if x["image"] not in imgs:
+        if x.get("video"):
+            if x["video"] not in vids:
+                vids[x["video"]] = Reaction(out.parent, x["video"])
+        elif x["image"] not in imgs:
             im = np.asarray(Image.open(x["image"]).convert("RGBA").resize((SIZE, SIZE), Image.LANCZOS), np.float32) / 255
             imgs[x["image"]] = np.dstack([im[..., :3] * im[..., 3:4], im[..., 3:]])
     p = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "1080x1920", "-r", str(FPS), "-i", "-",
@@ -180,10 +206,13 @@ def render_clip(src: Source, pos: np.ndarray, out: Path, accent: str, shade: str
         sc = 1.0 + .005 * np.sin(2 * np.pi * t / 3.4)
         rot = 0.0
         if act:
-            layer = imgs[act["image"]]
-            u = (t - act["t"]) / .32
-            sc *= .86 + .14 * _back_out(u)
-            rot = -3.0 * (1 - min(_back_out(u), 1))
+            if act.get("video"):   # the reaction plays as video: no pop, the flash and shake still mark the cut
+                layer = vids[act["video"]].frame(int((t - act["t"]) * FPS))
+            else:
+                layer = imgs[act["image"]]
+                u = (t - act["t"]) / .32
+                sc *= .86 + .14 * _back_out(u)
+                rot = -3.0 * (1 - min(_back_out(u), 1))
         for x in impacts:   # flash and shake live a little longer than the pop
             dt = t - x["t"]
             if 0 <= dt < .34:

@@ -699,7 +699,7 @@ def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, masc
             o = talkclip.voice_openness(vall, total)
             pos = talkclip.plan_path(o, src.mouth)
             clip = talkclip.render_clip(src, pos, tmp_p / "talk.mp4", th.accent, _shade(th.accent, .55),
-                                        [{"t": x["t"], "d": x["d"], "image": impact_file(mascot, x["name"])} for x in imp])
+                                        [{"t": x["t"], "d": x["d"], "image": impact_file(mascot, x["name"]), "video": talkclip.reaction_video(x["name"])} for x in imp])
             render_story(timed, app, silent, tmp_p, "none", clip, words=words, emphasis=emphasis, lay=TALKCLIP_LAY)
         else:
             pose_at = [(s0, talker(mascot, b.get("pose") or "idle")) for s0, b in zip(starts, beats)]
@@ -733,7 +733,8 @@ def _impacts(beats, starts, secs, words, mascot, lead):
                     t = float(w["start"]); break
         if t is None:
             t = s0 + lead + (d - lead) * .4
-        dur = float(b.get("react_for") or .9)
+        from .talkclip import REACT_SECONDS, reaction_video
+        dur = float(b.get("react_for") or (REACT_SECONDS if mascot == "harsh" and reaction_video(str(name)) else .9))
         t = round(min(max(t, s0 + .15), s0 + d - dur - .05), 3)
         imp.append({"t": t, "d": dur, "name": str(name)})
         cues.append({"role": IMPACT_SFX.get(str(name), "pop"), "t": t, "gain": .55})
