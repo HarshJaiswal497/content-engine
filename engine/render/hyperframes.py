@@ -588,7 +588,8 @@ def beats_from_slides(slides: list[dict], app: str) -> list[dict]:
 def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str | None = "slip",
                         speaker: Path | None = None, words: list[dict] | None = None,
                         emphasis: list[str] | None = None, lip: list | None = None,
-                        presenter: bool = False, imp: list[dict] | None = None) -> tuple[Path, float]:
+                        presenter: bool = False, imp: list[dict] | None = None,
+                        lay: dict | None = None) -> tuple[Path, float]:
     """HyperFrames project for a story video. Two layouts that morph into each other:
     `full` (you fill the screen) and `stack` (a framed band of you at the bottom, motion above: a real app screen
     that pushes in on the focus box, a big word). The numbered progress bar and the headline stay on screen in both.
@@ -697,7 +698,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
               "MODE": "m-mascot" if presenter else ("m-spk" if speaker else "m-nospk"), "SPK_INNER": spk_inner,
               "MAS_W": 442 if presenter else 300, "M_INK": theme.on_accent, "M_BG": theme.accent,
               "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks, "lipev": lip or [], "imp": [[x["t"], x["d"], "ip" + x["name"]] for x in imp],
-                                  "lay": (MASCOT_LAY_REAL if mascot == "harsh" else MASCOT_LAY) if presenter else {}})}
+                                  "lay": lay if lay is not None else ((MASCOT_LAY_REAL if mascot == "harsh" else MASCOT_LAY) if presenter else {})})}
     if presenter:   # the band and the full screen are a glow of the app colour behind the mascot
         tokens["BAND_BG"] = f"radial-gradient(circle at 50% 58%, {theme.accent} 0%, {_shade(theme.accent, .55)} 100%)"
     (out_dir / "compositions" / "story.html").write_text(_fill((HF / "story" / "templates" / "main.html").read_text(), tokens))
@@ -729,7 +730,12 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
 def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str | None = "slip",
                  speaker: Path | None = None, quality: str = "looks", words: list[dict] | None = None,
                  emphasis: list[str] | None = None, lip: list | None = None, presenter: bool = False,
-                 imp: list[dict] | None = None) -> float:
-    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis, lip, presenter, imp)
+                 imp: list[dict] | None = None, lay: dict | None = None) -> float:
+    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis, lip, presenter, imp, lay)
     render_project(proj, out, quality)
     return total
+
+
+# the retimed talking clip (1080x1920, mascot bottom-aligned, glow baked in) shown in the band and full screen
+TALKCLIP_LAY = {"stack": {"vx": 0, "vy": -560, "vs": .56, "bo": 0, "bx": 0, "by": 0, "bs": 1},
+                "full": {"vx": -135, "vy": -480, "vs": 1.25, "bo": 0}}

@@ -687,16 +687,26 @@ def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, masc
         _run(cmd + ["-filter_complex", ";".join(parts), "-map", "[o]", str(vall)])
         script = " ".join(l for l in lines if l.strip())
         words = transcribe(vall, script, fixes)
-        from .hyperframes import REAL_VISEMES, talker
+        from .hyperframes import REAL_VISEMES, TALKCLIP_LAY, THEMES, _shade, impact_file, talker
         real = mascot == "harsh"
-        pose_at = [(s0, talker(mascot, b.get("pose") or "idle")) for s0, b in zip(starts, beats)]
-        lip = lip_events(vall, pose_at, nvis=REAL_VISEMES if real else 3)
         imp, extra = _impacts(beats, starts, secs, words, mascot, lead)
-        if imp:   # while a reaction image is up, the talking frames rest; the mouth resumes right after
-            lip = _with_impacts(lip, imp)
         timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
         silent = tmp_p / "picture.mp4"
-        render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True, imp=imp)
+        if real:   # the mascot video, re-timed to this voice: slow and smooth, one piece
+            from . import talkclip
+            th = THEMES.get(app, THEMES["personal"])
+            src = talkclip.Source(tmp_p)
+            o = talkclip.voice_openness(vall, total)
+            pos = talkclip.plan_path(o, src.mouth)
+            clip = talkclip.render_clip(src, pos, tmp_p / "talk.mp4", th.accent, _shade(th.accent, .55),
+                                        [{"t": x["t"], "d": x["d"], "image": impact_file(mascot, x["name"])} for x in imp])
+            render_story(timed, app, silent, tmp_p, "none", clip, words=words, emphasis=emphasis, lay=TALKCLIP_LAY)
+        else:
+            pose_at = [(s0, talker(mascot, b.get("pose") or "idle")) for s0, b in zip(starts, beats)]
+            lip = lip_events(vall, pose_at, nvis=3)
+            if imp:
+                lip = _with_impacts(lip, imp)
+            render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True, imp=imp)
         key = "/".join(out.parts[-4:-1])
         mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=lead, sfx=True, extra_cues=extra)
     return out
