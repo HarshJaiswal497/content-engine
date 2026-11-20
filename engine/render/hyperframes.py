@@ -474,7 +474,8 @@ def render_skit(beats: list[dict], app: str, out: Path, work: Path, title: str |
 # ---------------------------------------------------------------- story ("I built X": steps, real screens, speaker window, mascot)
 
 MASCOT_POSES = {"slip": ["idle", "happy", "wave", "surprised", "think", "write", "sleepy", "sad", "peek", "cheer"],
-                "bo": ["idle", "happy", "wave", "flex", "surprised", "think", "tick", "sleepy", "sad", "cheer"]}
+                "bo": ["idle", "happy", "wave", "flex", "surprised", "think", "tick", "sleepy", "sad", "cheer"],
+                "harsh": ["idle", "happy", "wave", "surprised", "think", "sad", "cheer"]}
 
 
 def _story_words(text: str) -> list[tuple[str, bool]]:
