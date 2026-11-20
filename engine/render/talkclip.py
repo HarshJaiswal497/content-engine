@@ -164,6 +164,39 @@ def plan_path(o: np.ndarray, mouth: np.ndarray, kmax: int = 5, pref: float = 2.0
     return pos / Q
 
 
+def plan_natural(o: np.ndarray, mouth: np.ndarray, speed: float = .5, gap: float = .35) -> np.ndarray:
+    """Not lip-sync: ordinary speaking, slow and smooth. The source plays at a constant `speed` (source frames per output
+    frame) while the voice is on; a pause longer than `gap` seconds lets the mouth settle shut and hold until the next
+    phrase. The path reflects at the ends of the source so there is never a jump."""
+    T, n = len(o), len(mouth)
+    on = o > .06
+    k = int(gap * FPS)
+    idx = np.flatnonzero(on)
+    talk = np.zeros(T, bool)
+    for a, b in zip(idx[:-1], idx[1:]):   # bridge short gaps
+        if b - a <= k:
+            talk[a:b + 1] = True
+    talk[idx] = True
+    closed = mouth < .12
+    pos = np.zeros(T)
+    p, d = float(np.argmax(closed[: n // 3])), 1.0   # start on a shut mouth
+    settling = False
+    for j in range(T):
+        pos[j] = p
+        want = talk[j] or (j + 1 < T and talk[j + 1])
+        if want:
+            settling = False
+        elif not settling and j > 0 and talk[j - 1]:
+            settling = True
+        if want or settling:
+            if settling and closed[int(round(p)) % n] and mouth[int(round(p))] < .12 and not want:
+                continue   # settled: hold
+            p += d * speed
+            if p >= n - 1: p, d = n - 1.0, -1.0
+            if p <= 0: p, d = 0.0, 1.0
+    return pos
+
+
 def _bg(accent: str, shade: str) -> np.ndarray:
     """radial-gradient(circle at 50% 58%, accent, shade) at 1080x1920, premultiplied-ready float RGB 0..1"""
     h = lambda c: np.array([int(c.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)], np.float32) / 255

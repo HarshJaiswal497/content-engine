@@ -14,8 +14,6 @@ slides:
   kicker: Slipnote
   title: Slip had to *sit on a button*
   say: It took me several tries to get Slip to sit on a button,
-  react: shocked
-  react_at: several
 - type: point
   title: '*Peeking* from behind'
   body: It didn't look right.
@@ -43,7 +41,7 @@ slides:
   label: Slip's tour
   say: Tap Slip, and a five page tour opens. Slipnote is in development, and the waitlist link is on my profile.
   react: point_down
-  react_at: profile
+  react_at: link
 video:
   kind: story
   speaker: mascot
