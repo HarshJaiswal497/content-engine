@@ -93,7 +93,8 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                 if not sp.exists():
                     return f"waiting for the speaker clip {spec['speaker']}"
             story_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app),
-                        spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True))
+                        spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
+                        script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
             _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent

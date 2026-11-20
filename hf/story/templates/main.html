@@ -3,41 +3,52 @@
     #root { position: absolute; inset: 0; overflow: hidden; font-family: "Inter", sans-serif; background: {{BG}}; color: {{INK}}; }
     .tex { position: absolute; inset: 0; {{TEXTURE}} }
     .blob { position: absolute; border-radius: 50%; background: {{CARD}}; opacity: .9; }
-    .prog { position: absolute; left: 60px; right: 60px; top: 150px; display: flex; gap: 10px; }
-    .prog i { flex: 1; height: 12px; border-radius: 8px; background: rgba(128,128,128,.28); overflow: hidden; position: relative; }
+    /* speaker: one element that morphs between the bottom band and the full screen */
+    #spk { position: absolute; left: 40px; top: 1120px; width: 1000px; height: 520px; border-radius: 40px; overflow: hidden; background: {{BAND_BG}}; border: 9px solid {{ACCENT}}; box-shadow: 0 24px 60px rgba(0,0,0,.4); z-index: 2; }
+    #spb { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 0 0; filter: blur(26px) brightness(.62) saturate(1.1); }
+    #spv { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; transform-origin: 0 0; }
+    #scrim { position: absolute; left: 0; right: 0; top: 0; height: 760px; background: linear-gradient(to bottom, rgba(0,0,0,.62), rgba(0,0,0,0)); opacity: 0; z-index: 3; }
+    #scrim2 { position: absolute; left: 0; right: 0; bottom: 0; height: 640px; background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0)); opacity: 0; z-index: 3; }
+    .prog { position: absolute; left: 60px; right: 60px; top: 150px; display: flex; gap: 10px; z-index: 6; }
+    .prog i { flex: 1; height: 12px; border-radius: 8px; background: rgba(128,128,128,.32); overflow: hidden; position: relative; }
     .prog i b { position: absolute; inset: 0; background: {{ACCENT}}; transform-origin: 0 50%; transform: scaleX(0); border-radius: 8px; }
-    .beat { position: absolute; inset: 0; opacity: 0; }
-    .badge { position: absolute; left: 60px; top: 190px; display: flex; align-items: center; gap: 16px; }
+    .beat { position: absolute; inset: 0; opacity: 0; z-index: 4; }
+    .badge { position: absolute; left: 60px; top: 190px; display: flex; align-items: center; gap: 16px; z-index: 6; }
     .badge .num { width: 72px; height: 72px; border-radius: 50%; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 40px; display: grid; place-items: center; }
     .badge .tag { font-weight: 900; font-size: 32px; letter-spacing: .16em; padding: 12px 24px; border-radius: 999px; background: {{INK}}; color: {{BG}}; }
-    .head { position: absolute; left: 60px; width: 560px; top: 300px; display: flex; flex-wrap: wrap; gap: 6px 16px; font-weight: 900; font-size: 88px; line-height: 1.04; letter-spacing: -.02em; }
-    .head .hw { position: relative; display: inline-block; opacity: 0; padding: 0 4px; }
+    .head { position: absolute; left: 60px; width: 560px; top: 300px; display: flex; flex-wrap: wrap; gap: 6px 16px; font-weight: 900; font-size: 88px; line-height: 1.04; letter-spacing: -.02em; z-index: 6; }
+    .head .hw { position: relative; display: inline-block; opacity: 0; padding: 0 4px; isolation: isolate; }
     .head .hw.em { color: {{ON_ACCENT}}; padding: 0 18px 6px; }
-    .head .hw { isolation: isolate; }
     .head .hw .pill { position: absolute; inset: 4px 0 0 0; background: {{ACCENT}}; border-radius: 18px; z-index: -1; transform-origin: 0 50%; }
     .solo .head { left: 60px; right: 60px; width: auto; justify-content: center; text-align: center; font-size: 118px; top: 360px; }
-    .ph { position: absolute; width: 380px; height: 823px; right: 36px; top: 215px; border-radius: 44px; background: #0d0d10; padding: 9px; box-shadow: 0 30px 70px rgba(0,0,0,.45); transform: rotate(3deg); }
-    .ph .scr { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: #000; }
+    .full .head { left: 60px; right: 60px; width: auto; justify-content: flex-start; text-align: left; font-size: 78px; top: 290px; color: #fff; text-shadow: 0 4px 20px rgba(0,0,0,.55); }
+    .full .badge .tag { background: #fff; color: #111; }
+    .ph { position: absolute; width: 360px; height: 780px; right: 40px; top: 190px; border-radius: 42px; background: #0d0d10; padding: 9px; box-shadow: 0 30px 70px rgba(0,0,0,.45); transform: rotate(3deg); }
+    .ph .scr { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #000; }
     .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .ph .ring { position: absolute; border: 6px solid {{ACCENT}}; border-radius: 20px; opacity: 0; box-shadow: 0 0 0 4px rgba(0,0,0,.25); }
     .ph .lab { position: absolute; left: -40px; padding: 12px 22px; border-radius: 16px; background: {{ACCENT}}; color: {{ON_ACCENT}}; font-weight: 900; font-size: 28px; white-space: nowrap; opacity: 0; z-index: 3; }
-    .big { position: absolute; left: 40px; right: 40px; top: 560px; text-align: center; font-weight: 900; font-size: 250px; line-height: 1; letter-spacing: -.04em; color: {{ACCENT}}; text-shadow: 0 10px 0 rgba(0,0,0,.14); opacity: 0; }
-    .m-nospk .ph { width: 440px; height: 953px; top: 330px; right: 30px; }
-    .m-nospk .head { top: 420px; }
-    .m-nospk .badge { top: 200px; }
-    .spk { position: absolute; left: 60px; width: 960px; height: 540px; top: 1075px; border-radius: 40px; overflow: hidden; border: 9px solid {{ACCENT}}; box-shadow: 0 24px 60px rgba(0,0,0,.4); background: #000; }
-    .spk video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
-    .mas { position: absolute; width: {{MAS_W}}px; left: {{MAS_L}}px; top: {{MAS_T}}px; }
+    .big { position: absolute; left: 40px; right: 40px; top: 600px; text-align: center; font-weight: 900; font-size: 250px; line-height: 1; letter-spacing: -.04em; color: {{ACCENT}}; text-shadow: 0 10px 0 rgba(0,0,0,.14); opacity: 0; }
+    /* captions: two or three words at a time, the spoken word pops in the accent colour */
+    .caps { position: absolute; left: 40px; right: 40px; top: 1010px; height: 110px; z-index: 7; }
+    .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; align-items: baseline; gap: 0 30px; opacity: 0; }
+    .cw { font-weight: 900; font-size: 74px; letter-spacing: -.01em; line-height: 1.1; color: #fff; -webkit-text-stroke: 8px rgba(10,10,20,.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,.35); display: inline-block; }
+    .cw.emph { font-style: italic; font-weight: 800; }
+    .mas { position: absolute; width: 300px; left: 44px; top: 880px; z-index: 8; }
     .mas img { position: absolute; left: 0; top: 0; width: 100%; opacity: 0; }
     .mas img.first { position: relative; }
   </style>
-  <div id="root" data-composition-id="story" data-width="1080" data-height="1920" class="{{MODE}}">
+  <div id="root" data-composition-id="story" data-width="1080" data-height="1920">
     <div class="tex"></div>
     <div class="blob" id="blob1" style="width:520px;height:520px;left:-170px;top:620px"></div>
     <div class="blob" id="blob2" style="width:380px;height:380px;right:-120px;top:120px"></div>
+    <div id="spk"><video id="spb" src="assets/speaker.mp4" muted playsinline></video><video id="spv" src="assets/speaker.mp4" muted playsinline></video></div>
+    <div id="scrim"></div><div id="scrim2"></div>
     <div class="prog">{{PROG}}</div>
 {{BEATS}}
-{{SPEAKER}}
+    <div class="caps" id="caps">
+{{CAPS_HTML}}
+    </div>
     <div class="mas" id="mas">
 {{MASCOT}}
     </div>
@@ -45,34 +56,74 @@
   <script>
     const tl = gsap.timeline({ paused: true });
     const D = {{DATA}};
+    const LAY = {
+      stack: { l: 40, t: 1120, w: 1000, h: 520, r: 40, b: 9, vx: 197, vy: -258, vs: .56, bx: 0, by: -420, bs: .93, bo: 1, cap: 1528, mx: 44, my: 850, ms: 1, sc: 0 },
+      full:  { l: 0, t: 0, w: 1080, h: 1920, r: 0, b: 0, vx: 0, vy: 0, vs: 1, bx: 0, by: 0, bs: 1, bo: 0, cap: 1400, mx: 760, my: 1450, ms: .82, sc: 1 }
+    };
+    const setLay = (L) => {
+      tl.set("#spk", { left: L.l, top: L.t, width: L.w, height: L.h, borderRadius: L.r, borderWidth: L.b }, 0);
+      tl.set("#spv", { x: L.vx, y: L.vy, scale: L.vs }, 0);
+      tl.set("#spb", { x: L.bx, y: L.by, scale: L.bs, opacity: L.bo }, 0);
+      tl.set("#caps", { top: L.cap }, 0);
+      tl.set("#mas", { left: L.mx, top: L.my, scale: L.ms }, 0);
+      tl.set("#scrim, #scrim2", { opacity: L.sc }, 0);
+    };
+    const morph = (L, t, d) => {
+      tl.to("#spk", { left: L.l, top: L.t, width: L.w, height: L.h, borderRadius: L.r, borderWidth: L.b, duration: d, ease: "power3.inOut" }, t);
+      tl.to("#spv", { x: L.vx, y: L.vy, scale: L.vs, duration: d, ease: "power3.inOut" }, t);
+      tl.to("#spb", { x: L.bx, y: L.by, scale: L.bs, opacity: L.bo, duration: d, ease: "power3.inOut" }, t);
+      tl.to("#caps", { top: L.cap, duration: d, ease: "power3.inOut" }, t);
+      tl.to("#mas", { left: L.mx, top: L.my, scale: L.ms, duration: d, ease: "power3.inOut" }, t);
+      tl.to("#scrim, #scrim2", { opacity: L.sc, duration: d, ease: "power2.inOut" }, t);
+    };
+    setLay(LAY[D.beats[0].layout]);
     tl.to("#blob1", { x: 60, y: -40, duration: D.total, ease: "sine.inOut" }, 0);
     tl.to("#blob2", { x: -50, y: 50, duration: D.total, ease: "sine.inOut" }, 0);
     D.beats.forEach((b, i) => {
-      const el = "#bt" + i;
+      const el = "#bt" + i, last = i === D.beats.length - 1;
       tl.fromTo("#pg" + i, { scaleX: 0 }, { scaleX: 1, duration: Math.max(b.e - b.s, .3), ease: "none" }, b.s);
+      // the layout morphs a touch before the beat so the picture is already moving when the new words land
+      if (i > 0 && D.beats[i - 1].layout !== b.layout) morph(LAY[b.layout], b.s - .12, .62);
+      // push transition: the new beat slides in from the right, the old one leaves to the left
       tl.set(el, { opacity: 1 }, b.s);
+      tl.fromTo(el, { x: i ? 90 : 0 }, { x: 0, duration: .5, ease: "expo.out" }, b.s);
       tl.fromTo(el + " .badge", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "expo.out" }, b.s);
       b.em.forEach((isEm, j) => {
-        const t = b.s + .12 + j * .09, w = el + "w" + j;
+        const t = b.s + .1 + j * .08, w = el + "w" + j;
         tl.fromTo(w, { y: 46, opacity: 0, scale: .88 }, { y: 0, opacity: 1, scale: 1, duration: .36, ease: "back.out(2.2)" }, t);
         if (isEm) tl.fromTo(w + " .pill", { scaleX: 0 }, { scaleX: 1, duration: .3, ease: "power3.out" }, t + .12);
       });
       if (b.screen) {
-        tl.fromTo(el + " .ph", { x: 460, rotate: 12, opacity: 0 }, { x: 0, rotate: 3, opacity: 1, duration: .6, ease: "expo.out" }, b.s + .15);
-        tl.to(el + " .ph", { y: -14, duration: Math.max(b.e - b.s - .8, .5), ease: "sine.inOut" }, b.s + .6);
+        tl.fromTo(el + " .ph", { x: 460, rotate: 12, opacity: 0 }, { x: 0, rotate: 3, opacity: 1, duration: .62, ease: "expo.out" }, b.s + .15);
+        tl.to(el + " .ph", { y: -12, duration: Math.max(b.e - b.s - .8, .5), ease: "sine.inOut" }, b.s + .6);
         tl.set(el + " .ph img", { transformOrigin: b.ox + "% " + b.oy + "%" }, 0);
         tl.fromTo(el + " .ph img", { scale: 1 }, { scale: b.z, duration: Math.max(b.e - b.s - 1.1, .6), ease: "power2.inOut" }, b.s + .7);
         if (b.ring) {
-          tl.fromTo(el + " .ring", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: .35, ease: "back.out(2)" }, b.s + .9);
-          tl.fromTo(el + " .lab", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: .3, ease: "back.out(2)" }, b.s + 1.05);
+          tl.fromTo(el + " .ring", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: .35, ease: "back.out(2)" }, b.s + .95);
+          tl.fromTo(el + " .lab", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: .3, ease: "back.out(2)" }, b.s + 1.1);
         }
       }
       if (b.big) tl.fromTo(el + " .big", { opacity: 0, scale: .5, rotate: -6 }, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: "back.out(2.4)" }, b.s + .25);
       // the mascot reacts: swap pose, little hop
-      tl.set("#mp" + b.mp, { opacity: 1 }, b.s);
-      D.poses.forEach(p => { if (p !== b.mp) tl.set("#mp" + p, { opacity: 0 }, b.s); });
-      tl.fromTo("#mas", { y: 40, scale: .9 }, { y: 0, scale: 1, duration: .45, ease: "back.out(3)" }, b.s + .05);
-      if (i < D.beats.length - 1) tl.to(el, { opacity: 0, y: -24, duration: .28, ease: "power2.in" }, b.e - .28);
+      D.poses.forEach(p => tl.set("#mp" + p, { opacity: p === b.mp ? 1 : 0 }, b.s));
+      tl.fromTo("#mas img", { y: 30 }, { y: 0, duration: .45, ease: "back.out(3)" }, b.s + .05);
+      if (!last) {
+        const nx = D.beats[i + 1];
+        const exit = b.e - .3 + (nx.layout !== b.layout ? -.1 : 0);
+        tl.to(el, { opacity: 0, x: -90, duration: .3, ease: "power2.in" }, exit);
+      }
+    });
+    // captions
+    D.caps.forEach((c, i) => {
+      const el = "#cap" + i;
+      tl.set(el, { opacity: 1 }, c.s);
+      tl.fromTo(el, { scale: .9, y: 16 }, { scale: 1, y: 0, duration: .14, ease: "back.out(2.6)" }, c.s);
+      tl.set(el, { opacity: 0 }, c.e);
+      c.w.forEach((w, j) => {
+        const id = "#cap" + i + "w" + j;
+        tl.to(id, { color: "{{ACCENT_CAP}}", scale: 1.1, duration: .08 }, w[0]);
+        tl.to(id, { color: "#ffffff", scale: 1, duration: .1 }, w[1]);
+      });
     });
     window.__timelines["story"] = tl;
   </script>

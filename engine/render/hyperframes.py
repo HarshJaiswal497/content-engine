@@ -495,6 +495,10 @@ def story_beats_ok(beats: list[dict], app: str) -> list[str]:
     for i, b in enumerate(beats, 1):
         if not str(b.get("head") or "").strip():
             errs.append(f"beat {i}: head is empty")
+        if b.get("layout") not in (None, "full", "stack"):
+            errs.append(f"beat {i}: layout must be 'full' or 'stack'")
+        if b.get("layout") == "full" and (b.get("screen") or b.get("big")):
+            errs.append(f"beat {i}: a full-screen beat shows only you (screens and big words need layout: stack)")
         if b.get("screen"):
             try:
                 resolve_screen(b["screen"], app)
@@ -503,11 +507,20 @@ def story_beats_ok(beats: list[dict], app: str) -> list[str]:
     return errs
 
 
+def _cap_accent(theme) -> str:
+    """Caption highlight: the app accent, or a warm yellow when the accent is too dark to read on the outline."""
+    h = theme.accent.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return theme.accent if (0.299 * r + 0.587 * g + 0.114 * b) > 150 else "#FFD23F"
+
+
 def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str | None = "slip",
-                        speaker: Path | None = None) -> tuple[Path, float]:
-    """HyperFrames project for a story video: a numbered-step motion canvas (headline words, a real app screen that
-    pushes in on what matters), an optional framed speaker window below it, and a mascot that changes pose per beat.
-    Returns (project, total seconds). The picture is silent; sound is mixed afterwards."""
+                        speaker: Path | None = None, words: list[dict] | None = None,
+                        emphasis: list[str] | None = None) -> tuple[Path, float]:
+    """HyperFrames project for a story video. Two layouts that morph into each other:
+    `full` (you fill the screen) and `stack` (a framed band of you at the bottom, motion above: a real app screen
+    that pushes in on the focus box, a big word). The numbered progress bar and the headline stay on screen in both.
+    Captions follow your words; the mascot changes pose per beat. Returns (project, total seconds). Picture only."""
     errs = story_beats_ok(beats, app)
     if errs:
         raise ValueError("; ".join(errs))
@@ -528,12 +541,15 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
     for i, b in enumerate(beats):
         step = b.get("step", i + 1)
         tag = html.escape(str(b.get("tag") or "").upper())
-        words = _story_words(str(b["head"]))
+        hw = _story_words(str(b["head"]))
         wspans = "".join(f'<span class="hw{" em" if em else ""}" id="bt{i}w{j}">{"<i class=pill></i>" if em else ""}{html.escape(w)}</span>'
-                         for j, (w, em) in enumerate(words))
+                         for j, (w, em) in enumerate(hw))
+        layout = b.get("layout") or ("stack" if (b.get("screen") or b.get("big")) else "full")
+        if not speaker:
+            layout = "stack"
         phone = big = ""
-        d = {"s": starts[i], "e": round(starts[i] + durs[i], 3), "screen": False, "em": [em for _, em in words],
-             "ring": False, "ox": 50, "oy": 33, "z": 1.2, "big": False}
+        d = {"s": starts[i], "e": round(starts[i] + durs[i], 3), "screen": False, "em": [em for _, em in hw],
+             "ring": False, "ox": 50, "oy": 33, "z": 1.2, "big": False, "layout": layout}
         if b.get("screen"):
             owner, slug, entry = resolve_screen(b["screen"], app)
             shutil.copy(ROOT / "assets" / "screens" / owner / f"{slug}.png", out_dir / "assets" / f"{owner}-{slug}.png")
@@ -543,7 +559,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
                 ring = (f'<div class="ring" style="left:{(box["x"]-.015)*100:.2f}%;top:{(box["y"]-.008)*100:.2f}%;'
                         f'width:{(box["w"]+.03)*100:.2f}%;height:{(box["h"]+.016)*100:.2f}%"></div>')
                 if b.get("label"):
-                    lab = (f'<div class="lab" style="top:{max(box["y"]*100-2, 1):.1f}%">{html.escape(str(b["label"]))}</div>')
+                    lab = f'<div class="lab" style="top:{max(box["y"]*100-2, 1):.1f}%">{html.escape(str(b["label"]))}</div>'
                 d.update(ring=True, ox=round((box["x"] + box["w"] / 2) * 100, 1), oy=round((box["y"] + box["h"] / 2) * 100, 1),
                          z=round(min(1.6, max(1.25, 0.55 / max(box["w"], box["h"]))), 3))
             else:
@@ -553,8 +569,8 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
         if b.get("big"):
             big = f'<div class="big">{html.escape(str(b["big"]))}</div>'
             d["big"] = True
-        solo = "" if (b.get("screen")) else " solo"
-        html_beats.append(f'    <div class="beat{solo}" id="bt{i}"><div class="badge"><span class="num">{html.escape(str(step))}</span>'
+        cls = "full" if layout == "full" else ("" if b.get("screen") else "solo")
+        html_beats.append(f'    <div class="beat {cls}" id="bt{i}"><div class="badge"><span class="num">{html.escape(str(step))}</span>'
                           f'{"<span class=tag>" + tag + "</span>" if tag else ""}</div><div class="head">{wspans}</div>{phone}{big}</div>')
         pose = b.get("pose") or ("wave" if i == 0 else "happy" if i == n - 1 else "think" if i % 2 else "idle")
         if mascot and mascot != "none" and pose not in MASCOT_POSES.get(mascot, []):
@@ -569,17 +585,24 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
             shutil.copy(CHARS / mascot / f"{p}.png", out_dir / "assets" / f"mascot-{p}.png")
             mascot_html += f'      <img{" class=first" if k == 0 else ""} id="mp{p}" src="assets/mascot-{p}.png" alt="">\n'
 
-    spk_html = ""
     if speaker:
         shutil.copy(speaker, out_dir / "assets" / "speaker.mp4")
-        spk_html = '    <div class="spk"><video id="spk-video" src="assets/speaker.mp4" muted playsinline></video></div>'
-    mode = "spk" if speaker else "nospk"
+    else:   # no clip: a stack beat with the band left empty
+        (out_dir / "assets" / "speaker.mp4").write_bytes(b"")
+    _norm = lambda x: re.sub(r"\W", "", x.lower())
+    emph = {_norm(e) for e in (emphasis or [])}
+    chunks = _caption_chunks(words or [], total) if speaker else []
+    caps_html = []
+    for i, c in enumerate(chunks):
+        spans = "".join(f'<span class="cw{" emph" if _norm(w[2]) in emph else ""}" id="cap{i}w{j}">{html.escape(w[2])}</span>'
+                        for j, w in enumerate(c["w"]))
+        caps_html.append(f'      <div class="cap" id="cap{i}">{spans}</div>')
     prog = "".join(f'<i><b id="pg{i}"></b></i>' for i in range(n))
     tokens = {"BG": theme.bg, "INK": theme.ink, "ACCENT": theme.accent, "ON_ACCENT": theme.on_accent, "CARD": theme.card,
-              "TEXTURE": _texture(theme.texture, theme.ink), "MODE": "m-" + mode, "PROG": prog, "BEATS": "\n".join(html_beats),
-              "SPEAKER": spk_html, "MASCOT": mascot_html if mascot_html else "",
-              "MAS_W": 330 if speaker else 420, "MAS_L": 20 if speaker else 20, "MAS_T": 1360 if speaker else 1400,
-              "DATA": json.dumps({"beats": data, "total": total, "poses": poses})}
+              "ACCENT_CAP": _cap_accent(theme), "BAND_BG": "#15151c" if theme.bg.lower() > "#888888" else theme.card,
+              "TEXTURE": _texture(theme.texture, theme.ink), "PROG": prog, "BEATS": "\n".join(html_beats),
+              "CAPS_HTML": "\n".join(caps_html), "MASCOT": mascot_html,
+              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks})}
     (out_dir / "compositions" / "story.html").write_text(_fill((HF / "story" / "templates" / "main.html").read_text(), tokens))
     (out_dir / "index.html").write_text(f"""<!doctype html>
 <html lang="en">
@@ -607,7 +630,8 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
 
 
 def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str | None = "slip",
-                 speaker: Path | None = None, quality: str = "looks") -> float:
-    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker)
+                 speaker: Path | None = None, quality: str = "looks", words: list[dict] | None = None,
+                 emphasis: list[str] | None = None) -> float:
+    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis)
     render_project(proj, out, quality)
     return total

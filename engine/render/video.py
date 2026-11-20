@@ -542,11 +542,14 @@ def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: 
 
 
 def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot: str | None = "slip",
-                speaker: Path | None = None, voices: bool = True) -> Path:
-    """'I built X' story: numbered-step motion canvas with real app screens, an optional framed speaker window
-    (its own speech is the sound), and a mascot. Without a speaker, each beat's `say` line is spoken (if voices)
-    over a music bed; beats last as long as their line."""
+                speaker: Path | None = None, voices: bool = True, script: str | None = None,
+                fixes: dict | None = None, emphasis: list[str] | None = None, words: list[dict] | None = None) -> Path:
+    """'I built X' story: progress bar + headline always on screen, you full-screen or in a framed band with motion
+    above, captions, a mascot. With a speaker clip the picture is rendered silent and the sound is rebuilt: your
+    voice cleaned (rumble, hiss, level), a music bed that ducks under you, and a sound on every cut and screen.
+    Without a clip, each beat's `say` line is spoken instead (if voices)."""
     from .hyperframes import render_story
+    from . import sfx as sfxlib
     with tempfile.TemporaryDirectory() as tmp:
         tmp_p = Path(tmp)
         secs = [float(b.get("seconds") or 4.0) for b in beats]
@@ -562,17 +565,43 @@ def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot
                 voice = None
         timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
         total = sum(secs)
-        clip = None
-        if speaker is not None:
-            clip = tmp_p / "speaker.mp4"
-            _run(["ffmpeg", "-y", "-hide_banner", "-t", f"{total:.3f}", "-i", str(speaker), *ENC, str(clip)])
+        if speaker is not None and words is None and probe(speaker)["has_audio"]:
+            words = transcribe(speaker, script, fixes)
         silent = tmp_p / "picture.mp4"
-        render_story(timed, app, silent, tmp_p, mascot, clip)
+        render_story(timed, app, silent, tmp_p, mascot, speaker, words=words, emphasis=emphasis)
         key = "/".join(out.parts[-4:-1])
-        if clip is not None and probe(clip)["has_audio"]:
-            _run(["ffmpeg", "-y", "-hide_banner", "-i", str(silent), "-i", str(clip), "-filter_complex",
-                  "[1:a:0]loudnorm=I=-16:TP=-1.5,aresample=44100[aout]", "-map", "0:v", "-map", "[aout]",
-                  "-t", f"{total:.3f}", *ENC, str(out)])
-        else:
+        if speaker is None:
             mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=0.2, sfx=True)
+            return out
+        # sound on every change: a whoosh into each beat (a touch earlier when the layout morphs), a pop when a screen
+        # lands, a ping when the ring appears
+        cues, t0 = [], 0.0
+        prev_layout = None
+        for i, (b, s) in enumerate(zip(timed, secs)):
+            layout = b.get("layout") or ("stack" if (b.get("screen") or b.get("big")) else "full")
+            if i:
+                cues.append({"role": "whoosh", "t": max(t0 - (0.12 if layout != prev_layout else 0), 0), "n": i, "gain": 0.55})
+            if b.get("screen"):
+                cues.append({"role": "pop", "t": t0 + 0.35, "n": i, "gain": 0.45})
+                if b.get("focus"):
+                    cues.append({"role": "ping", "t": t0 + 0.95, "n": i, "gain": 0.3})
+            if b.get("big"):
+                cues.append({"role": "hit", "t": t0 + 0.3, "n": i, "gain": 0.5})
+            prev_layout = layout
+            t0 += s
+        sx_args, sx_parts, sx_labels = sfxlib.add_to_graph(cues, 3, total)
+        audio_in, music_f = _music_input(key, total, 2, "music", MUSIC_WITH_VOICE, mood)
+        cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(silent), "-i", str(speaker), *audio_in, *sx_args]
+        parts = [
+            # voice: cut rumble, take hiss out, even the level, then normalise
+            "[1:a:0]highpass=f=85,afftdn=nr=14:nf=-32:tn=1,lowpass=f=14000,"
+            "acompressor=threshold=0.09:ratio=3:attack=6:release=140:makeup=2,loudnorm=I=-15:TP=-1.5,aresample=44100,"
+            "aformat=channel_layouts=stereo,asplit=2[voice][key]",
+            music_f,
+            "[music][key]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=500:makeup=1[bed]",
+            *sx_parts,
+            f"[bed][voice]{''.join(sx_labels)}amix=inputs={2 + len(sx_labels)}:duration=first:normalize=0,alimiter=limit=0.95[mixed]",
+        ]
+        cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[mixed]", "-t", f"{total:.3f}", *ENC, str(out)]
+        _run(cmd)
     return out
