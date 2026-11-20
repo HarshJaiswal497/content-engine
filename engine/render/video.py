@@ -697,7 +697,7 @@ def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, masc
             th = THEMES.get(app, THEMES["personal"])
             src = talkclip.Source(tmp_p)
             o = talkclip.voice_openness(vall, total)
-            pos = talkclip.plan_path(o, src.mouth)
+            pos = talkclip.plan_natural(o, src.mouth, speed=25 / 30)   # the source plays at its own speed; no lip-sync
             clip = talkclip.render_clip(src, pos, tmp_p / "talk.mp4", th.accent, _shade(th.accent, .55),
                                         [{"t": x["t"], "d": x["d"], "image": impact_file(mascot, x["name"]), "video": talkclip.reaction_video(x["name"])} for x in imp])
             render_story(timed, app, silent, tmp_p, "none", clip, words=words, emphasis=emphasis, lay=TALKCLIP_LAY)

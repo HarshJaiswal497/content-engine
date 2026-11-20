@@ -51,6 +51,7 @@ class Source:
         self._flow: dict[int, np.ndarray] = {}
         self.mouth = self._mouth_openness()
         self.calm = None
+        self.sharp = True      # use whole source frames (nearest): in-between frames from optical flow soften the lips
         self.dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_FAST)
 
     def _mouth_openness(self) -> np.ndarray:
@@ -98,6 +99,8 @@ class Source:
     def frame_at(self, q: float) -> np.ndarray:
         """The source at fractional frame q (optical-flow interpolation between neighbours)."""
         q = float(np.clip(q, 0, self.n - 1))
+        if self.sharp:
+            q = float(round(q))
         i = int(q)
         a = q - i
         if a < 1e-3 or i >= self.n - 1:
