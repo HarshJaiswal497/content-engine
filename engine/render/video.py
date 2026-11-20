@@ -541,6 +541,41 @@ def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: 
     return out
 
 
+def lip_events(wav: Path, pose_at: list[tuple[float, str]], fps: float = 30.0) -> list[list]:
+    """Mouth frames from the loudness of a voice track: [[seconds, 'mp<pose>m<0|1|2>'], ...] (shut, half, open).
+    Levels are relative to the loudest syllable, each state is held at least two frames so the mouth doesn't flicker."""
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(wav), "-ac", "1", "-ar", "16000", "-f", "f32le", "-"],
+                         capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, dtype=np.float32)
+    hop = int(16000 / fps)
+    n = len(x) // hop
+    if n == 0:
+        return []
+    rms = np.sqrt((x[:n * hop].reshape(n, hop) ** 2).mean(axis=1))
+    rms = np.convolve(rms, [.25, .5, .25], mode="same")
+    peak = float(np.percentile(rms, 97)) or 1.0
+    lvl = np.zeros(n, dtype=int)
+    lvl[rms > peak * .10] = 1
+    lvl[rms > peak * .38] = 2
+    hold, cur, since = lvl.copy(), 0, 99
+    for i in range(n):
+        if lvl[i] != cur and since >= 2:
+            cur, since = int(lvl[i]), 0
+        hold[i] = cur
+        since += 1
+    poses = sorted(pose_at)
+    ev, last = [], None
+    for i in range(n):
+        t = i / fps
+        pose = [p for s0, p in poses if s0 <= t + 1e-6][-1] if poses else "idle"
+        key = f"mp{pose}m{int(hold[i])}"
+        if key != last:
+            ev.append([round(t, 3), key])
+            last = key
+    return ev
+
+
 def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot: str | None = "slip",
                 speaker: Path | None = None, voices: bool = True, script: str | None = None,
                 fixes: dict | None = None, emphasis: list[str] | None = None, words: list[dict] | None = None) -> Path:
@@ -550,6 +585,8 @@ def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot
     Without a clip, each beat's `say` line is spoken instead (if voices)."""
     from .hyperframes import render_story
     from . import sfx as sfxlib
+    if speaker == "mascot":
+        return _mascot_story(beats, app, out, mood, mascot or "slip", fixes, emphasis)
     with tempfile.TemporaryDirectory() as tmp:
         tmp_p = Path(tmp)
         secs = [float(b.get("seconds") or 4.0) for b in beats]
@@ -604,4 +641,46 @@ def story_video(beats: list[dict], app: str, out: Path, mood: str | None, mascot
         ]
         cmd += ["-filter_complex", ";".join(parts), "-map", "0:v", "-map", "[mixed]", "-t", f"{total:.3f}", *ENC, str(out)]
         _run(cmd)
+    return out
+
+
+def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, mascot: str,
+                  fixes: dict | None, emphasis: list[str] | None) -> Path:
+    """The mascot presents the story in your voice: each beat's `say` line is spoken, the captions follow the
+    words, the mascot's mouth follows the loudness of the voice. Same progress bar, headline, layouts and sound."""
+    from .hyperframes import render_story
+    from .tts import synthesize
+    from . import sfx as sfxlib
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_p = Path(tmp)
+        lines = [str(b.get("say") or "") for b in beats]
+        voice = synthesize(lines, tmp_p / "voice", "story")
+        lead = 0.2
+        secs = plan_seconds(len(beats), [float(b.get("seconds") or 4.0) for b in beats], voice, 0.0, lead, 0.2)
+        total = sum(secs)
+        starts, t = [], 0.0
+        for d in secs:
+            starts.append(t); t += d
+        # one voice track, each line placed at its beat
+        cmd = ["ffmpeg", "-y", "-hide_banner"]
+        parts, labels, idx = [], [], 0
+        for i, c in enumerate(voice):
+            if c:
+                cmd += ["-i", str(c)]
+                ms = int((starts[i] + lead) * 1000)
+                parts.append(f"[{idx}:a]aresample=44100,aformat=channel_layouts=mono,adelay={ms}|{ms}[v{i}]")
+                labels.append(f"[v{i}]"); idx += 1
+        vall = tmp_p / "voice_all.wav"
+        parts.append(f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0,apad=whole_dur={total:.3f},"
+                     f"atrim=0:{total:.3f}[o]")
+        _run(cmd + ["-filter_complex", ";".join(parts), "-map", "[o]", str(vall)])
+        script = " ".join(l for l in lines if l.strip())
+        words = transcribe(vall, script, fixes)
+        pose_at = [(s0, b.get("pose") or "idle") for s0, b in zip(starts, beats)]
+        lip = lip_events(vall, pose_at)
+        timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
+        silent = tmp_p / "picture.mp4"
+        render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True)
+        key = "/".join(out.parts[-4:-1])
+        mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=lead, sfx=True)
     return out

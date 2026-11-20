@@ -87,12 +87,17 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
             _finish_video(post, mp4, upload)
         elif kind == "story":
             sp = None
-            if spec.get("speaker"):
+            beats = spec.get("beats") or []
+            if spec.get("speaker") == "mascot":   # the mascot presents: beats come from the slides unless given
+                from .hyperframes import beats_from_slides
+                sp = "mascot"
+                beats = beats or beats_from_slides(slides, post.app)
+            elif spec.get("speaker"):
                 from ..config import ROOT
                 sp = ROOT / spec["speaker"]
                 if not sp.exists():
                     return f"waiting for the speaker clip {spec['speaker']}"
-            story_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app),
+            story_video(beats, post.app, mp4, mood_for(spec.get("tone"), post.app),
                         spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
                         script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
             _finish_video(post, mp4, upload)

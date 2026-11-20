@@ -296,9 +296,14 @@ def validate(post: Post) -> None:
                 e.append("video.kind 'skit' needs video.beats")
             e += skit_beats_ok(beats)
         if kind == "story":
-            from .render.hyperframes import story_beats_ok
-            e += story_beats_ok(post.video_spec.get("beats") or [], post.app)
-            if len(post.video_spec.get("beats") or []) > 8:
+            from .render.hyperframes import beats_from_slides, story_beats_ok
+            sb = post.video_spec.get("beats") or []
+            if post.video_spec.get("speaker") == "mascot" and not sb:
+                if not post.data.get("slides"):
+                    e.append("story with speaker: mascot needs slides (or video.beats)")
+                sb = beats_from_slides(post.data.get("slides") or [], post.app)
+            e += story_beats_ok(sb, post.app)
+            if len(sb) > 8:
                 w.append("story has more than 8 beats; keep Reels under about 45 s")
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):
             e.append("video.source (file in inbox/) is required for recording/talking_head")

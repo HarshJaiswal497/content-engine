@@ -514,9 +514,45 @@ def _cap_accent(theme) -> str:
     return theme.accent if (0.299 * r + 0.587 * g + 0.114 * b) > 150 else "#FFD23F"
 
 
+# the mascot as the presenter: sits in the band (stack) or fills the screen (full); no speaker clip, no scrims
+MASCOT_LAY = {"stack": {"mx": 319, "my": 1090, "ms": .8, "sc": 0, "cap": 1528},
+              "full": {"mx": 319, "my": 735, "ms": 1.85, "sc": 0, "cap": 1560}}
+
+
+def _shade(hexcolor: str, k: float) -> str:
+    h = hexcolor.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return f"#{int(r * k):02x}{int(g * k):02x}{int(b * k):02x}"
+
+
+def beats_from_slides(slides: list[dict], app: str) -> list[dict]:
+    """Story beats from a post's slides, for a mascot that presents: each slide's title is the headline, a slide with
+    a screen gets the stack layout (mascot in the band, the app above), the rest fill the screen with the mascot."""
+    out, n = [], len(slides)
+    for i, sl in enumerate(slides):
+        kind = sl.get("type") or ""
+        screen = sl.get("screen")
+        b = {"tag": "intro" if i == 0 else ("try it" if kind == "cta" or i == n - 1 else f"{i}/{n - 2}" if n > 2 else ""),
+             "head": sl.get("title") or sl.get("head") or "", "say": sl.get("say") or "",
+             "layout": "stack" if screen else "full",
+             "pose": sl.get("pose") or ("wave" if i == 0 else "cheer" if i == n - 1 else "think" if i % 2 else "idle")}
+        if screen:
+            b["screen"] = screen
+            for k in ("focus", "label"):
+                if sl.get(k):
+                    b[k] = sl[k]
+        if sl.get("big"):
+            b["big"] = sl["big"]; b["layout"] = "stack"
+        out.append(b)
+    return out
+
+
 def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str | None = "slip",
                         speaker: Path | None = None, words: list[dict] | None = None,
-                        emphasis: list[str] | None = None) -> tuple[Path, float]:
+                        emphasis: list[str] | None = None, lip: list | None = None,
+                        presenter: bool = False) -> tuple[Path, float]:
     """HyperFrames project for a story video. Two layouts that morph into each other:
     `full` (you fill the screen) and `stack` (a framed band of you at the bottom, motion above: a real app screen
     that pushes in on the focus box, a big word). The numbered progress bar and the headline stay on screen in both.
@@ -545,7 +581,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
         wspans = "".join(f'<span class="hw{" em" if em else ""}" id="bt{i}w{j}">{"<i class=pill></i>" if em else ""}{html.escape(w)}</span>'
                          for j, (w, em) in enumerate(hw))
         layout = b.get("layout") or ("stack" if (b.get("screen") or b.get("big")) else "full")
-        if not speaker:
+        if not speaker and not presenter:
             layout = "stack"
         phone = big = ""
         d = {"s": starts[i], "e": round(starts[i] + durs[i], 3), "screen": False, "em": [em for _, em in hw],
@@ -582,16 +618,23 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
     if mascot and mascot != "none":
         poses = sorted(set(used) | {"idle"})
         for k, p in enumerate(poses):
+            if presenter:   # talking frames: shut / half / open mouth, swapped by the voice loudness
+                for m in range(3):
+                    shutil.copy(CHARS / mascot / f"{p}-m{m}.png", out_dir / "assets" / f"mascot-{p}-m{m}.png")
+                    mascot_html += (f'      <img{" class=first" if (k == 0 and m == 0) else ""} id="mp{p}m{m}" '
+                                    f'src="assets/mascot-{p}-m{m}.png" alt="">\n')
+                continue
             shutil.copy(CHARS / mascot / f"{p}.png", out_dir / "assets" / f"mascot-{p}.png")
             mascot_html += f'      <img{" class=first" if k == 0 else ""} id="mp{p}" src="assets/mascot-{p}.png" alt="">\n'
 
+    spk_inner = ""
     if speaker:
         shutil.copy(speaker, out_dir / "assets" / "speaker.mp4")
-    else:   # no clip: a stack beat with the band left empty
-        (out_dir / "assets" / "speaker.mp4").write_bytes(b"")
+        spk_inner = ('<video id="spb" src="assets/speaker.mp4" muted playsinline></video>'
+                     '<video id="spv" src="assets/speaker.mp4" muted playsinline></video>')
     _norm = lambda x: re.sub(r"\W", "", x.lower())
     emph = {_norm(e) for e in (emphasis or [])}
-    chunks = _caption_chunks(words or [], total) if speaker else []
+    chunks = _caption_chunks(words or [], total) if (speaker or presenter) else []
     caps_html = []
     for i, c in enumerate(chunks):
         spans = "".join(f'<span class="cw{" emph" if _norm(w[2]) in emph else ""}" id="cap{i}w{j}">{html.escape(w[2])}</span>'
@@ -602,7 +645,12 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
               "ACCENT_CAP": _cap_accent(theme), "BAND_BG": "#15151c" if theme.bg.lower() > "#888888" else theme.card,
               "TEXTURE": _texture(theme.texture, theme.ink), "PROG": prog, "BEATS": "\n".join(html_beats),
               "CAPS_HTML": "\n".join(caps_html), "MASCOT": mascot_html,
-              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks})}
+              "MODE": "m-mascot" if presenter else ("m-spk" if speaker else "m-nospk"), "SPK_INNER": spk_inner,
+              "MAS_W": 442 if presenter else 300, "M_INK": theme.on_accent, "M_BG": theme.accent,
+              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks, "lipev": lip or [],
+                                  "lay": MASCOT_LAY if presenter else {}})}
+    if presenter:   # the band and the full screen are a glow of the app colour behind the mascot
+        tokens["BAND_BG"] = f"radial-gradient(circle at 50% 58%, {theme.accent} 0%, {_shade(theme.accent, .55)} 100%)"
     (out_dir / "compositions" / "story.html").write_text(_fill((HF / "story" / "templates" / "main.html").read_text(), tokens))
     (out_dir / "index.html").write_text(f"""<!doctype html>
 <html lang="en">
@@ -631,7 +679,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
 
 def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str | None = "slip",
                  speaker: Path | None = None, quality: str = "looks", words: list[dict] | None = None,
-                 emphasis: list[str] | None = None) -> float:
-    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis)
+                 emphasis: list[str] | None = None, lip: list | None = None, presenter: bool = False) -> float:
+    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis, lip, presenter)
     render_project(proj, out, quality)
     return total
