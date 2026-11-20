@@ -1,0 +1,21 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-23T19:30:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  TEST of the story template on the Oct 31 clip. Do not merge; not for posting.
+video:
+  kind: story
+  mascot: slip
+  speaker: inbox/2026-10-31-why-slipnote.mp4
+  script: |
+    There are so many people I think about all the time. My family, my friends, my best friend. But everyone's busy, schedules never match, and you can't have a one-on-one chat every day. So most of the time, they never know they crossed your mind. That's why I'm building Slipnote. You write a note by hand, draw something, or doodle on a photo, and it lands right on their home screen as a widget. It doesn't interrupt their day. It just tells them you thought of them. It's coming to Android first, with iOS planned, and the waitlist link is in my bio.
+  emphasis: [busy, mind, Slipnote, doodle, widget, waitlist]
+  beats:
+    - {tag: the idea, head: "They cross your mind *all the time*", layout: full, seconds: 6.9, pose: think}
+    - {tag: the problem, head: "But everyone's *busy*", layout: full, seconds: 8.9, pose: sad}
+    - {tag: so I'm building, head: "*Slipnote*", screen: slipnote/composer, focus: send, label: Send, seconds: 5.0, pose: wave}
+    - {tag: how, head: "Write, draw, *doodle*", screen: slipnote/composer-tools, focus: tools, label: Pen and more, seconds: 5.0, pose: happy}
+    - {tag: lands, head: "On their *home screen*", screen: slipnote/circle-home, focus: note, label: As a widget, seconds: 4.4, pose: cheer}
+    - {tag: android first, head: "*Waitlist* in bio", layout: full, seconds: 3.83, pose: cheer}
