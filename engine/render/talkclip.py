@@ -17,9 +17,14 @@ import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "assets" / "characters" / "harsh" / "talk_source" / "mascot_talking_green.mp4"
-CROP_X, SIZE = 420, 1080
-ROI = (470, 540, 650, 670)
+SOURCE = ROOT / "assets" / "characters" / "harsh" / "talk_source" / "mascot_talking_calm.mp4"
+SIZE = 1080
+# the calm source (1664x928): a 928 square from x=368, scaled to 1080. Mouth sits near (550, 640) in that square.
+CROP = "crop=928:928:368:0,scale=1080:1080"
+CROP_X = 420           # the 1920x1080 reaction videos: a 1080 square from x=420
+ROI = (460, 560, 640, 720)
+CALM_BOX = (420, 540, 690, 780)
+TALK_SCALE = .62       # the calm source is a close-up; bring its head to the size of the reaction videos
 Q = 4                      # quarter-frame positions
 FPS = 30
 
@@ -38,7 +43,7 @@ def key(rgb: np.ndarray) -> np.ndarray:
 class Source:
     def __init__(self, workdir: Path, video: Path = SOURCE):
         self.raw = workdir / "src.raw"
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video), "-vf", f"crop={SIZE}:{SIZE}:{CROP_X}:0",
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(video), "-vf", CROP,
                         "-f", "rawvideo", "-pix_fmt", "rgb24", str(self.raw)], check=True)
         self.n = self.raw.stat().st_size // (SIZE * SIZE * 3)
         self.mm = np.memmap(self.raw, np.uint8, "r", shape=(self.n, SIZE, SIZE, 3))
@@ -61,7 +66,7 @@ class Source:
         lo, hi = np.percentile(m, 5), np.percentile(m, 95)
         return np.clip((m - lo) / (hi - lo + 1e-9), 0, 1)
 
-    def calm_mouth(self, radius: int = 7, box=(430, 500, 700, 740), feather: int = 28) -> None:
+    def calm_mouth(self, radius: int = 3, box=CALM_BOX, feather: int = 28) -> None:
         """The source mouth chatters at ~3 Hz with big swings. Inside the mouth box, average each frame with its neighbours
         (±radius) so the lips move less and more gently; the rest of the head stays sharp."""
         from scipy.ndimage import uniform_filter1d, gaussian_filter
@@ -261,9 +266,10 @@ def render_clip(src: Source, pos: np.ndarray, out: Path, accent: str, shade: str
         flash, dx = 0.0, 0.0
         act = next((x for x in impacts if x["t"] <= t < x["t"] + x["d"]), None)
         # a gentle breathing scale so the stills between sentences are never frozen
-        sc = 1.0 + .005 * np.sin(2 * np.pi * t / 3.4)
+        sc = (1.0 + .005 * np.sin(2 * np.pi * t / 3.4)) * TALK_SCALE
         rot = 0.0
         if act:
+            sc /= TALK_SCALE
             if act.get("video"):   # the reaction plays as video: no pop, the flash and shake still mark the cut
                 layer = vids[act["video"]].frame(int((t - act["t"]) * FPS))
             else:
