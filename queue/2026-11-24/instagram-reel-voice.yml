@@ -1,0 +1,36 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-24T13:30:00+05:30'
+app: personal
+pillar: personal
+text: voice script test
+slides:
+- type: point
+  title: Voice
+  body: script
+  say: Hi, I'm Harsh, and I build small apps that people actually use.
+- type: point
+  title: Voice
+  body: script
+  say: Some days it works on the first try. Most days it takes a few more.
+- type: point
+  title: Voice
+  body: script
+  say: Honestly, that's the fun part. You build it, you break it, and then you fix
+    it.
+- type: point
+  title: Voice
+  body: script
+  say: Have you ever tapped a button by mistake? Yeah, me too, more than once.
+- type: point
+  title: Voice
+  body: script
+  say: So, here's what I learned. Keep it simple, ship it early, and listen to people.
+- type: point
+  title: Voice
+  body: script
+  say: Thanks for watching. If this helped, follow along, and I'll see you in the
+    next one.
+video:
+  kind: voice
+  tone: calm

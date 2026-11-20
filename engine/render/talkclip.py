@@ -45,6 +45,7 @@ class Source:
         self._keyed: dict[int, np.ndarray] = {}
         self._flow: dict[int, np.ndarray] = {}
         self.mouth = self._mouth_openness()
+        self.calm = None
         self.dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_FAST)
 
     def _mouth_openness(self) -> np.ndarray:
@@ -59,6 +60,18 @@ class Source:
             m = -m
         lo, hi = np.percentile(m, 5), np.percentile(m, 95)
         return np.clip((m - lo) / (hi - lo + 1e-9), 0, 1)
+
+    def calm_mouth(self, radius: int = 7, box=(430, 500, 700, 740), feather: int = 28) -> None:
+        """The source mouth chatters at ~3 Hz with big swings. Inside the mouth box, average each frame with its neighbours
+        (±radius) so the lips move less and more gently; the rest of the head stays sharp."""
+        from scipy.ndimage import uniform_filter1d, gaussian_filter
+        x0, y0, x1, y1 = box
+        crop = np.asarray(self.mm[:, y0:y1, x0:x1]).astype(np.float32)
+        self.calm = uniform_filter1d(crop, size=2 * radius + 1, axis=0, mode="nearest") / 255.0
+        m = np.zeros((y1 - y0, x1 - x0), np.float32)
+        m[feather:-feather, feather:-feather] = 1
+        self.calm_mask = gaussian_filter(m, feather / 2.2)[..., None]
+        self.calm_box = box
 
     def keyed(self, i: int) -> np.ndarray:
         i = int(np.clip(i, 0, self.n - 1))
@@ -83,13 +96,25 @@ class Source:
         i = int(q)
         a = q - i
         if a < 1e-3 or i >= self.n - 1:
-            return self.keyed(i)
+            return self._calmed(self.keyed(i), q)
         F = self._flow_between(i)
         gx, gy = np.meshgrid(np.arange(SIZE, dtype=np.float32), np.arange(SIZE, dtype=np.float32))
         A, B = self.keyed(i), self.keyed(i + 1)
         wa = cv2.remap(A, gx - a * F[..., 0], gy - a * F[..., 1], cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
         wb = cv2.remap(B, gx + (1 - a) * F[..., 0], gy + (1 - a) * F[..., 1], cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-        return (1 - a) * wa + a * wb
+        return self._calmed((1 - a) * wa + a * wb, q)
+
+    def _calmed(self, rgba: np.ndarray, q: float) -> np.ndarray:
+        if self.calm is None:
+            return rgba
+        i = int(np.clip(q, 0, self.n - 2)); a = float(np.clip(q - i, 0, 1))
+        c = (1 - a) * self.calm[i] + a * self.calm[i + 1]
+        x0, y0, x1, y1 = self.calm_box
+        out = rgba.copy()
+        reg = out[y0:y1, x0:x1]
+        al = reg[..., 3:4]
+        reg[..., :3] = reg[..., :3] * (1 - self.calm_mask) + c * al * self.calm_mask
+        return out
 
 
 REACT_DIR = ROOT / "assets" / "characters" / "harsh" / "reactions"

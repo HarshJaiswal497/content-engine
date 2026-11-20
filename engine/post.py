@@ -19,7 +19,7 @@ FORMATS = {
     "instagram": {"image", "carousel", "reel"},
     "youtube": {"short"},
 }
-VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "story", "same_as"}
+VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "story", "voice", "same_as"}
 APPS = {"slipnote", "setalytix", "personal"}
 
 # Hard limits from brand/founder.md. Each entry: (regex, message). Matches are errors.
