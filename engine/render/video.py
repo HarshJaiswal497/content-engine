@@ -541,7 +541,7 @@ def skit_video(beats: list[dict], app: str, out: Path, mood: str | None, title: 
     return out
 
 
-def lip_events(wav: Path, pose_at: list[tuple[float, str]], fps: float = 30.0) -> list[list]:
+def lip_events(wav: Path, pose_at: list[tuple[float, str]], fps: float = 30.0, nvis: int = 3) -> list[list]:
     """Mouth frames from the loudness of a voice track: [[seconds, 'mp<pose>m<0|1|2>'], ...] (shut, half, open).
     Levels are relative to the loudest syllable, each state is held at least two frames so the mouth doesn't flicker."""
     import numpy as np
@@ -565,11 +565,21 @@ def lip_events(wav: Path, pose_at: list[tuple[float, str]], fps: float = 30.0) -
         hold[i] = cur
         since += 1
     poses = sorted(pose_at)
-    ev, last = [], None
+    ev, last, turn = [], None, 0
     for i in range(n):
         t = i / fps
         pose = [p for s0, p in poses if s0 <= t + 1e-6][-1] if poses else "idle"
-        key = f"mp{pose}m{int(hold[i])}"
+        lv = int(hold[i])
+        if nvis > 3:   # real mouths: a soft level and a loud level each rotate through shapes so it never looks mechanical
+            if lv == 0:
+                k = 0
+            else:
+                cyc = [1, 2, 1, 2, 5] if lv == 1 else [3, 2, 3, 4, 3, 6]
+                if i == 0 or hold[i - 1] != lv:
+                    turn = turn + 1 if lv else turn
+                k = cyc[turn % len(cyc)]
+            lv = k
+        key = f"mp{pose}m{lv}"
         if key != last:
             ev.append([round(t, 3), key])
             last = key
@@ -676,8 +686,10 @@ def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, masc
         _run(cmd + ["-filter_complex", ";".join(parts), "-map", "[o]", str(vall)])
         script = " ".join(l for l in lines if l.strip())
         words = transcribe(vall, script, fixes)
-        pose_at = [(s0, b.get("pose") or "idle") for s0, b in zip(starts, beats)]
-        lip = lip_events(vall, pose_at)
+        from .hyperframes import REAL_VISEMES, talker
+        real = mascot == "harsh"
+        pose_at = [(s0, talker(mascot, b.get("pose") or "idle")) for s0, b in zip(starts, beats)]
+        lip = lip_events(vall, pose_at, nvis=REAL_VISEMES if real else 3)
         timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
         silent = tmp_p / "picture.mp4"
         render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True)
