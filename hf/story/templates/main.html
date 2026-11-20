@@ -34,6 +34,8 @@
     .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; align-items: baseline; gap: 0 30px; opacity: 0; }
     .cw { font-weight: 900; font-size: 74px; letter-spacing: -.01em; line-height: 1.1; color: #fff; -webkit-text-stroke: 8px rgba(10,10,20,.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,.35); display: inline-block; }
     .cw.emph { font-style: italic; font-weight: 800; }
+    .wipe { position: absolute; left: -1300px; top: 0; width: 1250px; height: 1110px; background: {{ACCENT}}; transform: skewX(-12deg); z-index: 5; }
+    .wipe.w2 { background: {{CARD}}; z-index: 5; }
     .mas { position: absolute; width: 300px; left: 44px; top: 880px; z-index: 8; }
     .mas img { position: absolute; left: 0; top: 0; width: 100%; opacity: 0; }
     .mas img.first { position: relative; }
@@ -46,6 +48,7 @@
     <div id="scrim"></div><div id="scrim2"></div>
     <div class="prog">{{PROG}}</div>
 {{BEATS}}
+    <div class="wipe w2" id="wipe2"></div><div class="wipe" id="wipe1"></div>
     <div class="caps" id="caps">
 {{CAPS_HTML}}
     </div>
@@ -85,6 +88,11 @@
       // the layout morphs a touch before the beat so the picture is already moving when the new words land
       if (i > 0 && D.beats[i - 1].layout !== b.layout) morph(LAY[b.layout], b.s - .12, .62);
       // push transition: the new beat slides in from the right, the old one leaves to the left
+      // stack -> stack: an accent panel sweeps across the canvas and the next beat is revealed behind it
+      if (i > 0 && D.beats[i - 1].layout === "stack" && b.layout === "stack") {
+        tl.fromTo("#wipe2", { x: 0 }, { x: 2650, duration: .62, ease: "power3.inOut" }, b.s - .36);
+        tl.fromTo("#wipe1", { x: 0 }, { x: 2650, duration: .62, ease: "power3.inOut" }, b.s - .42);
+      }
       tl.set(el, { opacity: 1 }, b.s);
       tl.fromTo(el, { x: i ? 90 : 0 }, { x: 0, duration: .5, ease: "expo.out" }, b.s);
       tl.fromTo(el + " .badge", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "expo.out" }, b.s);
