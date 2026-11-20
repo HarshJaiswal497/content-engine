@@ -3,3 +3,4 @@ faster-whisper>=1.0
 
 # Cover thumbnails (tools/make_thumb.py): Chromium via playwright, using the CI browser.
 playwright>=1.45
+opencv-python-headless>=4.8
