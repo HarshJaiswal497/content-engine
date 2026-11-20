@@ -1,10 +1,10 @@
 """Generate the cartoon Harsh (curly hair, clear glasses, beard, black tee) as SVG poses plus PNG renders, same drawing
 style as Slip and Bo. Talking frames <pose>-m0|1|2 (shut, half, wide open) for lip-sync.
-Usage: python tools/make_harsh.py  -> assets/characters/harsh/<pose>.svg / .png (transparent, 600 px wide)."""
+Usage: python tools/make_harsh.py  -> assets/characters/harsh-cartoon/<pose>.svg / .png (transparent, 600 px wide)."""
 from pathlib import Path
 import math, sys
 
-OUT = Path(__file__).resolve().parent.parent / "assets" / "characters" / "harsh"
+OUT = Path(__file__).resolve().parent.parent / "assets" / "characters" / "harsh-cartoon"
 SKIN, SEDGE, HAIR, HEDGE = "#E0AA7E", "#8A5733", "#3A2A24", "#1A100D"
 TEE, TEDGE, GLASS, INK, BLUSH = "#2D2D36", "#14141A", "#93A8C0", "#2A1B16", "#E0795F"
 SW = 7
@@ -144,5 +144,5 @@ if __name__ == "__main__":
     for n, p in POSES.items():
         for name, q in [(n, p)] + [(f"{n}-m{k}", {**p, "mouth": m}) for k, m in enumerate(LIP)]:
             (OUT / f"{name}.svg").write_text(build(q))
-    print("now: python tools/render_svgs.py assets/characters/harsh")
+    print("now: python tools/render_svgs.py assets/characters/harsh-cartoon")
     print("poses:", ", ".join(POSES))

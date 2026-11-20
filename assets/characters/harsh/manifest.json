@@ -1,0 +1,362 @@
+[
+ {
+  "group": "expressions",
+  "name": "neutral_talking",
+  "file": "expressions/neutral_talking.webp",
+  "original": "mascot_emotions_reference_quality_7/01_neutral_talking.png",
+  "shows": "front, relaxed, mouth slightly open as if mid-sentence",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "happy",
+  "file": "expressions/happy.webp",
+  "original": "mascot_emotions_reference_quality_7/02_happy.png",
+  "shows": "front, big open smile with teeth",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "excited",
+  "file": "expressions/excited.webp",
+  "original": "mascot_emotions_reference_quality_7/03_excited.png",
+  "shows": "front, brows up, wide open grin",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "thinking",
+  "file": "expressions/thinking.webp",
+  "original": "mascot_emotions_reference_quality_7/04_thinking.png",
+  "shows": "hand on chin, eyes looking aside, closed mouth",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "surprised",
+  "file": "expressions/surprised.webp",
+  "original": "mascot_emotions_reference_quality_7/05_surprised.png",
+  "shows": "front, brows up, small round mouth",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "shocked",
+  "file": "expressions/shocked.webp",
+  "original": "mascot_emotions_reference_quality_7/06_shocked.png",
+  "shows": "front, huge eyes, jaw dropped",
+  "note": ""
+ },
+ {
+  "group": "expressions",
+  "name": "confused",
+  "file": "expressions/confused.webp",
+  "original": "mascot_emotions_reference_quality_7/07_confused.png",
+  "shows": "eyes aside, one brow down, mouth twisted",
+  "note": "white halo around the hair in the source; cleaned here"
+ },
+ {
+  "group": "mouths",
+  "name": "closed",
+  "file": "mouths/closed.webp",
+  "original": "mascot_lips_individual_complete_7/01_closed.png",
+  "shows": "mouth shape: closed (m, b, p)",
+  "note": "front, neutral face; the base for lip-sync"
+ },
+ {
+  "group": "mouths",
+  "name": "slight_open",
+  "file": "mouths/slight_open.webp",
+  "original": "mascot_lips_individual_complete_7/02_neutral_slight_open.png",
+  "shows": "mouth shape: neutral, slightly open",
+  "note": ""
+ },
+ {
+  "group": "mouths",
+  "name": "small_open",
+  "file": "mouths/small_open.webp",
+  "original": "mascot_lips_individual_complete_7/03_small_open.png",
+  "shows": "mouth shape: small open (e, i)",
+  "note": ""
+ },
+ {
+  "group": "mouths",
+  "name": "wide_open",
+  "file": "mouths/wide_open.webp",
+  "original": "mascot_lips_individual_complete_7/04_wide_open.png",
+  "shows": "mouth shape: wide open (a)",
+  "note": ""
+ },
+ {
+  "group": "mouths",
+  "name": "round",
+  "file": "mouths/round.webp",
+  "original": "mascot_lips_individual_complete_7/05_round.png",
+  "shows": "mouth shape: round (o, u, w)",
+  "note": ""
+ },
+ {
+  "group": "mouths",
+  "name": "teeth_on_lip",
+  "file": "mouths/teeth_on_lip.webp",
+  "original": "mascot_lips_individual_complete_7/06_teeth_on_lip.png",
+  "shows": "mouth shape: upper teeth showing (f, v)",
+  "note": "teeth do not clearly rest on the lip; usable as an f/v approximation"
+ },
+ {
+  "group": "mouths",
+  "name": "wide_smile",
+  "file": "mouths/wide_smile.webp",
+  "original": "mascot_lips_individual_complete_7/07_wide_smile.png",
+  "shows": "mouth shape: wide smile with teeth (ee, s)",
+  "note": "the zip README says this one is missing; it is there"
+ },
+ {
+  "group": "face",
+  "name": "smirk",
+  "file": "face/smirk.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/01_smile.png",
+  "shows": "closed-mouth smile pulled up on one side",
+  "note": "was named 01_smile; it is a smirk"
+ },
+ {
+  "group": "face",
+  "name": "big_grin",
+  "file": "face/big_grin.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/02_big_grin.png",
+  "shows": "wide grin with teeth",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "open_mouth",
+  "file": "face/open_mouth.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/03_smirk.png",
+  "shows": "mouth open, brows slightly up, mid-word",
+  "note": "was named 03_smirk; it shows an open mouth, not a smirk"
+ },
+ {
+  "group": "face",
+  "name": "frown",
+  "file": "face/frown.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/04_frown.png",
+  "shows": "downturned mouth, unhappy",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "pout",
+  "file": "face/pout.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/05_pout.png",
+  "shows": "lips pushed forward (duck/kiss pout)",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "flat",
+  "file": "face/flat.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/06_flat.png",
+  "shows": "flat mouth, deadpan",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "gritted_teeth",
+  "file": "face/gritted_teeth.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/07_gritted_teeth.png",
+  "shows": "teeth clenched, brows down, frustrated",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "laugh_eyes_closed",
+  "file": "face/laugh_eyes_closed.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/08_laugh_eyes_closed.png",
+  "shows": "laughing, eyes squeezed shut",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "yawn",
+  "file": "face/yawn.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/09_yawn.png",
+  "shows": "yawning with a hand over the mouth",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "tongue_out",
+  "file": "face/tongue_out.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/10_tongue_out.png",
+  "shows": "tongue out, one eye winking",
+  "note": ""
+ },
+ {
+  "group": "face",
+  "name": "oh_gasp",
+  "file": "face/oh_gasp.webp",
+  "original": "mascot_non_speaking_corrected_labels/non_speaking/11_oh_gasp.png",
+  "shows": "wide eyes, small round mouth",
+  "note": ""
+ },
+ {
+  "group": "eyes",
+  "name": "blink_open",
+  "file": "eyes/blink_open.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/blink/01_open.png",
+  "shows": "eyes open",
+  "note": "different framing: head is smaller, body wider; not aligned with the other sets"
+ },
+ {
+  "group": "eyes",
+  "name": "blink_half",
+  "file": "eyes/blink_half.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/blink/02_half_open.png",
+  "shows": "eyes half closed",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "blink_closed",
+  "file": "eyes/blink_closed.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/blink/03_closed.png",
+  "shows": "eyes closed",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "gaze_camera",
+  "file": "eyes/gaze_camera.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/gaze/01_camera.png",
+  "shows": "looking at the camera",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "gaze_left",
+  "file": "eyes/gaze_left.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/gaze/02_left.png",
+  "shows": "looking to the left of the frame",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "gaze_right",
+  "file": "eyes/gaze_right.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/gaze/03_right.png",
+  "shows": "looking to the right of the frame",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "gaze_up",
+  "file": "eyes/gaze_up.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/gaze/04_up.png",
+  "shows": "looking up",
+  "note": "different framing"
+ },
+ {
+  "group": "eyes",
+  "name": "happy_arcs",
+  "file": "eyes/happy_arcs.webp",
+  "original": "mascot_eyes_brows_PARTIAL_8/special/01_happy_arcs.png",
+  "shows": "eyes as happy arcs, small smile",
+  "note": "source canvas 1199x1312; fitted to a square"
+ },
+ {
+  "group": "gestures",
+  "name": "arms_crossed",
+  "file": "gestures/arms_crossed.webp",
+  "original": "mascot_gestures_arms_phone_typing_individual/01_arms_crossed.png",
+  "shows": "arms crossed, calm smirk",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "holding_phone",
+  "file": "gestures/holding_phone.webp",
+  "original": "mascot_gestures_arms_phone_typing_individual/02_holding_phone.png",
+  "shows": "looking down at a phone in both hands",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "typing_laptop",
+  "file": "gestures/typing_laptop.webp",
+  "original": "mascot_gestures_arms_phone_typing_individual/03_typing_laptop.png",
+  "shows": "typing on a laptop, glancing at the screen",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "point_left",
+  "file": "gestures/point_left.webp",
+  "original": "mascot_pointing_left_right_verified/point_left.png",
+  "shows": "pointing to the left of the frame, looking that way",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "point_right",
+  "file": "gestures/point_right.webp",
+  "original": "mascot_pointing_left_right_verified/point_right.png",
+  "shows": "pointing to the right of the frame, looking at the camera",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "present_phone",
+  "file": "gestures/present_phone.webp",
+  "original": "(attached) Enthusiastic_Smartphone_Presentation.png",
+  "shows": "holding a phone toward the camera and pointing at it, excited",
+  "note": "blank black phone screen: put the app on it"
+ },
+ {
+  "group": "gestures",
+  "name": "cheer",
+  "file": "gestures/cheer.webp",
+  "original": "(attached) cheer.png",
+  "shows": "both fists up, open-mouth joy",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "hand_on_forehead",
+  "file": "gestures/hand_on_forehead.webp",
+  "original": "(attached) face_palm.png",
+  "shows": "hand on forehead, eyes shut, wincing",
+  "note": "was face_palm; the hand is on the forehead, not over the face"
+ },
+ {
+  "group": "gestures",
+  "name": "shrug",
+  "file": "gestures/shrug.webp",
+  "original": "(attached) shrug.png",
+  "shows": "both palms up, questioning look",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "point_down",
+  "file": "gestures/point_down.webp",
+  "original": "(attached) pointing_down.png",
+  "shows": "looking down and pointing down, mouth open",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "point_up",
+  "file": "gestures/point_up.webp",
+  "original": "(attached) pointing_up.png",
+  "shows": "looking up and pointing up with one finger",
+  "note": ""
+ },
+ {
+  "group": "gestures",
+  "name": "wave",
+  "file": "gestures/wave.webp",
+  "original": "(attached) Joyful_Wave_in_Black_Hoodie.png",
+  "shows": "waving, big smile",
+  "note": ""
+ }
+]
