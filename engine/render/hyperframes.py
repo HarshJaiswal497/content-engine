@@ -484,6 +484,20 @@ REAL_TALK = {"idle": "front", "think": "neutral", "wave": "happy", "cheer": "hap
 REAL_VISEMES = 7
 
 
+IMPACT_GROUPS = ("expressions", "face", "gestures")
+# sound for an impact frame: strong reactions hit, bad moments thud, happy ones pop
+IMPACT_SFX = {"shocked": "hit", "surprised": "hit", "oh_gasp": "hit", "confused": "dun", "frown": "dun", "hand_on_forehead": "dun",
+              "gritted_teeth": "dun", "shrug": "dun", "yawn": "dun", "flat": "dun"}
+
+
+def impact_file(mascot: str, name: str) -> Path | None:
+    for g in IMPACT_GROUPS:
+        f = CHARS / mascot / g / f"{name}.webp"
+        if f.exists():
+            return f
+    return None
+
+
 def talker(mascot: str | None, pose: str) -> str:
     """The name of the image set a beat's pose shows (the real mascot maps several poses onto its few talking sets)."""
     return REAL_TALK.get(pose, "front") if mascot == "harsh" else pose
@@ -500,7 +514,7 @@ def _story_words(text: str) -> list[tuple[str, bool]]:
     return out
 
 
-def story_beats_ok(beats: list[dict], app: str) -> list[str]:
+def story_beats_ok(beats: list[dict], app: str, mascot: str | None = None) -> list[str]:
     errs = []
     if not beats:
         return ["story needs beats"]
@@ -511,6 +525,8 @@ def story_beats_ok(beats: list[dict], app: str) -> list[str]:
             errs.append(f"beat {i}: layout must be 'full' or 'stack'")
         if b.get("layout") == "full" and (b.get("screen") or b.get("big")):
             errs.append(f"beat {i}: a full-screen beat shows only you (screens and big words need layout: stack)")
+        if b.get("react") and mascot == "harsh" and not impact_file(mascot, str(b["react"])):
+            errs.append(f"beat {i}: react '{b['react']}' is not one of the mascot's expression/face/gesture images")
         if b.get("screen"):
             try:
                 resolve_screen(b["screen"], app)
@@ -562,6 +578,9 @@ def beats_from_slides(slides: list[dict], app: str) -> list[dict]:
                     b[k] = sl[k]
         if sl.get("big"):
             b["big"] = sl["big"]; b["layout"] = "stack"
+        for k in ("react", "react_at", "react_for"):
+            if sl.get(k) is not None:
+                b[k] = sl[k]
         out.append(b)
     return out
 
@@ -569,7 +588,7 @@ def beats_from_slides(slides: list[dict], app: str) -> list[dict]:
 def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str | None = "slip",
                         speaker: Path | None = None, words: list[dict] | None = None,
                         emphasis: list[str] | None = None, lip: list | None = None,
-                        presenter: bool = False) -> tuple[Path, float]:
+                        presenter: bool = False, imp: list[dict] | None = None) -> tuple[Path, float]:
     """HyperFrames project for a story video. Two layouts that morph into each other:
     `full` (you fill the screen) and `stack` (a framed band of you at the bottom, motion above: a real app screen
     that pushes in on the focus box, a big word). The numbered progress bar and the headline stay on screen in both.
@@ -651,6 +670,12 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
             shutil.copy(CHARS / mascot / f"{p}.png", out_dir / "assets" / f"mascot-{p}.png")
             mascot_html += f'      <img{" class=first" if k == 0 else ""} id="mp{p}" src="assets/mascot-{p}.png" alt="">\n'
 
+    imp = imp or []
+    if presenter and mascot == "harsh":
+        for nm in sorted({x["name"] for x in imp}):
+            f = impact_file(mascot, nm)
+            shutil.copy(f, out_dir / "assets" / f"imp-{nm}.webp")
+            mascot_html += f'      <img class="ip" id="ip{nm}" src="assets/imp-{nm}.webp" alt="">\n'
     spk_inner = ""
     if speaker:
         shutil.copy(speaker, out_dir / "assets" / "speaker.mp4")
@@ -671,7 +696,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
               "CAPS_HTML": "\n".join(caps_html), "MASCOT": mascot_html,
               "MODE": "m-mascot" if presenter else ("m-spk" if speaker else "m-nospk"), "SPK_INNER": spk_inner,
               "MAS_W": 442 if presenter else 300, "M_INK": theme.on_accent, "M_BG": theme.accent,
-              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks, "lipev": lip or [],
+              "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks, "lipev": lip or [], "imp": [[x["t"], x["d"], "ip" + x["name"]] for x in imp],
                                   "lay": (MASCOT_LAY_REAL if mascot == "harsh" else MASCOT_LAY) if presenter else {}})}
     if presenter:   # the band and the full screen are a glow of the app colour behind the mascot
         tokens["BAND_BG"] = f"radial-gradient(circle at 50% 58%, {theme.accent} 0%, {_shade(theme.accent, .55)} 100%)"
@@ -703,7 +728,8 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
 
 def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str | None = "slip",
                  speaker: Path | None = None, quality: str = "looks", words: list[dict] | None = None,
-                 emphasis: list[str] | None = None, lip: list | None = None, presenter: bool = False) -> float:
-    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis, lip, presenter)
+                 emphasis: list[str] | None = None, lip: list | None = None, presenter: bool = False,
+                 imp: list[dict] | None = None) -> float:
+    proj, total = build_story_project(beats, app, work / "hf-story", mascot, speaker, words, emphasis, lip, presenter, imp)
     render_project(proj, out, quality)
     return total

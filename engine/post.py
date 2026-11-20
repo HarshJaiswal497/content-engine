@@ -302,7 +302,7 @@ def validate(post: Post) -> None:
                 if not post.data.get("slides"):
                     e.append("story with speaker: mascot needs slides (or video.beats)")
                 sb = beats_from_slides(post.data.get("slides") or [], post.app)
-            e += story_beats_ok(sb, post.app)
+            e += story_beats_ok(sb, post.app, post.video_spec.get("mascot"))
             if len(sb) > 8:
                 w.append("story has more than 8 beats; keep Reels under about 45 s")
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):

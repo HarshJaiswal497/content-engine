@@ -14,26 +14,36 @@ slides:
   kicker: Slipnote
   title: Slip had to *sit on a button*
   say: It took me several tries to get Slip to sit on a button,
+  react: shocked
+  react_at: several
 - type: point
   title: '*Peeking* from behind'
   body: It didn't look right.
   say: First, Slip peeked up from behind it, and that didn't look right,
+  react: hand_on_forehead
+  react_at: didn't
 - type: point
   title: '*Straight legs*'
   body: Stiff. Not Slip.
   say: Then Slip sat with straight legs, and that looked stiff,
+  react: shrug
+  react_at: stiff
 - type: point
   title: '*A quick sketch* fixed it'
   body: Legs bent, hands on the button, a small seat shadow.
   screen: slip-sitting
   label: Slip on the button
   say: A quick sketch of the legs fixed it. Now Slip sits on the button, with its legs bent and a little shadow, and waves,
+  react: cheer
+  react_at: fixed
 - type: cta
   title: Tap Slip for *a 5-page tour*
   body: Slipnote is in development. Waitlist link in my bio
   screen: tour-1
   label: Slip's tour
   say: Tap Slip, and a five page tour opens. Slipnote is in development, and the waitlist link is on my profile.
+  react: point_down
+  react_at: profile
 video:
   kind: story
   speaker: mascot

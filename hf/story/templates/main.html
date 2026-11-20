@@ -34,6 +34,8 @@
     .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; align-items: baseline; gap: 0 30px; opacity: 0; }
     .cw { font-weight: 900; font-size: 74px; letter-spacing: -.01em; line-height: 1.1; color: #fff; -webkit-text-stroke: 8px rgba(10,10,20,.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,.35); display: inline-block; }
     .cw.emph { font-style: italic; font-weight: 800; }
+    .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 9; }
+    .mas img.ip { transform-origin: 50% 100%; }
     .wipe { position: absolute; left: -1300px; top: 0; width: 1250px; height: 1110px; background: {{ACCENT}}; transform: skewX(-12deg); z-index: 5; }
     .wipe.w2 { background: {{CARD}}; z-index: 5; }
     .m-mascot .full .head { color: {{M_INK}}; text-shadow: none; }
@@ -52,6 +54,7 @@
     <div id="scrim"></div><div id="scrim2"></div>
     <div class="prog">{{PROG}}</div>
 {{BEATS}}
+    <div class="flash" id="flash"></div>
     <div class="wipe w2" id="wipe2"></div><div class="wipe" id="wipe1"></div>
     <div class="caps" id="caps">
 {{CAPS_HTML}}
@@ -129,6 +132,12 @@
     // lip-sync: the mouth frame follows the loudness of the voice; the pose changes with each beat
     let prevMp = null;
     D.lipev.forEach(([t, id]) => { if (prevMp) tl.set("#" + prevMp, { opacity: 0 }, t); tl.set("#" + id, { opacity: 1 }, t); prevMp = id; });
+    // impact frames: a reaction image pops in over the talking mascot for a moment, with a white flash
+    (D.imp || []).forEach(([t, d, id]) => {
+      tl.fromTo("#" + id, { scale: .86, rotation: -3 }, { scale: 1, rotation: 0, duration: .32, ease: "back.out(2.6)" }, t);
+      tl.fromTo("#flash", { opacity: .55 }, { opacity: 0, duration: .22, ease: "power2.out" }, t);
+      tl.fromTo("#mas", { x: -14 }, { x: 0, duration: .34, ease: "elastic.out(1,.35)" }, t);
+    });
     if (D.lipev.length) tl.to("#mas", { y: 12, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: Math.ceil(D.total / 1.3) }, 0);
     // captions
     D.caps.forEach((c, i) => {

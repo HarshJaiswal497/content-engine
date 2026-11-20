@@ -184,7 +184,8 @@ def _whoosh_filter(label: str = "sw") -> str:
 
 
 def mux_audio(video: Path, out: Path, seconds: list[float], fade: float, voice: list[Path | None] | None,
-              mood: str | None, key: str, lead: float = VOICE_LEAD, sfx: bool = False) -> Path:
+              mood: str | None, key: str, lead: float = VOICE_LEAD, sfx: bool = False,
+              extra_cues: list[dict] | None = None) -> Path:
     """Add the voiceover (music ducks under it) or just music to a silent video of the same length.
     With sfx, a soft whoosh plays at each scene change."""
     total = sum(seconds) - fade * (len(seconds) - 1)
@@ -219,7 +220,7 @@ def mux_audio(video: Path, out: Path, seconds: list[float], fade: float, voice: 
     if sfx and len(starts) > 1:
         from . import sfx as sfxlib
         next_in = 2 + sum(1 for c in clips if c)
-        args, sparts, labels = sfxlib.add_to_graph(sfxlib.cues_for_scenes(starts, total, hook=True), next_in, total)
+        args, sparts, labels = sfxlib.add_to_graph(sfxlib.cues_for_scenes(starts, total, hook=True) + (extra_cues or []), next_in, total)
         if labels:
             cmd += args
             parts += sparts
@@ -690,9 +691,55 @@ def _mascot_story(beats: list[dict], app: str, out: Path, mood: str | None, masc
         real = mascot == "harsh"
         pose_at = [(s0, talker(mascot, b.get("pose") or "idle")) for s0, b in zip(starts, beats)]
         lip = lip_events(vall, pose_at, nvis=REAL_VISEMES if real else 3)
+        imp, extra = _impacts(beats, starts, secs, words, mascot, lead)
+        if imp:   # while a reaction image is up, the talking frames rest; the mouth resumes right after
+            lip = _with_impacts(lip, imp)
         timed = [{**b, "seconds": s} for b, s in zip(beats, secs)]
         silent = tmp_p / "picture.mp4"
-        render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True)
+        render_story(timed, app, silent, tmp_p, mascot, None, words=words, emphasis=emphasis, lip=lip, presenter=True, imp=imp)
         key = "/".join(out.parts[-4:-1])
-        mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=lead, sfx=True)
+        mux_audio(silent, out, secs, 0.0, voice, mood, key, lead=lead, sfx=True, extra_cues=extra)
     return out
+
+
+def _impacts(beats, starts, secs, words, mascot, lead):
+    """Reaction images from beats' `react` (name), `react_at` (seconds into the beat, or a spoken word) and `react_for`
+    (seconds, default 0.9). Returns the impact list and the sound cues for them."""
+    import re
+    from .hyperframes import IMPACT_SFX
+    imp, cues = [], []
+    norm = lambda w: re.sub(r"[^a-z0-9]", "", str(w).lower())
+    for b, s0, d in zip(beats, starts, secs):
+        name = b.get("react")
+        if not name:
+            continue
+        at = b.get("react_at")
+        t = None
+        if isinstance(at, (int, float)):
+            t = s0 + float(at)
+        elif isinstance(at, str):
+            for w in words or []:
+                if s0 <= float(w["start"]) < s0 + d and norm(w["word"]) == norm(at):
+                    t = float(w["start"]); break
+        if t is None:
+            t = s0 + lead + (d - lead) * .4
+        dur = float(b.get("react_for") or .9)
+        t = round(min(max(t, s0 + .15), s0 + d - dur - .05), 3)
+        imp.append({"t": t, "d": dur, "name": str(name)})
+        cues.append({"role": IMPACT_SFX.get(str(name), "pop"), "t": t, "gain": .55})
+    return imp, cues
+
+
+def _with_impacts(lip, imp):
+    """Replace the mouth events inside each impact window by the impact image, then restore the last mouth after it."""
+    ev = [e for e in lip]
+    for x in sorted(imp, key=lambda x: x["t"]):
+        t0, t1 = x["t"], x["t"] + x["d"]
+        before = [e for e in ev if e[0] <= t0 and not e[1].startswith("ip")]
+        back = before[-1][1] if before else None
+        ev = [e for e in ev if not (t0 <= e[0] < t1)]
+        ev.append([t0, "ip" + x["name"]])
+        if back:
+            ev.append([round(t1, 3), back])
+        ev.sort(key=lambda e: e[0])
+    return ev
