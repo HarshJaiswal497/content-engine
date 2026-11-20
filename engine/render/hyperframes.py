@@ -737,5 +737,5 @@ def render_story(beats: list[dict], app: str, out: Path, work: Path, mascot: str
 
 
 # the retimed talking clip (1080x1920, mascot bottom-aligned, glow baked in) shown in the band and full screen
-TALKCLIP_LAY = {"stack": {"vx": 0, "vy": -560, "vs": .56, "bo": 0, "bx": 0, "by": 0, "bs": 1},
+TALKCLIP_LAY = {"stack": {"vx": 197, "vy": -560, "vs": .56, "bo": 0, "bx": 0, "by": 0, "bs": 1},
                 "full": {"vx": -135, "vy": -480, "vs": 1.25, "bo": 0}}
