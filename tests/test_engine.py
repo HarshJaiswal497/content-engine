@@ -252,3 +252,21 @@ def test_skit_project_builds(tmp_path):
     proj, marks = build_skit_project(beats, "slipnote", tmp_path / "p")
     page = (proj / "compositions" / "skit.html").read_text()
     assert 'id="b0"' in page and 'id="slip-wave"' in page and 'id="human-phone"' in page and len(marks) == 3
+
+
+def test_cover_headline_wrapping():
+    from engine.render.cover import words_from_title
+    assert words_from_title("Slip had to *sit on a button*") == ["Slip had to", "*sit on a*", "*button*"]
+    assert len(words_from_title("*The rest timer starts itself.*")) <= 3
+    assert any(w.startswith("*") for w in words_from_title("My first themes looked ugly"))   # always one highlight
+
+
+def test_reel_container_passes_cover(monkeypatch):
+    from engine.platforms import instagram
+    seen = {}
+    monkeypatch.setattr(instagram, "_container", lambda uid, **p: seen.update(p) or "cid")
+    instagram._reel_container("u", "cap", "https://v/x.mp4", "https://c/x.jpg")
+    assert seen["cover_url"] == "https://c/x.jpg"
+    seen.clear()
+    instagram._reel_container("u", "cap", "https://v/x.mp4")
+    assert "cover_url" not in seen

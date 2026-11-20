@@ -1,2 +1,5 @@
 # Only needed for captioning recordings/talking-head clips (installed in CI).
 faster-whisper>=1.0
+
+# Cover thumbnails (tools/make_thumb.py): Chromium via playwright, using the CI browser.
+playwright>=1.45

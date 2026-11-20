@@ -20,7 +20,7 @@ from .video import caption_video, caption_video_motion, skit_video, story_video,
 
 def _clean(asset_dir: Path) -> None:
     for p in list(asset_dir.glob("slide-*.jpg")) + [asset_dir / "video.mp4", asset_dir / "video.json", asset_dir / "captions.txt",
-                                                     asset_dir / ".render-hash"]:
+                                                     asset_dir / "cover.jpg", asset_dir / ".render-hash"]:
         p.unlink(missing_ok=True)
 
 
@@ -122,6 +122,13 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
             for name in ("video.json", "video.mp4"):
                 if (sib.asset_dir / name).exists():
                     shutil.copy(sib.asset_dir / name, post.asset_dir / name)
+
+    if post.format in {"reel", "short"}:   # a cover for the Reel / the YouTube upload; never blocks the post
+        try:
+            from .cover import make_cover
+            make_cover(post)
+        except Exception:
+            print(f"{post.id}: cover failed, Instagram will pick a frame\n{traceback.format_exc()[-1200:]}", flush=True)
 
     (post.asset_dir / ".render-hash").write_text(post.render_hash())
     return "rendered"

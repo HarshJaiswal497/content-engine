@@ -71,6 +71,16 @@ def _upload(post) -> Result:
     return Result("published", vid, f"https://youtube.com/shorts/{vid}", note)
 
 
+def _thumb_line(post, bullet: bool = False) -> str:
+    """The cover made at render time, so it can be picked as the thumbnail while uploading."""
+    cover = post.asset_dir / "cover.jpg"
+    if not cover.exists():
+        return ""
+    from ..github import raw_url
+    return (f"\n- **Thumbnail:** {raw_url(cover, 'main')} (save it, then pick it as the thumbnail when you upload)" if bullet
+            else f"\n\n**1b. Thumbnail** (save it, then pick it as the thumbnail when you upload): {raw_url(cover, 'main')}")
+
+
 def _handoff(post) -> Result:
     m = _meta(post)
     ref = post.video_ref() or {}
@@ -78,7 +88,7 @@ def _handoff(post) -> Result:
     tags = ", ".join(m["tags"])
     body = f"""Today's Short is ready. Upload it from the YouTube app, then close this issue.
 
-**1. Download the video:** {link}
+**1. Download the video:** {link}{_thumb_line(post)}
 
 **2. Title**
 ```
@@ -128,7 +138,7 @@ _Download links open the video file from this repo's release page (right-click â
         parts.append(f"""---
 ### {i}. {when:%a %d %b, %I:%M %p} IST â€” {m['title']}
 - [ ] Uploaded and scheduled
-- **Video:** {link}
+- **Video:** {link}{_thumb_line(post, bullet=True)}
 
 **Title**
 ```
