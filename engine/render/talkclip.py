@@ -148,6 +148,18 @@ class Reaction:
         return key(np.asarray(self.mm[int(np.clip(i, 0, self.n - 1))]))
 
 
+def head_metrics(rgba: np.ndarray) -> tuple[float, float, float]:
+    """(top of the hair, hair width, hair centre x) of a keyed 1080 square: what makes two clips the same size."""
+    a = rgba[..., 3] > .5
+    top = int(np.flatnonzero(a.any(1))[0])
+    best, cx = 0, 0.0
+    for y in range(top, min(top + 250, a.shape[0])):
+        xs = np.flatnonzero(a[y])
+        if len(xs) and xs[-1] - xs[0] > best:
+            best, cx = xs[-1] - xs[0], (xs[-1] + xs[0]) / 2
+    return float(top), float(best), float(cx)
+
+
 def voice_openness(wav: Path, total: float, fps: int = FPS) -> np.ndarray:
     """Target mouth opening per frame (0 shut .. 1 wide) from the loudness of the voice."""
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(wav), "-ac", "1", "-ar", "16000", "-f", "f32le", "-"],
@@ -263,32 +275,52 @@ def render_clip(src: Source, pos: np.ndarray, out: Path, accent: str, shade: str
                           "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)],
                          stdin=subprocess.PIPE)
     T = len(pos)
+    tm = head_metrics(src.keyed(100))
+    cache: dict = {}
+
+    def align_to_talk(layer, key_):
+        """3x3 that puts a reaction's head where the talker's head is (same size, same top, same centre)."""
+        if key_ not in cache:
+            top_r, w_r, cx_r = head_metrics(layer)
+            s_ = TALK_SCALE * tm[1] / w_r
+            cx_t = 540 + (tm[2] - 540) * TALK_SCALE
+            top_t = 1080 - (1080 - tm[0]) * TALK_SCALE
+            cache[key_] = np.array([[s_, 0, cx_t - s_ * cx_r], [0, s_, top_t - s_ * top_r], [0, 0, 1]], np.float64)
+        return cache[key_]
+
+    def pop(sc, rot, dx):
+        M = np.vstack([cv2.getRotationMatrix2D((SIZE / 2, SIZE), rot, sc), [0, 0, 1]])
+        M[0, 2] += dx
+        return M
+
+    FADE = .12
     for j in range(T):
         t = j / FPS
-        layer = src.frame_at(pos[j])
         flash, dx = 0.0, 0.0
-        act = next((x for x in impacts if x["t"] <= t < x["t"] + x["d"]), None)
-        # a gentle breathing scale so the stills between sentences are never frozen
-        sc = (1.0 + .005 * np.sin(2 * np.pi * t / 3.4)) * TALK_SCALE
-        rot = 0.0
-        if act:
-            sc /= TALK_SCALE
-            if act.get("video"):   # the reaction plays as video: no pop, the flash and shake still mark the cut
-                layer = vids[act["video"]].frame(int((t - act["t"]) * FPS))
-            else:
-                layer = imgs[act["image"]]
-                u = (t - act["t"]) / .32
-                sc *= .86 + .14 * _back_out(u)
-                rot = -3.0 * (1 - min(_back_out(u), 1))
+        act = next((x for x in impacts if x["t"] - 1e-6 <= t < x["t"] + x["d"]), None)
         for x in impacts:   # flash and shake live a little longer than the pop
             dt = t - x["t"]
             if 0 <= dt < .34:
                 dx += -14 * np.exp(-6 * dt) * np.cos(2 * np.pi * 2.2 * dt)
             if 0 <= dt < .22:
                 flash = max(flash, .55 * (1 - dt / .22) ** 2)
-        M = cv2.getRotationMatrix2D((SIZE / 2, SIZE), rot, sc)
-        M[0, 2] += dx
-        layer = cv2.warpAffine(layer, M, (SIZE, SIZE), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+        breath = 1.0 + .005 * np.sin(2 * np.pi * t / 3.4)   # the stills between sentences are never frozen
+        Tt = np.array([[TALK_SCALE, 0, 540 * (1 - TALK_SCALE)], [0, TALK_SCALE, 1080 * (1 - TALK_SCALE)], [0, 0, 1]])
+        talk = cv2.warpAffine(src.frame_at(pos[j]), (pop(breath, 0, dx) @ Tt)[:2], (SIZE, SIZE), flags=cv2.INTER_LINEAR)
+        layer = talk
+        if act:
+            u = t - act["t"]
+            w = min(1.0, u / FADE, (act["t"] + act["d"] - t) / FADE)
+            w = float(np.clip(w, 0, 1)); w = w * w * (3 - 2 * w)
+            if act.get("video"):   # plays as video, aligned to the talker; cross-fades in and out
+                raw = vids[act["video"]].frame(int(u * FPS)); psc, rot = 1.0, 0.0
+                A = align_to_talk(vids[act["video"]].frame(0), act["video"])
+            else:
+                raw = imgs[act["image"]]; q = u / .32
+                psc, rot = .9 + .1 * _back_out(q), -3.0 * (1 - min(_back_out(q), 1))
+                A = align_to_talk(raw, act["image"])
+            react = cv2.warpAffine(raw, (pop(psc * breath, rot, dx) @ A)[:2], (SIZE, SIZE), flags=cv2.INTER_LINEAR)
+            layer = talk * (1 - w) + react * w
         frame = bg.copy()
         reg = frame[top:top + SIZE]
         reg[:] = layer[..., :3] + reg * (1 - layer[..., 3:4])
