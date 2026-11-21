@@ -25,7 +25,7 @@ slides:
 - say: Lighthouse measured it, so I fixed numbers, not feelings.
   head: "*Measure*, then fix"
   tag: LIGHTHOUSE
-  card: {type: gauge, file: Lighthouse, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: Live site, 21 Nov 2026}
+  card: {type: gauge, file: PageSpeed Insights, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: Live site, 21 Nov 2026}
 - say: And my own phone found every real bug, because I used the site like a visitor.
   head: Use it like a *visitor*
   tag: THE BUGS

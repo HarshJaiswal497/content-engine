@@ -6,7 +6,7 @@ pillar: lessons
 text: |
   AI built my entire portfolio, but I made three calls it never touched: the facts, the rules and the taste.
 
-  The result: 100 on desktop and 82 on phones (Lighthouse, 21 Nov), and it all started with a process I now follow on every project.
+  The result: 100 on desktop and 82 on phones (PageSpeed Insights, 21 Nov), and it all started with a process I now follow on every project.
 
   Comment WORKFLOW and I'll send you the exact 8-phase process, with the prompts.
 
@@ -34,7 +34,7 @@ slides:
   tag: PROOF
   react: cheer
   react_at: hundred
-  card: {type: gauge, file: Lighthouse · live site · 21 Nov 2026, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: 'Accessibility, best practices, SEO: 100'}
+  card: {type: gauge, file: PageSpeed Insights · live site · 21 Nov 2026, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: 'Accessibility, best practices, SEO: 100'}
 - say: Comment WORKFLOW, and I'll send you the exact process.
   head: Get the *workflow*
   tag: FREE

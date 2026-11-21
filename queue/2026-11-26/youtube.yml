@@ -7,9 +7,9 @@ video:
   kind: same_as
   post: instagram-reel
 youtube:
-  title: My site scored 53 on phones. 3 fixes took it to 82
+  title: My site scored 53 on phones. One push got it to 82
   description: |
-    A smaller main script, lighter videos and smaller images. The fixes with the prompts are a free guide: ask in the comments of the Instagram Reel.
+    A scrolling marquee that measured itself every frame, a star that spun off screen, and a 3D carousel that loaded too early. The fixes with the prompts are a free guide: ask in the comments of the Instagram Reel.
     #Shorts #webperformance #lighthouse
   tags:
   - lighthouse
