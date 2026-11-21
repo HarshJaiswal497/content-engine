@@ -180,7 +180,7 @@ class Post:
                 relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "teach":   # a changed template, mascot clip or walkthrough re-renders
             files = [f for d in (ROOT / "assets" / "characters", ROOT / "hf" / "teach") for f in sorted(d.rglob("*")) if f.is_file() and f.suffix in (".png", ".html", ".css", ".js")]
-            relevant["_teach"] = hashlib.sha256(b"".join(f.read_bytes() for f in files)).hexdigest()[:8]
+            relevant["_teach"] = hashlib.sha256(b"".join(f.read_bytes() for f in files) + (ROOT / "engine" / "render" / "teach.py").read_bytes()).hexdigest()[:8]
             from .render.tts import voice_fingerprint
             relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):

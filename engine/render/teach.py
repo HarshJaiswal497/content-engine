@@ -29,12 +29,13 @@ def _typed(text: str, cls: str = "") -> str:
 
 
 def _head_html(s: str) -> str:
+    """Words as spans; *several words* share one highlight pill."""
     out = []
-    for tok in s.split():
-        if tok.startswith("*"):
-            out.append(f'<span class="hl">{html.escape(tok.strip("*"))}</span>')
+    for m in re.finditer(r"\*(.+?)\*([^\s*]*)|(\S+)", s):
+        if m.group(1) is not None:
+            out.append(f'<span class="hl">{html.escape(m.group(1))}</span>' + (f'<span class="hw">{html.escape(m.group(2))}</span>' if m.group(2) else ""))
         else:
-            out.append(f'<span class="hw">{html.escape(tok)}</span>')
+            out.append(f'<span class="hw">{html.escape(m.group(3))}</span>')
     return " ".join(out)
 
 
