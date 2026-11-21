@@ -60,4 +60,6 @@ if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for n, p in POSES.items():
         (OUT / f"{n}.svg").write_text(build(p))
+        for k, m in enumerate(S.LIP):    # talking frames for lip-sync
+            (OUT / f"{n}-m{k}.svg").write_text(build({**p, "mouth": m}))
     print("wrote", len(POSES), "poses to", OUT)

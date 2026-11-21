@@ -27,6 +27,7 @@ def mouth(kind, cx=150, cy=196):
         "smile": f'<path d="M{cx-14} {cy-4} Q{cx} {cy+14} {cx+14} {cy-4}" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
         "open": f'<path d="M{cx-17} {cy-6} Q{cx} {cy+30} {cx+17} {cy-6} Z" fill="{INK}"/><path d="M{cx-9} {cy+8} Q{cx} {cy+18} {cx+9} {cy+8} Z" fill="{BLUSH}"/>',
         "o": f'<ellipse cx="{cx}" cy="{cy+2}" rx="9" ry="12" fill="{INK}"/>',
+        "mid": f'<ellipse cx="{cx}" cy="{cy+1}" rx="12" ry="9" fill="{INK}"/>',
         "sad": f'<path d="M{cx-12} {cy+8} Q{cx} {cy-6} {cx+12} {cy+8}" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
         "flat": f'<path d="M{cx-10} {cy} L{cx+10} {cy}" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>',
     }
@@ -57,6 +58,9 @@ POSES = {
 }
 
 
+LIP = ["tiny", "mid", "open"]
+
+
 def build(name, p):
     eyes = p["eyes"]
     if isinstance(eyes, str):
@@ -74,6 +78,8 @@ if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for n, p in POSES.items():
         (OUT / f"{n}.svg").write_text(build(n, p))
+        for k, m in enumerate(LIP):      # talking frames for lip-sync: shut, half open, wide open
+            (OUT / f"{n}-m{k}.svg").write_text(build(n, {**p, "mouth": m}))
     from PIL import Image  # noqa
     import io
     try:
