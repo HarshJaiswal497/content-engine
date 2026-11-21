@@ -475,13 +475,7 @@ def render_skit(beats: list[dict], app: str, out: Path, work: Path, title: str |
 
 MASCOT_POSES = {"slip": ["idle", "happy", "wave", "surprised", "think", "write", "sleepy", "sad", "peek", "cheer"],
                 "bo": ["idle", "happy", "wave", "flex", "surprised", "think", "tick", "sleepy", "sad", "cheer"],
-                "harsh-cartoon": ["idle", "happy", "wave", "surprised", "think", "sad", "cheer"],
-                "harsh": ["idle", "happy", "wave", "think", "cheer", "front", "neutral", "point_right"]}   # the real mascot
-
-# the real mascot talks in aligned frames (tools/build_talk.py): a beat's pose picks which of its talking sets is used
-REAL_TALK = {"idle": "front", "think": "neutral", "wave": "happy", "cheer": "happy", "happy": "happy",
-             "front": "front", "neutral": "neutral", "point_right": "point_right"}
-REAL_VISEMES = 7
+                "harsh": ["idle", "happy", "wave", "think", "cheer"]}   # the real mascot
 
 
 IMPACT_GROUPS = ("expressions", "face", "gestures")
@@ -496,11 +490,6 @@ def impact_file(mascot: str, name: str) -> Path | None:
         if f.exists():
             return f
     return None
-
-
-def talker(mascot: str | None, pose: str) -> str:
-    """The name of the image set a beat's pose shows (the real mascot maps several poses onto its few talking sets)."""
-    return REAL_TALK.get(pose, "front") if mascot == "harsh" else pose
 
 
 def _story_words(text: str) -> list[tuple[str, bool]]:
@@ -545,11 +534,6 @@ def _cap_accent(theme) -> str:
 # the mascot as the presenter: sits in the band (stack) or fills the screen (full); no speaker clip, no scrims
 MASCOT_LAY = {"stack": {"mx": 319, "my": 1090, "ms": .8, "sc": 0, "cap": 1528},
               "full": {"mx": 319, "my": 735, "ms": 1.85, "sc": 0, "cap": 1560}}
-
-
-# the real mascot is a square cut-out of head and torso: the bust sits in the band, large and cropped on the full beats
-MASCOT_LAY_REAL = {"stack": {"mx": 319, "my": 1170, "ms": 1.086, "sc": 0, "cap": 1005},
-                   "full": {"mx": 319, "my": 1179, "ms": 2.443, "sc": 0, "cap": 640}}
 
 
 def _shade(hexcolor: str, k: float) -> str:
@@ -648,20 +632,13 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
         pose = b.get("pose") or ("wave" if i == 0 else "happy" if i == n - 1 else "think" if i % 2 else "idle")
         if mascot and mascot != "none" and pose not in MASCOT_POSES.get(mascot, []):
             raise ValueError(f"beat {i+1}: {mascot} has no pose '{pose}' ({', '.join(MASCOT_POSES[mascot])})")
-        pose = talker(mascot, pose)
         d["mp"] = pose
         used.append(pose); data.append(d)
 
     mascot_html, poses = "", []
     if mascot and mascot != "none":
-        poses = sorted(set(used) | ({"front"} if mascot == "harsh" else {"idle"}))
+        poses = sorted(set(used) | ({"idle"}))
         for k, p in enumerate(poses):
-            if presenter and mascot == "harsh":   # real mascot: seven mouth frames per set
-                for m in range(REAL_VISEMES):
-                    shutil.copy(CHARS / mascot / "talk" / f"{p}-v{m}.webp", out_dir / "assets" / f"mascot-{p}-m{m}.webp")
-                    mascot_html += (f'      <img{" class=first" if (k == 0 and m == 0) else ""} id="mp{p}m{m}" '
-                                    f'src="assets/mascot-{p}-m{m}.webp" alt="">\n')
-                continue
             if presenter:   # talking frames: shut / half / open mouth, swapped by the voice loudness
                 for m in range(3):
                     shutil.copy(CHARS / mascot / f"{p}-m{m}.png", out_dir / "assets" / f"mascot-{p}-m{m}.png")
@@ -698,7 +675,7 @@ def build_story_project(beats: list[dict], app: str, out_dir: Path, mascot: str 
               "MODE": "m-mascot" if presenter else ("m-spk" if speaker else "m-nospk"), "SPK_INNER": spk_inner,
               "MAS_W": 442 if presenter else 300, "M_INK": theme.on_accent, "M_BG": theme.accent,
               "DATA": json.dumps({"beats": data, "total": total, "poses": poses, "caps": chunks, "lipev": lip or [], "imp": [[x["t"], x["d"], "ip" + x["name"]] for x in imp],
-                                  "lay": lay if lay is not None else ((MASCOT_LAY_REAL if mascot == "harsh" else MASCOT_LAY) if presenter else {})})}
+                                  "lay": lay if lay is not None else (MASCOT_LAY if presenter else {})})}
     if presenter:   # the band and the full screen are a glow of the app colour behind the mascot
         tokens["BAND_BG"] = f"radial-gradient(circle at 50% 58%, {theme.accent} 0%, {_shade(theme.accent, .55)} 100%)"
     (out_dir / "compositions" / "story.html").write_text(_fill((HF / "story" / "templates" / "main.html").read_text(), tokens))
