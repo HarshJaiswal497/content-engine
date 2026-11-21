@@ -1,0 +1,27 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-28T19:30:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: |
+  The first 2 days of Setalytix with me and a few friends: 14 workouts, 244 sets, about 39 tonnes lifted. Small numbers, real workouts.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #buildinpublic #indiedev #gymlife #strengthtraining
+slides:
+- type: cover
+  kicker: Setalytix, first 2 days
+  title: 'First 2 days with *friends*'
+- type: big
+  title: '*14*'
+  body: workouts logged
+- type: big
+  title: '*244*'
+  body: sets saved
+- type: big
+  title: '*~39 tonnes*'
+  body: lifted in total
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

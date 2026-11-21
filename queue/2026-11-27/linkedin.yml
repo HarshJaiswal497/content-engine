@@ -1,0 +1,17 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-27T09:15:00+05:30'
+app: slipnote
+pillar: build-in-public
+text: |
+  I called my own design "boring", so I rebuilt it.
+
+  In Slipnote, the first version of reactions was a plain row of icons. It worked, but it looked like every other app. I wanted reacting to a friend's handwritten note to feel like something, so reactions are now a sheet of peel-off stickers.
+
+  It's a small example of how I work on Slipnote. I use the build. I say honestly what feels dead. I redo it before adding more features. The same thing happened with the whole app. The first version "lacked motion and interaction", so every screen was redesigned before anything else was built.
+
+  Slipnote is still in development. The waitlist link is below.
+
+  The waitlist is open: https://harshjaiswal497.github.io/content-engine/slipnote/
+
+  #buildinpublic #flutter #appdesign

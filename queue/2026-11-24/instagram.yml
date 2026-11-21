@@ -1,0 +1,34 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-24T19:30:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: |
+  Update gone wrong mid-workout? A phone can keep a half-updated copy of an app right after a deploy. Setalytix notices when its files fail to load, clears the cached files and reloads once. That's it. Workout data and sign-in aren't touched, and after 10 seconds you get a Refresh button.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #pwa #buildinpublic #indiedev #webdev
+slides:
+- type: cover
+  kicker: Under the hood
+  title: 'An update goes wrong *mid-gym*. Now what?'
+- type: point
+  number: 1
+  title: The *problem*
+  body: A phone can keep a half-updated copy of the app right after a deploy.
+- type: point
+  number: 2
+  title: The *safety net*
+  body: If the app files fail to load, it clears the cached files and reloads once by itself.
+- type: point
+  number: 3
+  title: Your *data* stays
+  body: Workouts and sign-in are not touched.
+- type: point
+  number: 4
+  title: Still stuck?
+  body: After 10 seconds it says "Setalytix did not start" and shows a Refresh button.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

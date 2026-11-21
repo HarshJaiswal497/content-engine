@@ -1,0 +1,18 @@
+platform: linkedin
+format: video
+scheduled_at: '2026-11-24T09:15:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  If you leave a workout open overnight, Setalytix won't call it a 14-hour session.
+
+  It's a small rule with a clear reason. A workout left open for most of a day was forgotten, not trained, so showing it as a real length would make your stats wrong. The app caps the length at 8 hours.
+
+  I think a lot of what makes a logging app trustworthy is the cases nobody tests on purpose: you fall asleep, you forget to tap done, the phone dies. The numbers should still mean what they say.
+
+  Setalytix (free): https://app.setalytix.in
+
+  #buildinpublic #pwa #ux
+video:
+  kind: same_as
+  post: instagram-reel

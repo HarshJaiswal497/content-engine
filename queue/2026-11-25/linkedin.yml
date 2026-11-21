@@ -1,0 +1,15 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-25T09:15:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  A public key and a secret key look the same in your code. They are not the same, and mixing them up cost me a day.
+
+  On my portfolio, new visitor slips never appeared live. The cause: I had saved a public bot-check key as a secret. Secrets aren't available at build time, so the live site couldn't see it. One file fixed it. Public key in a committed config. Real secrets on the server.
+
+  The rule I use now: if a key is made to sit in the page and is locked to my domain, it's public. If anyone who reads the page source could abuse it, it never goes in the page.
+
+  When AI writes the code, this matters more. It will put a key wherever the example does. Checking is my job. 2 minutes in view-source is enough.
+
+  #aicoding #webdev #security

@@ -1,0 +1,38 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-26T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Slipnote has 5 drawing tools: pen, marker, highlighter, pencil and an eraser. The eraser takes off ink but never the paper or your photo. A stroke stabiliser makes handwriting neat. No typed text. On purpose.
+
+  Slipnote is in development. The waitlist link is in my bio.
+
+  #slipnote #handwrittennotes #widgetapp #indiedev #buildinpublic #flutter #appdesign #drawingapp
+slides:
+- type: cover
+  kicker: Slipnote
+  title: 'Real *drawing tools*, no typing'
+- type: point
+  number: 1
+  title: '*Five tools*'
+  body: Pen, marker, highlighter, pencil and eraser.
+  screen: composer-tools
+  focus: tools
+- type: point
+  number: 2
+  title: An eraser that is *careful*
+  body: It erases ink, never the paper or your photo.
+- type: point
+  number: 3
+  title: A *stroke stabiliser*
+  body: Makes handwriting neat.
+  screen: composer-tools
+  focus: ink-and-size
+- type: point
+  number: 4
+  title: No typed text, *on purpose*
+  body: Every note looks like your hand.
+- type: cta
+  title: Join the *waitlist*
+  body: Link in bio

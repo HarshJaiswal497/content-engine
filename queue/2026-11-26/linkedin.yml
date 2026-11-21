@@ -1,0 +1,38 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-26T09:15:00+05:30'
+app: personal
+pillar: engineering-deep-dive
+text: |
+  My portfolio scored 53 on phones in Lighthouse. After three fixes, the live site scores 82 on phones and 100 on desktop.
+
+  Same design, less to download. The three things I cut, in order: the main script (767 KB down to 165 KB, with the 3D carousel loading only when needed), the project videos (phones now get 3.4 MB versions) and the images (1.1 MB down to 0.5 MB).
+
+  I measured first, fixed one thing at a time and measured again. On a phone, the weight is the speed.
+
+  https://portfolio-harsh-jaiswal.pages.dev
+
+  #webperformance #lighthouse #webdev
+slides:
+- type: cover
+  kicker: Lighthouse, live site
+  title: '*53 to 82* on phones, in 3 fixes'
+- type: point
+  number: 1
+  title: Split the *main script*
+  body: 767 KB down to 165 KB. The 3D carousel loads only when someone needs it.
+- type: point
+  number: 2
+  title: '*Lighter videos* for phones'
+  body: Desktop videos went from 10.3 MB to 6.5 MB. Phones get their own 3.4 MB versions.
+- type: point
+  number: 3
+  title: '*Smaller images*'
+  body: 1.1 MB down to 0.5 MB, same look.
+- type: point
+  number: 4
+  title: Measure, *then* fix
+  body: One change at a time, with Lighthouse on the live site in between.
+- type: cta
+  title: See the *site*
+  body: portfolio-harsh-jaiswal.pages.dev

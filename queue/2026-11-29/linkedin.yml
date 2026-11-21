@@ -1,0 +1,36 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-29T09:15:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  Three things I'd do differently on my portfolio, and one I'd do the same.
+
+  Differently: test on a real phone from day one. Set up Git and the live deploy before building anything. Settle how long the intro runs early. Every serious bug I hit came from using the site like a visitor, on my own phone and laptop, not from a test.
+
+  The same: decide the facts, the rules and the taste myself, and let AI do the typing.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  https://portfolio-harsh-jaiswal.pages.dev
+
+  #buildinpublic #aicoding #webdev
+slides:
+- type: cover
+  kicker: Looking back
+  title: '*3 things* I''d do differently'
+- type: point
+  number: 1
+  title: Test on a *real phone*
+  body: From day one. Every serious bug came from using the site like a visitor.
+- type: point
+  number: 2
+  title: '*Deploy* an empty page first'
+  body: Set up Git and the live site before building, so every change is visible.
+- type: point
+  number: 3
+  title: Settle the *intro* early
+  body: How long it plays changes everything after it, including the phone score.
+- type: cta
+  title: What I'd keep
+  body: I decide. AI types.
