@@ -1,0 +1,41 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-29T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  Six things built my portfolio, and only one is AI.
+
+  Claude wrote the code. GitHub held every release, and Cloudflare put each push live without me touching a server. Lighthouse gave me 2 numbers to chase, 100 on desktop and 82 on phones. And my own phone found every real bug.
+
+  Comment TOOLS and I'll send you the full list, and what each one does.
+
+  #buildwithai #vibecoding #webdev #aicoding #devtools #buildinpublic #indiedev #claude
+slides:
+- say: Six things built my portfolio, and only one of them is AI.
+  head: Only *one* is AI
+  tag: THE STACK
+  react: shocked
+  react_at: Six
+  card: {type: code, file: tools.txt, code: "[[good:Claude]]  writes the code\n[[good:GitHub]]  holds every release\n[[good:Cloudflare]]  puts it live\n[[good:Lighthouse]]  measures it", pill: THE TOOLS}
+- say: Claude wrote the code. Every push to GitHub went live by itself on Cloudflare.
+  head: Push, and it's *live*
+  tag: THE FLOW
+  card: {type: flow, file: how it ships, nodes: [{title: Claude, sub: writes code}, {title: GitHub, sub: every release}, {title: Cloudflare, sub: goes live}], note: Every push deployed itself.}
+- say: Lighthouse measured it, so I fixed numbers, not feelings.
+  head: "*Measure*, then fix"
+  tag: LIGHTHOUSE
+  card: {type: gauge, file: Lighthouse, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: Live site, 21 Nov 2026}
+- say: And my own phone found every real bug, because I used the site like a visitor.
+  head: Use it like a *visitor*
+  tag: THE BUGS
+  card: {type: code, file: bugs.txt, code: "found on my phone:\n[[bad:cut-out flung off screen]]\n[[bad:page scattered on reload]]", sub: Tests didn't find these. Using it did.}
+- say: Comment TOOLS, and I'll send you the full list.
+  head: Get the *list*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: TOOLS, reply: 'Sent ✓ The tools list'}
+video:
+  kind: teach
+  tone: story

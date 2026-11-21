@@ -1,0 +1,37 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-24T12:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: |
+  Left your workout open overnight? Setalytix won't call it a 14-hour session. It caps the length at 8 hours, so your stats stay honest even when you forget to tap done.
+
+  Free at app.setalytix.in, link in bio.
+
+  #setalytix #gymtracker #workoutapp #gymlife #progressiveoverload #buildinpublic #indiedev
+slides:
+- type: cover
+  tag: Small detail
+  kicker: Small detail
+  title: Workout open *overnight?*
+  say: Left your workout open overnight? It won't count as fourteen hours,
+  react: shocked
+  react_at: overnight
+- type: point
+  tag: The rule
+  title: Capped at *8 hours*
+  big: 8 H MAX
+  say: Anything left open for most of a day was forgotten, not trained, so the app caps the length at eight hours.
+  react: thinking
+  react_at: forgotten
+- type: point
+  tag: Why
+  title: Your stats stay *honest*
+  say: So your workout times stay honest, even when you forget to tap done.
+  react: cheer
+  react_at: honest
+video:
+  kind: story
+  speaker: mascot
+  mascot: harsh
+  tone: story

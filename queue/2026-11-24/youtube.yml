@@ -1,0 +1,19 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-24T17:45:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Workout left open overnight? It won't log 14 hours
+  description: |
+    Setalytix caps a forgotten workout at 8 hours so your stats stay honest. Free: https://app.setalytix.in
+    #Shorts #gym #workout
+  tags:
+  - setalytix
+  - workout tracker
+  - gym app
+  - workout log
+  - strength training

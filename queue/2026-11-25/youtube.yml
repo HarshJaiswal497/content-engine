@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-25T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Stop putting secret keys in your AI app
+  description: |
+    Public keys are made to sit in your page. Secret keys must stay on the server. The checklist is a free guide: ask for it in the comments of the Instagram Reel.
+    #Shorts #buildwithai #webdev
+  tags:
+  - api keys
+  - secret keys
+  - build with ai
+  - vibe coding
+  - web security basics
+  - environment variables

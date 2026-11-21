@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-28T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Write the rules before the code (AI will invent them)
+  description: |
+    Decide the look, the accent and the words you'll use, and list what you rejected. The spec and rules template is a free guide: ask in the comments of the Instagram Reel.
+    #Shorts #buildwithai #vibecoding
+  tags:
+  - build with ai
+  - vibe coding
+  - ai coding
+  - spec
+  - prompt engineering
+  - claude

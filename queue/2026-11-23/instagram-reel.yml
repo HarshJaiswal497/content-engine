@@ -1,0 +1,46 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-23T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  AI built my entire portfolio, but I made three calls it never touched: the facts, the rules and the taste.
+
+  The result: 100 on desktop and 82 on phones (Lighthouse, 21 Nov), and it all started with a process I now follow on every project.
+
+  Comment WORKFLOW and I'll send you the exact 8-phase process, with the prompts.
+
+  #buildwithai #vibecoding #portfolio #webdev #aicoding #buildinpublic #indiedev #claude
+slides:
+- say: AI built my entire portfolio, but I made three calls it never touched.
+  head: AI built it. *I* decided.
+  tag: THE HOOK
+  react: cheer
+  react_at: portfolio
+  card: {type: video, src: inbox/2026-11-23-portfolio-walkthrough.mp4, span: 4, cuts: [0, 6, 12, 18], chips: [{label: projects, to: 5, beat: 1, at: 0.9}, {label: sections, to: 6, beat: 1, at: 1.5}]}
+- say: The facts. Every project and every number came from me.
+  head: The *facts*
+  tag: 1 OF 3
+- say: The rules. I wrote them before a single line of code.
+  head: The *rules*
+  tag: 2 OF 3
+- say: And the taste. I asked for previews, and rejected fast.
+  head: The *taste*
+  tag: 3 OF 3
+  react: shrug
+  react_at: rejected
+- say: The result? A hundred on desktop, and eighty-two on phones.
+  head: The *result*
+  tag: PROOF
+  react: cheer
+  react_at: hundred
+  card: {type: gauge, file: Lighthouse · live site · 21 Nov 2026, items: [{label: Desktop, value: 100, color: '#3ddc97'}, {label: Phones, value: 82, color: '#ffb347'}], note: 'Accessibility, best practices, SEO: 100'}
+- say: Comment WORKFLOW, and I'll send you the exact process.
+  head: Get the *workflow*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: WORKFLOW, reply: 'Sent ✓ My Portfolio-Building AI Workflow'}
+video:
+  kind: teach
+  tone: story

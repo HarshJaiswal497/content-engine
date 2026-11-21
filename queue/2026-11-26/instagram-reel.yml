@@ -1,0 +1,41 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-26T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  My portfolio scored 53 on phones. Three fixes took it to 82 (Lighthouse, live site).
+
+  Same site, same design. I cut the weight phones had to download: a smaller main script, lighter videos and smaller images, in that order.
+
+  Comment SPEED and I'll send you the 3 fixes with the prompts.
+
+  #webperformance #lighthouse #buildwithai #vibecoding #webdev #aicoding #buildinpublic #indiedev
+slides:
+- say: My portfolio scored fifty-three on phones. Three fixes took it to eighty-two.
+  head: "*53* on phones"
+  tag: THE PROBLEM
+  react: shocked
+  react_at: fifty-three
+  card: {type: gauge, file: 'Lighthouse · phones', items: [{label: Before, value: 53, color: '#ff5a4a'}, {label: After, value: 82, color: '#3ddc97'}], note: Same site. Same design.}
+- say: First, the main script. I split it so phones download less up front.
+  head: "Fix 1: the *script*"
+  tag: FIX 1
+  card: {type: code, file: main script, code: "before  [[bad:767 KB]]\nafter   [[good:165 KB]]", pill: SPLIT IT, sub: The 3D carousel loads only when needed.}
+- say: Second, the videos. Phones now get their own smaller files.
+  head: "Fix 2: the *videos*"
+  tag: FIX 2
+  card: {type: code, file: project videos, code: "desktop  [[bad:10.3 MB]]\nphones   [[good:3.4 MB]]", pill: LIGHTER FILES, sub: A smaller version for small screens.}
+- say: Third, the images. Smaller files, same look.
+  head: "Fix 3: the *images*"
+  tag: FIX 3
+  card: {type: code, file: images, code: "before  [[bad:1.1 MB]]\nafter   [[good:0.5 MB]]", pill: COMPRESS, sub: Same look, half the weight.}
+- say: Comment SPEED, and I'll send you the three fixes, with the prompts.
+  head: Get the *3 fixes*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: SPEED, reply: 'Sent ✓ The 3 fixes, with the prompts'}
+video:
+  kind: teach
+  tone: story

@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-23T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: I let AI build my portfolio. 3 things it never decided
+  description: |
+    The facts, the rules and the taste stayed mine. The workflow is a free guide; ask for it in the comments of the Instagram Reel, or on my channel page.
+    #Shorts #buildwithai #portfolio
+  tags:
+  - build with ai
+  - ai portfolio
+  - vibe coding
+  - portfolio website
+  - claude
+  - web development

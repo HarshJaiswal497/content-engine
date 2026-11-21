@@ -1,0 +1,21 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-23T09:15:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  I rebuilt my portfolio from scratch in a week, and Claude wrote all of the code.
+
+  What I did not hand over: the facts, the rules, and the taste.
+
+  The facts: every project description and every number came from me. The rules: I wrote down my decisions before any code existed (dark base, one accent colour, "Products built" instead of "shipped", a status tag on every project). The taste: I asked for previews, rejected most of them, and said why.
+
+  Using it like a visitor found every serious bug. A newly signed slip never appeared because I had saved a public key as a secret. Dragging a cut-out on my phone flung it off screen. Reloading mid-page scattered everything. None of that showed up until I used the site on a real phone.
+
+  Lighthouse on the live site (21 Nov): 100 on desktop, 82 on phones, 100 for accessibility, best practices and SEO.
+
+  I'm open to software developer, backend and AI-native engineering roles. If your team ships like this, I'd love to talk.
+
+  https://portfolio-harsh-jaiswal.pages.dev
+
+  #buildinpublic #webdev #ai

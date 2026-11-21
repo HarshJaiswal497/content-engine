@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-27T17:45:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Reactions you peel off like stickers (Slipnote)
+  description: |
+    Slipnote is a widget app for handwritten notes between friends, family and couples. In development; waitlist link on my channel page.
+    #Shorts #indiedev #appdesign
+  tags:
+  - slipnote
+  - widget app
+  - handwritten notes
+  - indie dev
+  - app design
+  - flutter
