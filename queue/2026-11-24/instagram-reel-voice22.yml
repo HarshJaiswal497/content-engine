@@ -1,0 +1,27 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-24T13:30:00+05:30'
+app: personal
+pillar: personal
+text: voice 22 test
+slides:
+- type: point
+  title: Voice
+  body: script
+  say: Tap the tick, and the rest timer starts itself.
+- type: point
+  title: Voice
+  body: script
+  say: One tap saves the set and starts the timer. The default is ninety seconds,
+    and you can set it per exercise.
+- type: point
+  title: Voice
+  body: script
+  say: Tapped it by mistake? Tap it again to undo.
+- type: point
+  title: Voice
+  body: script
+  say: It's called Setalytix, and it's free at app.setalytix.in.
+video:
+  kind: voice
+  tone: calm
