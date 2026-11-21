@@ -1,16 +1,14 @@
-"""A talking clip of the real mascot, re-timed to any voice.
+"""The talking mascot clip for story Reels.
 
-The source is one continuous green-screen video of the mascot talking (fast, 16.8 s). Cutting between stills makes the
-head and ears jitter, so instead the *video* is played along a path through its own frames, chosen so the mouth opening
-follows the loudness of our voice: slower and smoother than the source, head and neck moving as one piece.
+The source is one calm green-screen video of the mascot talking (assets/characters/harsh/talk_source). It is not lip-synced:
+it plays at its own speed while the voice is on and settles to a shut mouth in pauses (plan_natural), which looks calm and
+keeps the head, neck and ears in one piece. Reaction videos (assets/characters/harsh/reactions) are matched to the
+talker's head size and place and cross-faded in on cue; reaction stills pop in instead.
 
-  path   dynamic programme over (source position in quarter frames, speed): matches mouth openness to the voice,
-         penalises speed changes, so the clip plays at 0..1.25x with no jumps.
-  frames in-between positions are rendered with optical flow, not cross-fades.
-  clip   1080x1920: the mascot over a glow of the app colour, reaction images (impact frames) popped in on cue.
+  clip   1080x1920: the mascot over a glow of the app colour, with flash and shake on each reaction.
 """
 from __future__ import annotations
-import subprocess, tempfile
+import subprocess
 from pathlib import Path
 import cv2
 import numpy as np
@@ -23,9 +21,7 @@ SIZE = 1080
 CROP = "crop=928:928:368:0,scale=1080:1080"
 CROP_X = 420           # the 1920x1080 reaction videos: a 1080 square from x=420
 ROI = (460, 560, 640, 720)
-CALM_BOX = (420, 540, 690, 780)
 TALK_SCALE = .62       # the calm source is a close-up; bring its head to the size of the reaction videos
-Q = 4                      # quarter-frame positions
 FPS = 30
 
 
@@ -48,11 +44,7 @@ class Source:
         self.n = self.raw.stat().st_size // (SIZE * SIZE * 3)
         self.mm = np.memmap(self.raw, np.uint8, "r", shape=(self.n, SIZE, SIZE, 3))
         self._keyed: dict[int, np.ndarray] = {}
-        self._flow: dict[int, np.ndarray] = {}
         self.mouth = self._mouth_openness()
-        self.calm = None
-        self.sharp = True      # use whole source frames (nearest): in-between frames from optical flow soften the lips
-        self.dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_FAST)
 
     def _mouth_openness(self) -> np.ndarray:
         x0, y0, x1, y1 = ROI
@@ -67,18 +59,6 @@ class Source:
         lo, hi = np.percentile(m, 5), np.percentile(m, 95)
         return np.clip((m - lo) / (hi - lo + 1e-9), 0, 1)
 
-    def calm_mouth(self, radius: int = 3, box=CALM_BOX, feather: int = 28) -> None:
-        """The source mouth chatters at ~3 Hz with big swings. Inside the mouth box, average each frame with its neighbours
-        (±radius) so the lips move less and more gently; the rest of the head stays sharp."""
-        from scipy.ndimage import uniform_filter1d, gaussian_filter
-        x0, y0, x1, y1 = box
-        crop = np.asarray(self.mm[:, y0:y1, x0:x1]).astype(np.float32)
-        self.calm = uniform_filter1d(crop, size=2 * radius + 1, axis=0, mode="nearest") / 255.0
-        m = np.zeros((y1 - y0, x1 - x0), np.float32)
-        m[feather:-feather, feather:-feather] = 1
-        self.calm_mask = gaussian_filter(m, feather / 2.2)[..., None]
-        self.calm_box = box
-
     def keyed(self, i: int) -> np.ndarray:
         i = int(np.clip(i, 0, self.n - 1))
         if i not in self._keyed:
@@ -87,42 +67,9 @@ class Source:
             self._keyed[i] = key(np.asarray(self.mm[i]))
         return self._keyed[i]
 
-    def _flow_between(self, i: int) -> np.ndarray:
-        if i not in self._flow:
-            if len(self._flow) > 6:
-                self._flow.pop(next(iter(self._flow)))
-            g = lambda k: cv2.resize(cv2.cvtColor(np.asarray(self.mm[k]), cv2.COLOR_RGB2GRAY), (SIZE // 2, SIZE // 2), interpolation=cv2.INTER_AREA)
-            f = self.dis.calc(g(i), g(i + 1), None)
-            self._flow[i] = cv2.resize(f, (SIZE, SIZE)) * 2.0
-        return self._flow[i]
-
     def frame_at(self, q: float) -> np.ndarray:
-        """The source at fractional frame q (optical-flow interpolation between neighbours)."""
-        q = float(np.clip(q, 0, self.n - 1))
-        if self.sharp:
-            q = float(round(q))
-        i = int(q)
-        a = q - i
-        if a < 1e-3 or i >= self.n - 1:
-            return self._calmed(self.keyed(i), q)
-        F = self._flow_between(i)
-        gx, gy = np.meshgrid(np.arange(SIZE, dtype=np.float32), np.arange(SIZE, dtype=np.float32))
-        A, B = self.keyed(i), self.keyed(i + 1)
-        wa = cv2.remap(A, gx - a * F[..., 0], gy - a * F[..., 1], cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-        wb = cv2.remap(B, gx + (1 - a) * F[..., 0], gy + (1 - a) * F[..., 1], cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-        return self._calmed((1 - a) * wa + a * wb, q)
-
-    def _calmed(self, rgba: np.ndarray, q: float) -> np.ndarray:
-        if self.calm is None:
-            return rgba
-        i = int(np.clip(q, 0, self.n - 2)); a = float(np.clip(q - i, 0, 1))
-        c = (1 - a) * self.calm[i] + a * self.calm[i + 1]
-        x0, y0, x1, y1 = self.calm_box
-        out = rgba.copy()
-        reg = out[y0:y1, x0:x1]
-        al = reg[..., 3:4]
-        reg[..., :3] = reg[..., :3] * (1 - self.calm_mask) + c * al * self.calm_mask
-        return out
+        """The nearest whole source frame (blending in-between frames softens the lips)."""
+        return self.keyed(int(round(float(np.clip(q, 0, self.n - 1)))))
 
 
 REACT_DIR = ROOT / "assets" / "characters" / "harsh" / "reactions"
@@ -174,39 +121,6 @@ def voice_openness(wav: Path, total: float, fps: int = FPS) -> np.ndarray:
     o = np.clip((rms / ref) ** .75, 0, 1)
     o[rms < rms.max() * .05] = 0
     return o
-
-
-def plan_path(o: np.ndarray, mouth: np.ndarray, kmax: int = 5, pref: float = 2.0,
-              lam_change: float = .004, lam_pref: float = .0012) -> np.ndarray:
-    """Source position (in frames, fractional) for each output frame. Speed is 0..kmax quarter-frames per output frame."""
-    n = len(mouth)
-    P = (n - 1) * Q + 1
-    ms = np.interp(np.arange(P) / Q, np.arange(n), mouth).astype(np.float32)
-    T, K = len(o), kmax + 1
-    ks = np.arange(K)
-    pen = (np.abs(ks[:, None] - ks[None, :]) * lam_change + ((ks - pref) ** 2)[None, :] * lam_pref).astype(np.float32)
-    INF = np.float32(1e9)
-    dp = np.full((P, K), INF, np.float32)
-    dp[: P // 3, :] = ((o[0] - ms[: P // 3]) ** 2)[:, None] + pen[int(pref)][None, :] * 0   # start in the first third
-    back = np.zeros((T, P, K), np.int8)
-    for j in range(1, T):
-        tmp = dp[:, :, None] + pen[None]
-        bp = tmp.argmin(1).astype(np.int8)
-        bv = tmp.min(1)
-        cost = ((o[j] - ms) ** 2).astype(np.float32)
-        new = np.full((P, K), INF, np.float32)
-        for k in range(K):
-            new[k:, k] = bv[: P - k, k] + cost[k:]
-            back[j][k:, k] = bp[: P - k, k]
-        dp = new
-    p, k = np.unravel_index(int(dp.argmin()), dp.shape)
-    pos = np.zeros(T, np.int64)
-    for j in range(T - 1, -1, -1):
-        pos[j] = p
-        if j:
-            kp = back[j][p, k]
-            p, k = p - k, int(kp)
-    return pos / Q
 
 
 def plan_natural(o: np.ndarray, mouth: np.ndarray, speed: float = .5, gap: float = .35) -> np.ndarray:
