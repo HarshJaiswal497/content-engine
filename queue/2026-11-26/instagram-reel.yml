@@ -23,8 +23,7 @@ slides:
 - say: The main culprit was a scrolling marquee that measured its own width on every single frame.
   head: "Fix 1: the *marquee*"
   tag: FIX 1
-  card: {type: code, file: marquee.js, code: "every frame:  [[bad:measure width]]
-now:  [[good:measure once]]", pill: LAYOUT THRASH, sub: About 700 ms of blocked time on a phone profile.}
+  card: {type: code, file: marquee.js, code: "every frame:  [[bad:measure width]]\nnow:  [[good:measure once]]", pill: LAYOUT THRASH, sub: About 700 ms of blocked time on a phone profile.}
 - say: Second, the spinning star now pauses when it's off screen.
   head: "Fix 2: the *star*"
   tag: FIX 2
@@ -32,8 +31,7 @@ now:  [[good:measure once]]", pill: LAYOUT THRASH, sub: About 700 ms of blocked 
 - say: Third, on phones the heavy 3D carousel loads only when you reach it.
   head: "Fix 3: *load later*"
   tag: FIX 3
-  card: {type: code, file: work carousel, code: "phones:  [[good:load at Work section]]
-desktop:  after the intro", pill: LAZY LOAD, sub: Phones skip the 3D code up front.}
+  card: {type: code, file: work carousel, code: "phones:  [[good:load at Work section]]\ndesktop:  after the intro", pill: LAZY LOAD, sub: Phones skip the 3D code up front.}
 - say: Comment SPEED, and I'll send you the three fixes, with the prompts.
   head: Get the *3 fixes*
   tag: FREE

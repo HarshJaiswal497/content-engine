@@ -20,7 +20,6 @@ slides:
 - type: point
   tag: The rule
   title: Capped at *8 hours*
-  big: 8 H MAX
   say: Anything left open for most of a day was forgotten, not trained, so the app caps the length at eight hours.
   react: thinking
   react_at: forgotten
