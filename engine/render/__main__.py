@@ -101,6 +101,10 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                         spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
                         script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
             _finish_video(post, mp4, upload)
+        elif kind == "teach":
+            from .teach import teach_video
+            teach_video(slides, post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("caption_fixes"))
+            _finish_video(post, mp4, upload)
         elif kind in {"recording", "talking_head"}:
             accent = THEMES.get(post.app, THEMES["personal"]).accent
             done = False

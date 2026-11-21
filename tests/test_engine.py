@@ -270,3 +270,13 @@ def test_reel_container_passes_cover(monkeypatch):
     seen.clear()
     instagram._reel_container("u", "cap", "https://v/x.mp4")
     assert "cover_url" not in seen
+
+
+def test_teach_slides_check():
+    from engine.render.teach import check_slides
+    ok = [{"say": "a", "head": "A", "card": {"type": "code", "code": "x"}},
+          {"say": "b", "head": "B", "card": {"type": "comment", "word": "KEYS", "reply": "Sent"}}]
+    assert check_slides(ok) == []
+    assert any("comment card" in e for e in check_slides(ok[:1]))
+    assert any("needs say" in e for e in check_slides([{"head": "A"}]))
+    assert any("card.type" in e for e in check_slides([{"say": "a", "head": "A", "card": {"type": "nope"}}]))
