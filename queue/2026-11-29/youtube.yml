@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-29T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 6 things built my portfolio. Only 1 is AI
+  description: |
+    Claude, GitHub, Cloudflare, Lighthouse and my own phone. The full list is a free guide: ask in the comments of the Instagram Reel.
+    #Shorts #buildwithai #webdev
+  tags:
+  - build with ai
+  - dev tools
+  - vibe coding
+  - portfolio website
+  - cloudflare pages
+  - lighthouse

@@ -19,7 +19,7 @@ FORMATS = {
     "instagram": {"image", "carousel", "reel"},
     "youtube": {"short"},
 }
-VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "story", "same_as"}
+VIDEO_KINDS = {"slides", "recording", "talking_head", "skit", "story", "teach", "same_as"}
 APPS = {"slipnote", "setalytix", "personal"}
 
 # Hard limits from brand/founder.md. Each entry: (regex, message). Matches are errors.
@@ -178,6 +178,11 @@ class Post:
             if self.video_spec.get("voice", True) and not self.video_spec.get("speaker"):
                 from .render.tts import voice_fingerprint
                 relevant["_voice"] = voice_fingerprint()
+        if self.video_spec.get("kind") == "teach":   # a changed template, mascot clip or walkthrough re-renders
+            files = [f for d in (ROOT / "assets" / "characters", ROOT / "hf" / "teach") for f in sorted(d.rglob("*")) if f.is_file() and f.suffix in (".png", ".html", ".css", ".js")]
+            relevant["_teach"] = hashlib.sha256(b"".join(f.read_bytes() for f in files)).hexdigest()[:8]
+            from .render.tts import voice_fingerprint
+            relevant["_voice"] = voice_fingerprint()
         if self.video_spec.get("kind") == "same_as" and self.video_spec.get("post"):
             sib = self.path.parent / f"{self.video_spec['post']}.yml"
             if sib.exists() and sib != self.path:  # re-copy whenever the sibling's video changes
@@ -305,6 +310,9 @@ def validate(post: Post) -> None:
             e += story_beats_ok(sb, post.app, post.video_spec.get("mascot"))
             if len(sb) > 8:
                 w.append("story has more than 8 beats; keep Reels under about 45 s")
+        if kind == "teach":
+            from .render.teach import check_slides
+            e += check_slides(d.get("slides") or [])
         if kind in {"recording", "talking_head"} and not post.video_spec.get("source"):
             e.append("video.source (file in inbox/) is required for recording/talking_head")
         if kind == "talking_head" and not post.video_spec.get("script"):

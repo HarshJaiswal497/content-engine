@@ -1,0 +1,38 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-28T09:15:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  Before my portfolio had any code, it had rules.
+
+  I wrote down the look (dark base, sand text, one marigold accent), the words (products "built", not "shipped"), the facts (every number from me) and a list of ideas I'd already rejected, like phone screenshots in the hero.
+
+  AI follows rules you wrote down and invents the ones you didn't. Short, specific, 4 sections. That list of "no" saved me more arguments than any prompt.
+
+  https://portfolio-harsh-jaiswal.pages.dev
+
+  #aicoding #webdev #buildinpublic
+slides:
+- type: cover
+  kicker: Before any code
+  title: 'Write the *rules* before the code'
+- type: point
+  number: 1
+  title: The *look*
+  body: Dark base, sand text, one marigold accent, one serif font.
+- type: point
+  number: 2
+  title: The *words*
+  body: Products "built", not "shipped". A status tag on every project.
+- type: point
+  number: 3
+  title: The *facts*
+  body: Every project and number comes from me. AI may not invent any.
+- type: point
+  number: 4
+  title: The *rejected list*
+  body: Phone screenshots in the hero, dragging on phones, a lens on the carousel. Say no once.
+- type: cta
+  title: Rules in, *fewer arguments*
+  body: portfolio-harsh-jaiswal.pages.dev

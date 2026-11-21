@@ -1,0 +1,46 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-11-29T19:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  The 8 phases of how I build with AI: references, my own spec, previews, Git and an empty live page first, one section at a time, use it like a visitor, keep secrets secret, measure then ship.
+
+  Comment WORKFLOW and I'll send you the full guide with the prompts.
+
+  #buildwithai #vibecoding #aicoding #webdev #buildinpublic #indiedev #claude
+slides:
+- type: cover
+  kicker: My workflow
+  title: 'How I build with AI, *in 8 phases*'
+- type: point
+  number: 1
+  title: '*References* first'
+  body: Study many sites, pick what you like.
+- type: point
+  number: 2
+  title: Write *your decisions*
+  body: The spec is yours, not the AI's.
+- type: point
+  number: 3
+  title: Judge the *look* from previews
+  body: Reject fast, with a reason.
+- type: point
+  number: 4
+  title: '*Deploy* an empty page'
+  body: Git and the live site, before building.
+- type: point
+  number: 5
+  title: Build *section by section*
+  body: Check each one before the next.
+- type: point
+  number: 6
+  title: Use it like a *visitor*
+  body: Real phone, reload, drag.
+- type: point
+  number: 7
+  title: Keep *secrets* secret
+  body: Public keys in the page, secrets on the server.
+- type: cta
+  title: 'Phase 8: *measure*, then ship'
+  body: Comment WORKFLOW for the guide

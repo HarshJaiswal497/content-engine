@@ -1,0 +1,36 @@
+# Example slides for video.kind: teach (queue/<date>/instagram-reel.yml also needs platform, format, scheduled_at, app, text, and
+#   video: {kind: teach, tone: story}). One slide per beat; say = the spoken line (numbers as words), head = on-screen heading
+#   (*word* = highlighted), tag = small chip, react / react_at = mascot reaction and the spoken word it lands on.
+# card.type:
+#   code    {file, code, stamp, pill, big, sub, count: {to, label, at}}   code: use [[bad:text]] / [[good:text]] for typed, highlighted text
+#   flow    {file, nodes: [{title, sub, lock}] (up to 3), note}
+#   gauge   {file, items: [{label, value 0-100, color}] (up to 2), note}
+#   video   {src: inbox/clip.mp4, cuts: [start seconds per beat], span: beats it covers, chips: [{label, to, beat, at}]}
+#   comment {word, reply}   the resource CTA; the last slide must have one
+slides:
+- say: Stop putting secret keys in your AI app.
+  head: Stop *leaking* keys
+  tag: THE MISTAKE
+  react: shocked
+  react_at: keys
+  card: {type: code, file: app.js, code: "const key = [[bad:\"sk_live_51Hx9…\"]];\n// pushed to GitHub", stamp: LEAKED}
+- say: A public key is made to sit in your page. It's locked to your domain, so it's safe to ship.
+  head: Public keys are *fine*
+  tag: PUBLIC KEY
+  card: {type: code, file: app.js, code: "const maps = [[good:\"pk_live_AIza…\"]];", pill: PUBLIC KEY, big: Made to sit in your page., sub: Locked to your domain. Safe to ship.}
+- say: A secret key? Anyone can right-click, view source, and read it. Two clicks.
+  head: Secret keys are *readable*
+  tag: SECRET KEY
+  card: {type: code, file: view-source:yoursite.com, code: "line 214: [[bad:\"sk_live_51Hx9…\"]]", count: {to: 2, label: clicks to steal it, at: 3.0}}
+- say: Secrets live on the server, in environment variables. Never in the code you push.
+  head: Secrets stay on the *server*
+  tag: THE RULE
+  react: cheer
+  react_at: server
+  card: {type: flow, file: how it should flow, nodes: [{title: Browser, sub: no secrets}, {title: Server, sub: "🔒 secrets here", lock: true}, {title: Service, sub: "Stripe, OpenAI…"}], note: Environment variables. Never in the repo.}
+- say: Comment KEYS, and I'll send you the checklist.
+  head: Get the *checklist*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: KEYS, reply: "Sent ✓ Key-safety checklist is in your DMs"}

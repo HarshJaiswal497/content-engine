@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-11-26T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: My site scored 53 on phones. One push got it to 82
+  description: |
+    A scrolling marquee that measured itself every frame, a star that spun off screen, and a 3D carousel that loaded too early. The fixes with the prompts are a free guide: ask in the comments of the Instagram Reel.
+    #Shorts #webperformance #lighthouse
+  tags:
+  - lighthouse
+  - web performance
+  - mobile performance
+  - build with ai
+  - vibe coding
+  - website speed

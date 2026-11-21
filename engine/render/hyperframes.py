@@ -551,7 +551,7 @@ def beats_from_slides(slides: list[dict], app: str) -> list[dict]:
     for i, sl in enumerate(slides):
         kind = sl.get("type") or ""
         screen = sl.get("screen")
-        b = {"tag": "intro" if i == 0 else ("try it" if kind == "cta" or i == n - 1 else f"{i}/{n - 2}" if n > 2 else ""),
+        b = {"tag": sl["tag"] if sl.get("tag") is not None else "intro" if i == 0 else ("try it" if kind == "cta" or i == n - 1 else f"{i}/{n - 2}" if n > 2 else ""),
              "head": sl.get("title") or sl.get("head") or "", "say": sl.get("say") or "",
              "layout": "stack" if screen else "full",
              "pose": sl.get("pose") or ("wave" if i == 0 else "cheer" if i == n - 1 else "think" if i % 2 else "idle")}

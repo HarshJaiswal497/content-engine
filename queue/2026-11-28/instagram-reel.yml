@@ -1,0 +1,37 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-28T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  Write the rules before the code, or AI will invent them for you.
+
+  Before my portfolio had a single line of code, I wrote my decisions down: dark base, sand text, 1 marigold accent, "Products built" instead of "shipped", and a list of ideas I'd already rejected. Short. Specific. Easy for AI to follow.
+
+  Comment RULES and I'll send you my spec and rules template.
+
+  #buildwithai #vibecoding #aicoding #webdev #promptengineering #buildinpublic #indiedev #claude
+slides:
+- say: Write the rules before the code, or AI will invent them.
+  head: Rules *first*, code second
+  tag: THE MISTAKE
+  react: shocked
+  react_at: invent
+  card: {type: code, file: rules.md, code: "- dark base, sand text\n- one accent: [[good:marigold]]\n- \"Products built\", never \"shipped\"\n- no phone screenshots in the hero", pill: MY RULES}
+- say: "Mine were written before a single line of code: the colours, the one accent, even the words I would and wouldn't use."
+  head: Decide the *look*
+  tag: THE LOOK
+  card: {type: code, file: rules.md, code: "palette   [[good:dark + sand]]\naccent    [[good:one marigold]]\nfont      [[good:one serif]]", sub: Choose it once. AI follows it.}
+- say: Rejected ideas belong in the rules too, like phone screenshots in the hero.
+  head: List what you *rejected*
+  tag: THE NOS
+  card: {type: code, file: rules.md, code: "not allowed:\n[[bad:phone screenshots in the hero]]\n[[bad:paper look outside the slips]]", sub: Every no is one less argument.}
+- say: Comment RULES, and I'll send you the spec and rules template.
+  head: Get the *template*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: RULES, reply: 'Sent ✓ Spec and rules template'}
+video:
+  kind: teach
+  tone: story

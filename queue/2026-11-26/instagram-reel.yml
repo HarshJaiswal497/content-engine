@@ -1,0 +1,45 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-26T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  My portfolio scored 53 on phones. One push got it to 82.
+
+  The main gain was a scrolling marquee that measured its own width on every frame, so the browser recalculated the layout each time. That blocked a throttled phone for about 700 ms. I made it measure once, and the spin on a tagline star now pauses when it's off screen. On phones, the 3D carousel loads only when you reach it.
+
+  (53 is from lighthouse-metrics.com and 82 from PageSpeed Insights, so it's not a perfectly fair comparison.)
+
+  Comment SPEED and I'll send you the 3 fixes with the prompts.
+
+  #webperformance #lighthouse #buildwithai #vibecoding #webdev #aicoding #buildinpublic #indiedev
+slides:
+- say: My portfolio scored fifty-three on phones. One push got it to eighty-two.
+  head: "*53* on phones"
+  tag: THE PROBLEM
+  react: shocked
+  react_at: fifty-three
+  card: {type: gauge, file: 'Phones · before and after', items: [{label: Before, value: 53, color: '#ff5a4a'}, {label: After, value: 82, color: '#3ddc97'}], note: 'Two different testers, so a guide, not a lab result.'}
+- say: The main culprit was a scrolling marquee that measured its own width on every single frame.
+  head: "Fix 1: the *marquee*"
+  tag: FIX 1
+  card: {type: code, file: marquee.js, code: "every frame:  [[bad:measure width]]
+now:  [[good:measure once]]", pill: LAYOUT THRASH, sub: About 700 ms of blocked time on a phone profile.}
+- say: Second, the spinning star now pauses when it's off screen.
+  head: "Fix 2: the *star*"
+  tag: FIX 2
+  card: {type: code, file: tagline star, code: "off screen:  [[good:spin paused]]", pill: PAUSE OFF-SCREEN, sub: No work for things nobody can see.}
+- say: Third, on phones the heavy 3D carousel loads only when you reach it.
+  head: "Fix 3: *load later*"
+  tag: FIX 3
+  card: {type: code, file: work carousel, code: "phones:  [[good:load at Work section]]
+desktop:  after the intro", pill: LAZY LOAD, sub: Phones skip the 3D code up front.}
+- say: Comment SPEED, and I'll send you the three fixes, with the prompts.
+  head: Get the *3 fixes*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: SPEED, reply: 'Sent ✓ The 3 fixes, with the prompts'}
+video:
+  kind: teach
+  tone: story

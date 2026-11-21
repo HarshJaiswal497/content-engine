@@ -12,7 +12,7 @@ The audience should come away thinking: *"this person actually ships, explains t
 ## Never
 - Break the hard limits: no legal topics; no prices or amounts anywhere and no ads (Slipnote's premium themes, free trials and subscription may be mentioned, always with "plenty is free and free stays free"); never name competitor apps; friends are "a friend", never named; never post private details (project IDs, repo names, file paths with usernames, devices, emails). Validation blocks the first three.
 - Invent numbers (users, downloads, revenue, % improvements). If a number isn't in `brand/apps/*.md` or `inbox/`, don't use it.
-- Engagement bait ("Agree?", "Comment YES"), fake urgency, "I'm humbled to announce".
+- Engagement bait ("Agree?", "Comment YES"), fake urgency, "I'm humbled to announce". One exception, cleared by Harsh on 21 Nov: Instagram and YouTube teaching Reels (`video.kind: teach`) end with "Comment WORD and I'll send you X", where X is a real resource made from his real material. Never on LinkedIn, never on app promos (promo Reels have no CTA at all).
 - AI tells: "delve", "game-changer", "in today's fast-paced world", "let's dive in", "here's the thing", stacked rhetorical triads, one-word dramatic lines.
 - More than 3 hashtags on LinkedIn. Emojis: at most 1–2 per post, never as bullet points.
 - Trashing other apps or companies.

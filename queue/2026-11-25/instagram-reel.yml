@@ -1,0 +1,43 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-25T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: |
+  Stop putting secret keys in your AI app. Right-click, view source, and anyone can read one in 2 clicks.
+
+  A public key is different. It's made to sit in your page, locked to your domain, so it's safe to ship. On my own portfolio I saved a public key as a secret and the site couldn't see it. Fixed in 1 file: the public key lives in a committed config, and the real secrets stay on the server.
+
+  Comment KEYS and I'll send you the key-safety checklist.
+
+  #buildwithai #vibecoding #webdev #apisecurity #aicoding #buildinpublic #indiedev #claude
+slides:
+- say: Stop putting secret keys in your AI app.
+  head: Stop *leaking* keys
+  tag: THE MISTAKE
+  react: shocked
+  react_at: keys
+  card: {type: code, file: app.js, code: "const key = [[bad:\"sk_live_51Hx9…\"]];\n// pushed to GitHub", stamp: LEAKED}
+- say: A public key is made to sit in your page. It's locked to your domain, so it's safe to ship.
+  head: Public keys are *fine*
+  tag: PUBLIC KEY
+  card: {type: code, file: app.js, code: "const maps = [[good:\"pk_live_AIza…\"]];", pill: PUBLIC KEY, big: Made to sit in your page., sub: Locked to your domain. Safe to ship.}
+- say: A secret key? Anyone can right-click, view source, and read it. Two clicks.
+  head: Secret keys are *readable*
+  tag: SECRET KEY
+  card: {type: code, file: 'view-source:yoursite.com', code: "line 214: [[bad:\"sk_live_51Hx9…\"]]", count: {to: 2, label: clicks to steal it, at: 3.0}}
+- say: Secrets live on the server, in environment variables. Never in the code you push.
+  head: Secrets stay on the *server*
+  tag: THE RULE
+  react: cheer
+  react_at: server
+  card: {type: flow, file: how it should flow, nodes: [{title: Browser, sub: no secrets}, {title: Server, sub: '🔒 secrets here', lock: true}, {title: Service, sub: 'Stripe, OpenAI…'}], note: Environment variables. Never in the repo.}
+- say: Comment KEYS, and I'll send you the checklist.
+  head: Get the *checklist*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card: {type: comment, word: KEYS, reply: 'Sent ✓ Key-safety checklist'}
+video:
+  kind: teach
+  tone: story

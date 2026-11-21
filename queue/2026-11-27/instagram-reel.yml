@@ -1,0 +1,42 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-27T12:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: |
+  Reactions in Slipnote aren't a row of tiny icons. They're stickers you peel off a sheet. My first version was a plain icon row, and I called it boring, so I rebuilt it.
+
+  Slipnote is in development. The waitlist link is in my bio.
+
+  #slipnote #handwrittennotes #widgetapp #indiedev #buildinpublic #flutter #appdesign #madewithflutter
+slides:
+- type: cover
+  tag: Slipnote
+  kicker: Slipnote
+  title: Reactions that feel like *stickers*
+  say: I called my first reactions boring, so now you peel them off like stickers,
+  react: excited
+  react_at: stickers
+- type: point
+  tag: The redesign
+  title: Not a row of *icons*
+  screen: note-react
+  focus: reactions
+  label: Peel one off
+  say: My first version was a plain row of icons, and I called it boring, so I rebuilt it as a sticker sheet.
+  react: thinking
+  react_at: boring
+- type: point
+  tag: Send one back
+  title: Or doodle *back*
+  screen: note-react
+  focus: note
+  label: Doodle back
+  say: React with a sticker, or doodle something back.
+  react: cheer
+  react_at: doodle
+video:
+  kind: story
+  speaker: mascot
+  mascot: harsh
+  tone: story

@@ -1,0 +1,38 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-11-26T09:15:00+05:30'
+app: personal
+pillar: engineering-deep-dive
+text: |
+  My portfolio went from the 50s to 82 on phones in mobile Lighthouse, with one push and nothing visual changed.
+
+  The main gain: a scrolling marquee measured its own width on every animation frame, which made the browser recalculate the page layout each time. On a throttled phone profile that was about 700 ms of blocked time. It now measures once, re-measures only when its size changes, and runs only while it's on screen. Two smaller changes: the tagline star's spin pauses off screen, and on phones the 3D carousel loads only when you reach the Work section.
+
+  A caveat I'd rather state: 53 came from lighthouse-metrics.com and 82 from PageSpeed Insights, and they emulate phones a bit differently. The blocking time is now 70 ms; load time barely moved.
+
+  https://portfolio-harsh-jaiswal.pages.dev
+
+  #webperformance #lighthouse #webdev
+slides:
+- type: cover
+  kicker: Mobile Lighthouse
+  title: 'From *53 to 82* on phones, in one push'
+- type: point
+  number: 1
+  title: The *marquee*
+  body: It measured its own width every frame. Now it measures once. About 700 ms of blocked time, gone.
+- type: point
+  number: 2
+  title: The *tagline star*
+  body: Its spin now pauses when it's off screen.
+- type: point
+  number: 3
+  title: The *3D carousel*
+  body: On phones it loads only when you reach the Work section.
+- type: point
+  number: 4
+  title: An *honest caveat*
+  body: 53 and 82 came from two different testers, so treat it as a guide.
+- type: cta
+  title: See the *site*
+  body: portfolio-harsh-jaiswal.pages.dev
