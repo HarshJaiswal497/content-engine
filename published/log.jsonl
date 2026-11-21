@@ -132,3 +132,4 @@
 {"id": "queue/2026-11-21/linkedin", "status": "published", "at": "2026-11-21T03:45:05+00:00", "remote_id": "urn:li:ugcPost:7529751715827343360", "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7529751715827343360/", "note": null, "attempts": 1}
 {"id": "queue/2026-11-21/instagram-reel", "status": "published", "at": "2026-11-21T07:30:22+00:00", "remote_id": "18184470421435537", "url": "https://www.instagram.com/reel/Df_soDgDfTq/", "note": null, "attempts": 1}
 {"id": "queue/2026-11-21/instagram-reel#facebook", "status": "published", "at": "2026-11-21T07:30:30+00:00", "remote_id": "1649885593555736", "url": "https://www.facebook.com/1649885593555736", "attempts": 1}
+{"id": "queue/2026-11-27/youtube", "status": "handoff", "at": "2026-11-21T19:05:30+00:00", "remote_id": "40", "note": "weekly upload issue opened", "attempts": 1}
