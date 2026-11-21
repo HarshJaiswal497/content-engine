@@ -81,18 +81,36 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
                     imgs = render_post_slides(slides, post.app, Path(tmp), "vertical")
                     slides_to_video(imgs, mp4, secs, voice=voice, mood=mood_for(spec.get("tone"), post.app))
             _finish_video(post, mp4, upload)
+        elif kind == "voice":   # your cloned voice reading the slides' `say` lines: an audio-only file to drive talking clips
+            import subprocess
+            from .tts import synthesize
+            with tempfile.TemporaryDirectory() as tmp:
+                voice = [v for v in synthesize([str(s.get("say") or "") for s in slides], Path(tmp) / "voice", spec.get("tone", "calm")) if v]
+                cmd, parts = ["ffmpeg", "-y", "-hide_banner", "-v", "error"], []
+                for i, v in enumerate(voice):
+                    cmd += ["-i", str(v)]
+                    parts.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=mono,apad=pad_dur=0.6[a{i}]")
+                chain = "".join(f"[a{i}]" for i in range(len(voice)))
+                parts.append(f"{chain}concat=n={len(voice)}:v=0:a=1,highpass=f=85,loudnorm=I=-16:TP=-1.5[o]")
+                subprocess.run(cmd + ["-filter_complex", ";".join(parts), "-map", "[o]", "-c:a", "aac", "-b:a", "192k", str(mp4)], check=True)
+            _finish_video(post, mp4, upload)
         elif kind == "skit":
             skit_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app), spec.get("title"),
                        voices=spec.get("voice", True))
             _finish_video(post, mp4, upload)
         elif kind == "story":
             sp = None
-            if spec.get("speaker"):
+            beats = spec.get("beats") or []
+            if spec.get("speaker") == "mascot":   # the mascot presents: beats come from the slides unless given
+                from .hyperframes import beats_from_slides
+                sp = "mascot"
+                beats = beats or beats_from_slides(slides, post.app)
+            elif spec.get("speaker"):
                 from ..config import ROOT
                 sp = ROOT / spec["speaker"]
                 if not sp.exists():
                     return f"waiting for the speaker clip {spec['speaker']}"
-            story_video(spec.get("beats") or [], post.app, mp4, mood_for(spec.get("tone"), post.app),
+            story_video(beats, post.app, mp4, mood_for(spec.get("tone"), post.app),
                         spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
                         script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
             _finish_video(post, mp4, upload)

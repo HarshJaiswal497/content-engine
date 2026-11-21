@@ -34,20 +34,27 @@
     .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: center; align-items: baseline; gap: 0 30px; opacity: 0; }
     .cw { font-weight: 900; font-size: 74px; letter-spacing: -.01em; line-height: 1.1; color: #fff; -webkit-text-stroke: 8px rgba(10,10,20,.92); paint-order: stroke fill; text-shadow: 0 6px 18px rgba(0,0,0,.35); display: inline-block; }
     .cw.emph { font-style: italic; font-weight: 800; }
+    .flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 9; }
+    .mas img.ip { transform-origin: 50% 100%; }
     .wipe { position: absolute; left: -1300px; top: 0; width: 1250px; height: 1110px; background: {{ACCENT}}; transform: skewX(-12deg); z-index: 5; }
     .wipe.w2 { background: {{CARD}}; z-index: 5; }
-    .mas { position: absolute; width: 300px; left: 44px; top: 880px; z-index: 8; }
+    .m-mascot .full .head { color: {{M_INK}}; text-shadow: none; }
+    .m-mascot .full .badge .tag { background: {{M_INK}}; color: {{M_BG}}; }
+    .m-mascot #spk { background: {{BAND_BG}}; }
+    .m-mascot .mas { z-index: 5; filter: drop-shadow(0 18px 22px rgba(0,0,0,.28)); }
+    .mas { position: absolute; width: {{MAS_W}}px; left: 44px; top: 880px; z-index: 8; }
     .mas img { position: absolute; left: 0; top: 0; width: 100%; opacity: 0; }
     .mas img.first { position: relative; }
   </style>
-  <div id="root" data-composition-id="story" data-width="1080" data-height="1920">
+  <div id="root" data-composition-id="story" data-width="1080" data-height="1920" class="{{MODE}}">
     <div class="tex"></div>
     <div class="blob" id="blob1" style="width:520px;height:520px;left:-170px;top:620px"></div>
     <div class="blob" id="blob2" style="width:380px;height:380px;right:-120px;top:120px"></div>
-    <div id="spk"><video id="spb" src="assets/speaker.mp4" muted playsinline></video><video id="spv" src="assets/speaker.mp4" muted playsinline></video></div>
+    <div id="spk">{{SPK_INNER}}</div>
     <div id="scrim"></div><div id="scrim2"></div>
     <div class="prog">{{PROG}}</div>
 {{BEATS}}
+    <div class="flash" id="flash"></div>
     <div class="wipe w2" id="wipe2"></div><div class="wipe" id="wipe1"></div>
     <div class="caps" id="caps">
 {{CAPS_HTML}}
@@ -63,6 +70,7 @@
       stack: { l: 40, t: 1120, w: 1000, h: 520, r: 40, b: 9, vx: 197, vy: -258, vs: .56, bx: 0, by: -420, bs: .93, bo: 1, cap: 1528, mx: 44, my: 850, ms: 1, sc: 0 },
       full:  { l: 0, t: 0, w: 1080, h: 1920, r: 0, b: 0, vx: 0, vy: 0, vs: 1, bx: 0, by: 0, bs: 1, bo: 0, cap: 1400, mx: 760, my: 1450, ms: .82, sc: 1 }
     };
+    if (D.lay) { Object.assign(LAY.stack, D.lay.stack || {}); Object.assign(LAY.full, D.lay.full || {}); }
     const setLay = (L) => {
       tl.set("#spk", { left: L.l, top: L.t, width: L.w, height: L.h, borderRadius: L.r, borderWidth: L.b }, 0);
       tl.set("#spv", { x: L.vx, y: L.vy, scale: L.vs }, 0);
@@ -113,7 +121,7 @@
       }
       if (b.big) tl.fromTo(el + " .big", { opacity: 0, scale: .5, rotate: -6 }, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: "back.out(2.4)" }, b.s + .25);
       // the mascot reacts: swap pose, little hop
-      D.poses.forEach(p => tl.set("#mp" + p, { opacity: p === b.mp ? 1 : 0 }, b.s));
+      if (!D.lipev.length) D.poses.forEach(p => tl.set("#mp" + p, { opacity: p === b.mp ? 1 : 0 }, b.s));
       tl.fromTo("#mas img", { y: 30 }, { y: 0, duration: .45, ease: "back.out(3)" }, b.s + .05);
       if (!last) {
         const nx = D.beats[i + 1];
@@ -121,6 +129,16 @@
         tl.to(el, { opacity: 0, x: -90, duration: .3, ease: "power2.in" }, exit);
       }
     });
+    // lip-sync: the mouth frame follows the loudness of the voice; the pose changes with each beat
+    let prevMp = null;
+    D.lipev.forEach(([t, id]) => { if (prevMp) tl.set("#" + prevMp, { opacity: 0 }, t); tl.set("#" + id, { opacity: 1 }, t); prevMp = id; });
+    // impact frames: a reaction image pops in over the talking mascot for a moment, with a white flash
+    (D.imp || []).forEach(([t, d, id]) => {
+      tl.fromTo("#" + id, { scale: .86, rotation: -3 }, { scale: 1, rotation: 0, duration: .32, ease: "back.out(2.6)" }, t);
+      tl.fromTo("#flash", { opacity: .55 }, { opacity: 0, duration: .22, ease: "power2.out" }, t);
+      tl.fromTo("#mas", { x: -14 }, { x: 0, duration: .34, ease: "elastic.out(1,.35)" }, t);
+    });
+    if (D.lipev.length) tl.to("#mas", { y: 12, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: Math.ceil(D.total / 1.3) }, 0);
     // captions
     D.caps.forEach((c, i) => {
       const el = "#cap" + i;
