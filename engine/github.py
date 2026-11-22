@@ -92,7 +92,14 @@ def upload_media(path: Path, name: str) -> dict:
 
 def download_media(ref: dict, dest: Path) -> Path:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    with requests.get(ref["api_url"], headers={**_headers(), "Accept": "application/octet-stream"},
+    url = ref["api_url"]
+    probe = requests.get(url, headers=_headers(), timeout=30)
+    if probe.status_code == 404:   # the asset was re-uploaded (new id): find it again by name
+        for a in _media_release().get("assets", []):
+            if a["name"] == ref["release_asset"]:
+                url = a["url"]
+                break
+    with requests.get(url, headers={**_headers(), "Accept": "application/octet-stream"},
                       stream=True, timeout=600) as r:
         r.raise_for_status()
         with open(dest, "wb") as f:
