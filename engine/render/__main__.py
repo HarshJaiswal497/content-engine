@@ -24,6 +24,22 @@ def _clean(asset_dir: Path) -> None:
         p.unlink(missing_ok=True)
 
 
+def _trim_tail(mp4: Path, hold: float = 0.5, drop_frames: int = 2) -> None:
+    """Story renders end on a stray dark frame and stop right after the last word. Drop the last frames and
+    hold the final good picture for a moment (audio padded with silence) so the Reel ends cleanly."""
+    import subprocess
+    nb = int(subprocess.check_output(["ffprobe", "-v", "error", "-select_streams", "v", "-count_packets",
+                                      "-show_entries", "stream=nb_read_packets", "-of", "csv=p=0", str(mp4)]).split()[0])
+    keep = max(nb - drop_frames, 1)
+    out = mp4.with_suffix(".tail.mp4")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp4), "-vf",
+                    f"trim=end_frame={keep},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop_duration={hold}",
+                    "-af", "apad=pad_dur=2", "-t", f"{keep / 30 + hold:.3f}", "-c:v", "libx264", "-preset", "veryfast",
+                    "-crf", "18", "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "160k",
+                    "-movflags", "+faststart", str(out)], check=True)
+    out.replace(mp4)
+
+
 def _finish_video(post: Post, mp4: Path, upload: bool) -> None:
     if upload:
         date = post.path.parent.name
@@ -100,6 +116,8 @@ def render(post: Post, upload: bool, force: bool, seen: set[str]) -> str:
             story_video(beats, post.app, mp4, mood_for(spec.get("tone"), post.app),
                         spec.get("mascot", "slip" if post.app == "slipnote" else "bo"), sp, voices=spec.get("voice", True),
                         script=spec.get("script"), fixes=spec.get("caption_fixes"), emphasis=spec.get("emphasis"))
+            if spec.get("tail") == "hold":
+                _trim_tail(mp4)
             _finish_video(post, mp4, upload)
         elif kind == "teach":
             from .teach import teach_video
