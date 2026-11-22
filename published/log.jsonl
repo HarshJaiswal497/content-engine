@@ -141,3 +141,4 @@
 {"id": "queue/2026-11-29/youtube", "status": "handoff", "at": "2026-11-21T20:35:46+00:00", "remote_id": "43", "note": "weekly upload issue opened", "attempts": 1}
 {"id": "queue/2026-11-22/linkedin", "status": "failed", "at": "2026-11-22T03:45:01+00:00", "attempts": 1, "error": "HTTPError: 404 Client Error: Not Found for url: https://api.github.com/repos/HarshJaiswal497/content-engine/releases/assets/775096423"}
 {"id": "queue/2026-11-22/linkedin", "status": "failed", "at": "2026-11-22T03:50:06+00:00", "attempts": 2, "error": "HTTPError: 404 Client Error: Not Found for url: https://api.github.com/repos/HarshJaiswal497/content-engine/releases/assets/775096423"}
+{"id": "queue/2026-11-22/linkedin", "status": "failed", "at": "2026-11-22T03:55:10+00:00", "attempts": 3, "error": "HTTPError: 404 Client Error: Not Found for url: https://api.github.com/repos/HarshJaiswal497/content-engine/releases/assets/775096423"}
