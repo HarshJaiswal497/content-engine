@@ -122,3 +122,6 @@ resource: it must be made from his real material first. Rules from the 21 Nov sw
 4. Before opening the PR run `tools/draftcheck.py` on the week: rewrite every WEAK hook and FLAGGED text (heuristics, not predictions).
 Slide fields for `teach` are documented in `hf/teach/example.yml`; the walkthrough card needs a clip in `inbox/` with phone, email and
 other private details already cut out.
+
+### Resource PDFs
+Every comment-word has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.
