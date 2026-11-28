@@ -55,7 +55,7 @@ slides:
       new one took: [[bad:4]]
 
       fix: next = [[good:highest + 1]]'
-- say: Comment BUG, and I'll send you the bug report template.
+- say: Comment BUG, and I'll send you the bug report template. Follow for part 5 tomorrow.
   head: Get the *template*
   tag: FREE
   react: point_down
