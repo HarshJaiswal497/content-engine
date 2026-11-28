@@ -16,6 +16,12 @@ slides:
   tag: FIRST APP 7 OF 7
   react: excited
   react_at: Six
+  card:
+    type: code
+    file: roadmap.txt
+    code: '[[good:idea → live app]]'
+    big: 6 steps
+    sub: with AI doing the typing
 - say: One, check the idea. Two, build in phases, and end each one with a real test.
   head: Idea check, then *phases*
   tag: STEPS 1 AND 2
@@ -42,6 +48,14 @@ slides:
   tag: STEP 6
   react: cheer
   react_at: strangers
+  card:
+    type: code
+    file: launch.txt
+    code: '[[good:let strangers in]]
+
+      [[good:measure what they do]]'
+    pill: STEP 6
+    sub: Then go round again.
 - say: The whole roadmap is free, link in my bio. Comment if it helped, or DM me your doubts. Follow for the next series.
   head: Free guide in *bio*
   tag: FREE

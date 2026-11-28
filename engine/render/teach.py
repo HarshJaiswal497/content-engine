@@ -153,8 +153,17 @@ def _card(i: int, beat_len: float, card: dict, spec_span: int, starts: list[floa
 def check_slides(slides: list[dict]) -> list[str]:
     e = []
     kinds = {"code", "flow", "gauge", "video", "comment", "bio"}
+    span_end = 0   # last slide number covered by a video card's span
     for n, s in enumerate(slides, 1):
         s = s or {}
+        _c = s.get("card")
+        if _c:
+            if _c.get("type") == "video":
+                span_end = max(span_end, n + int(_c.get("span", 1)) - 1)
+            else:
+                span_end = max(span_end, n)
+        elif n > span_end:
+            e.append(f"teach slide {n}: needs a card (the renderer fails on a slide with no card and no video card spanning it)")
         if not s.get("say"):
             e.append(f"teach slide {n}: needs say")
         if not s.get("head"):

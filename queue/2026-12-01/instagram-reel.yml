@@ -29,6 +29,13 @@ slides:
   tag: THE PROBLEM
   react: thinking
   react_at: works
+  card:
+    type: code
+    file: deadline.txt
+    code: 'deadline: [[bad:when to stop]]
+
+      test: [[good:does it work?]]'
+    sub: A date can't tell you that.
 - say: So I built in phases, and every phase ended with a test on a real phone.
   head: Phases with an *exit test*
   tag: THE FIX

@@ -30,6 +30,15 @@ slides:
   tag: CHECK 1
   react: thinking
   react_at: probably
+  card:
+    type: code
+    file: views.txt
+    code: '10.79k page views
+
+      558 unique visitors
+
+      [[bad:not the same as users]]'
+    sub: Repeat opens, bots, link previews and me.
 - say: Second, I opened my own app like a stranger. The first thing I saw was a sign-in wall.
   head: Open it like a *stranger*
   tag: CHECK 2

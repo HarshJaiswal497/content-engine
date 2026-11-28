@@ -51,6 +51,12 @@ slides:
 - say: One sentence of detail saves you ten rounds of fixing.
   head: Detail saves *rounds*
   tag: THE RULE
+  card:
+    type: code
+    file: rule.txt
+    code: '[[good:one sentence of detail]]'
+    big: 1 sentence
+    sub: saves ten rounds of fixing
 - say: The before-and-after prompts are free, link in my bio. Comment if it helped, or DM me your doubts. Follow for part 4 tomorrow.
   head: Free guide in *bio*
   tag: FREE

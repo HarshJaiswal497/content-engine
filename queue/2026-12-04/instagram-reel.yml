@@ -19,6 +19,15 @@ slides:
   tag: FIRST APP 5 OF 7
   react: shocked
   react_at: forgets
+  card:
+    type: code
+    file: before launch.txt
+    code: '[[bad:no signal]]
+
+      [[bad:app closed mid-workout]]
+
+      [[bad:back pressed mid-workout]]'
+    pill: BEFORE LAUNCH
 - say: What if there's no internet? My gym has no signal, so sets save on the phone first.
   head: No *internet*
   tag: FORGOT 1
