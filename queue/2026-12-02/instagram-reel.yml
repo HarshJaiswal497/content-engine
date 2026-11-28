@@ -3,7 +3,7 @@ format: reel
 scheduled_at: '2026-12-02T12:30:00+05:30'
 app: personal
 pillar: lessons
-text: 'Never tell your AI "make it better". Say exactly what stays and what changes.
+text: 'Never tell your AI "make it better", it changes things you loved. Say exactly what stays and what changes.
 
 
   My first Today screen showed only a Resume button when a workout was open. I wanted the normal screen, with just Start turning into Resume. And a query for "the newest 20 notes" hid a friend''s note behind mine, until I asked for the newest from others.
@@ -14,15 +14,19 @@ text: 'Never tell your AI "make it better". Say exactly what stays and what chan
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
 slides:
-- say: Never tell your AI "make it better". Do this instead.
-  head: Stop saying *make it better*
+- say: Never tell your AI "make it better", it changes things you loved.
+  head: 'Pov: *"make it better"*'
   tag: FIRST APP 3 OF 7
   react: shocked
-  react_at: guess
+  react_at: loved
   card:
     type: code
-    file: prompt.txt
-    code: '[[bad:"fix the home screen"]]'
+    file: chat.txt
+    code: 'you: [[bad:make it better]]
+
+      AI: [[bad:improved everything 🎉]]
+
+      you: not everything'
     stamp: VAGUE
 - say: My first version showed only a Resume button. I wanted the normal screen, so I said exactly what stays, and what changes.
   head: Say what *stays*

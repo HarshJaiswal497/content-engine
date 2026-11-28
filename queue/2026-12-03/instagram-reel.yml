@@ -3,7 +3,7 @@ format: reel
 scheduled_at: '2026-12-03T12:30:00+05:30'
 app: personal
 pillar: lessons
-text: 'Your AI can''t fix a bug unless you give it three things: the steps, what you expected, and what changed.
+text: 'Three things stop your AI saying "fixed it" while the bug stays: the steps, what you expected, and what changed.
 
 
   I deleted an exercise from the middle of a split, then tried to add one, and it failed. I gave my AI the steps, not "adding is broken". The cause: deleting left a gap in the numbering (0, 1, 2, 4), and the new exercise landed on a taken spot. Fixed by numbering after the highest one.
@@ -14,19 +14,23 @@ text: 'Your AI can''t fix a bug unless you give it three things: the steps, what
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
 slides:
-- say: Your AI can't fix a bug unless you give it three things.
-  head: Give it *3 things*
+- say: Three things stop your AI saying "fixed it" while the bug stays.
+  head: 'Pov: *"fixed it"*'
   tag: FIRST APP 4 OF 7
   react: shocked
-  react_at: three
+  react_at: stays
   card:
     type: code
-    file: report.txt
-    code: '[[bad:"adding is broken"]]'
-    stamp: USELESS
-- say: One, the steps. I deleted an exercise from the middle of a split, then added a new one.
+    file: chat.txt
+    code: 'you: [[bad:adding is broken]]
+
+      AI: [[bad:fixed it ✅]]
+
+      you: it''s still broken'
+    stamp: NOT FIXED
+- say: '"Adding is broken" tells it nothing. One, the steps: I deleted an exercise from the middle of a split, then added a new one.'
   head: 'One: the *steps*'
-  tag: REAL BUG
+  tag: THREE THINGS
   card:
     type: code
     file: steps.txt
