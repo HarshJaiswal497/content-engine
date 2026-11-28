@@ -9,7 +9,7 @@ The facts about Harsh and his apps live in the **private** repo `HarshJaiswal497
 names, paths or devices in posts).
 1. Private repo: `brand/founder.md`, `brand/apps/*.md` (fact sheets — what's shareable and what's off-limits)
    and `brand/apps/*-story.md` (full story bibles; skip anything marked [UNSURE] or [IDEA]).
-   Also the private repo's `notes/weekly.md`: Harsh's notes on what happened this week. **This week's news leads:** anything he lists there as new (shipped, fixed, decided, learned) should anchor the build-in-public and feature-spotlight posts of the coming week, ahead of older story-bible material. Use the story bibles to fill the remaining slots and to give background. Notes are facts, but anything marked [UNSURE]/[IDEA] or "don't share" is still off-limits.
+   Also the private repo's `notes/weekly.md`: Harsh's notes on what happened this week. **Notes are the backbone (the facts), not the content, so drafting never stops for lack of new notes.** New items go into `notes/coverage.md` as UNUSED and lead the week; with no new section, fill the week from UNUSED and PARTIAL rows and say in the report that no new notes came. **This week's news leads:** anything he lists there as new (shipped, fixed, decided, learned) should anchor the build-in-public and feature-spotlight posts of the coming week, ahead of older story-bible material. Use the story bibles to fill the remaining slots and to give background. Notes are facts, but anything marked [UNSURE]/[IDEA] or "don't share" is still off-limits.
    Also `notes/coverage.md` (private repo): the tracker of every angle already used or still unused. See section 5.
 2. This repo: `brand/voice.md`, `brand/pillars.md`, `brand/calendar.yml`, `brand/handles.yml`.
 3. `inbox/` (public) — screenshots and screen recordings. Everything new since last week is fair game; new screen recordings should become
@@ -114,14 +114,20 @@ The private repo's `notes/coverage.md` lists every story angle, feature and less
 ## Teaching Reels (cleared 21 Nov 2026; Instagram + YouTube only, LinkedIn stays as before)
 Per week: about 2 Reels are pure app promos (`video.kind: story`, **no CTA at all**), the rest teach (`video.kind: teach`).
 A teaching Reel is faceless, the mascot talks in the lower window in Harsh's voice, one idea per beat, and **always ends with a
-comment-word CTA for a real resource** (a `card: {type: comment}` on the last slide). Hand-reply with the PDF link; never invent a
-resource: it must be made from his real material first. Rules from the 21 Nov swipe-file research (`claude/swipe-file.md`, project docs):
+free-resource line** ("The X is free, link in my bio. Comment if it helped, or DM me your doubts.") and a `card: {type: bio}` on the last slide (changed 29 Nov from comment words). Put the PDF in the public Drive folder in `resources/LINKS.md` (the bio link shows it); never invent a
+resource: it must be made from his real material first. Add "Follow for part N tomorrow." on series Reels. Rules from the 21 Nov swipe-file research (`claude/swipe-file.md`, project docs):
 1. Hook = a mistake, a stake or a number about the viewer's problem, not a topic label. Score it: `python tools/draftcheck.py queue/<date>`.
-2. The comment word names a specific, wanted resource ("WORKFLOW", "KEYS"), backed by one line of proof from real numbers or bugs.
+2. The resource is specific and wanted ("the bug report template"), backed by one line of proof from real numbers or bugs.
 3. Prefer a numbered or named series over one-offs; no diary updates or "thank you" posts.
 4. Before opening the PR run `tools/draftcheck.py` on the week: rewrite every WEAK hook and FLAGGED text (heuristics, not predictions).
 Slide fields for `teach` are documented in `hf/teach/example.yml`; the walkthrough card needs a clip in `inbox/` with phone, email and
 other private details already cut out.
 
 ### Resource PDFs
-Every comment-word has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.
+Every resource has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.
+
+### Tool stack and format test (Harsh, 29 Nov 2026)
+- **Tools Harsh really uses** (safe to name in teaching Reels as his own stack, never as endorsements of competitors): Claude Code for coding; Cloudflare, Firebase and Supabase for hosting; ChatGPT for image generation; GitHub for CI/CD. Which tool went with which app is not stated yet; do not assign one to an app until he says.
+- **Format test:** try skit-style (a "pov" chat joke in the first card, then the lesson) and clear explainers with jokes, then settle on whichever works better. Week of 30 Nov: Wed (prompts) and Thu (bug) are skit-style; Mon and Fri are explainers; Tue, Sat and Sun are real stories with numbers. Each Saturday compare 3-second holds, shares and saves per format (`brand/research-digest.md`) and write the verdict in `notes/coverage.md`.
+- **Read `brand/research-digest.md` before drafting.**
+- **Hooks:** the 29 Nov YouTube research found stances and relatable skits get far more views than plain how-to; a stance still needs a number or the payload in the first sentence to pass the hook scorer. A "pov" joke about AI behaviour must read as a joke, never as a claim that it happened to Harsh unless his notes say so.

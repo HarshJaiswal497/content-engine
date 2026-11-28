@@ -1,0 +1,35 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-12-06T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: 'Four charts in Setalytix: volume per workout, estimated 1RM per exercise, body weight, and the same workout session by session.
+
+
+  Free at app.setalytix.in, link in bio.
+
+
+  #setalytix #gymtracker #progressiveoverload #workoutapp #strengthtraining #gymlife #buildinpublic'
+slides:
+- type: cover
+  kicker: Setalytix progress
+  title: '*4 charts* of progress'
+- type: point
+  number: 1
+  title: '*Volume* per workout'
+  body: How much you lifted each session.
+- type: point
+  number: 2
+  title: '*Estimated 1RM*'
+  body: One chart per exercise.
+- type: point
+  number: 3
+  title: '*Body weight*'
+  body: Tracked alongside your lifts.
+- type: point
+  number: 4
+  title: Same workout, *session by session*
+  body: Added after I saw volume per day wasn't enough to show progress.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

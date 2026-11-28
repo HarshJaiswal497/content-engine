@@ -1,0 +1,26 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-12-02T09:15:00+05:30'
+app: slipnote
+pillar: engineering-deep-dive
+text: 'I swiped the app away, a note was sent, and the widget still updated. Then I restarted the phone.
+
+
+  Before building Slipnote, I made a throwaway test of the riskiest part: painting a home-screen widget in the background, with the app closed, on a phone from a brand known for killing background apps.
+
+
+  Results from that test: with the app swiped away, the widget updated in about 6.5 seconds. I repeated it unplugged, to rule out "it only works because it''s charging". After a reboot, without ever opening the app, it took about 35 seconds.
+
+
+  If that had failed, the idea was dead, and I''d have known on day one instead of week three.
+
+
+  Test the part that can kill your idea first.
+
+
+  Slipnote is in development. Waitlist:
+
+  https://harshjaiswal497.github.io/content-engine/slipnote/
+
+
+  #buildinpublic #android #flutter'

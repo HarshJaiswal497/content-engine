@@ -1,0 +1,24 @@
+platform: linkedin
+format: image
+scheduled_at: '2026-12-06T09:15:00+05:30'
+app: setalytix
+pillar: product-calls
+text: 'A workout left open overnight is not a 14-hour workout.
+
+
+  Real life: you start a session, forget to finish it, and open the app the next morning. Setalytix caps a session at 8 hours, so your stats don''t say you lifted all night.
+
+
+  Small product call, big difference to your numbers.
+
+
+  I''m open to software developer, backend and AI-native engineering roles. If your team ships like this, I''d love to talk.
+
+
+  https://app.setalytix.in
+
+
+  #buildinpublic #productdesign #webdev'
+slides:
+- type: big
+  title: Left open overnight? *8 hours* is the cap

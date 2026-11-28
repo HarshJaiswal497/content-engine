@@ -1,0 +1,23 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-12-04T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: 'Three libraries I needed were newer than my AI knew. So I made it read their source code instead of guessing.
+
+
+  Three libraries in Slipnote had all moved past the AI''s knowledge: flutter_local_notifications 22, firebase_messaging 17 and home_widget 0.10. One example: the notifications setup call now takes named parameters. So before any code, the source of each package got read. Not remembered. Read.
+
+
+  The lesson: when a library is new, don''t trust the AI''s memory of it. Point it at the real code, or the docs for that exact version, then build.
+
+
+  I''m open to software developer, backend and AI-native engineering roles. If your team ships like this, I''d love to talk.
+
+
+  Slipnote is in development. Waitlist:
+
+  https://harshjaiswal497.github.io/content-engine/slipnote/
+
+
+  #aicoding #flutter #buildinpublic'

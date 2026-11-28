@@ -1,0 +1,70 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-06T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Six steps from an idea to a live app, with AI doing the typing: the idea check, phases with a test each, specific prompts, real bug reports, the edge cases, and a launch you actually measure.
+
+
+  That''s the whole First App with AI series in one page. Got an idea? The whole roadmap is free, link in my bio. Comment if it helped, or DM me your doubts.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Six steps from an idea to a live app, in thirty seconds.
+  head: '*6 steps*, idea to live'
+  tag: FIRST APP 7 OF 7
+  react: excited
+  react_at: Six
+  card:
+    type: code
+    file: roadmap.txt
+    code: '[[good:idea → live app]]'
+    big: 6 steps
+    sub: with AI doing the typing
+- say: One, check the idea. Two, build in phases, and end each one with a real test.
+  head: Idea check, then *phases*
+  tag: STEPS 1 AND 2
+  card:
+    type: flow
+    file: the map
+    nodes:
+    - title: 1 Idea check
+    - title: 2 Phases
+    note: One screen, one job.
+- say: Three, prompt exactly. Four, report bugs with steps. Five, ask what the AI forgot.
+  head: Prompts, bugs, *edge cases*
+  tag: STEPS 3 TO 5
+  card:
+    type: flow
+    file: the map
+    nodes:
+    - title: 3 Exact prompts
+    - title: 4 Bug steps
+    - title: 5 Edge cases
+    note: Say it exactly.
+- say: Six, let strangers in, and measure what they do. Then go round again.
+  head: '*Launch*, then measure'
+  tag: STEP 6
+  react: cheer
+  react_at: strangers
+  card:
+    type: code
+    file: launch.txt
+    code: '[[good:let strangers in]]
+
+      [[good:measure what they do]]'
+    pill: STEP 6
+    sub: Then go round again.
+- say: The whole roadmap is free, link in my bio. Comment if it helped, or DM me your doubts. Follow for the next series.
+  head: Free guide in *bio*
+  tag: FREE
+  react: point_down
+  react_at: bio
+  card:
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
+video:
+  kind: teach
+  tone: story

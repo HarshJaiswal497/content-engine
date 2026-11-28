@@ -1,0 +1,23 @@
+platform: linkedin
+format: text
+scheduled_at: '2026-11-30T09:15:00+05:30'
+app: setalytix
+pillar: engineering-deep-dive
+text: 'What happens if an update goes wrong while you''re in the middle of a workout?
+
+
+  Setalytix is a web app. It keeps its files on your phone, so it opens fast and works with no signal. The catch: an update can leave the phone with half old files and half new ones, and then the app can fail to open properly. In a gym, with a bar loaded, that is the worst moment to find out.
+
+
+  So I added a safety net at startup. If Setalytix notices it''s running on a mix of old and new files, it clears its cached files and reloads once, by itself. You get a short pause instead of a broken app.
+
+
+  I added it on 16 October, one of the first days it was live. AI wrote most of the code. The call that a broken update should fix itself quietly, once, instead of asking people to clear their cache, was mine.
+
+
+  Try it free, no app store:
+
+  https://app.setalytix.in
+
+
+  #buildinpublic #webdev #pwa'

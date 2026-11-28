@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-12-02T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: 'Vibe coding: never tell your AI ''make it better'''
+  description: 'First App with AI, part 3 of 7: vague prompts make AI guess. Two real examples from my apps. The before-and-after prompts are free, link in my bio.
+
+    #Shorts #buildwithai #firstapp'
+  tags:
+  - build with ai
+  - ai prompts
+  - prompt engineering
+  - vibe coding
+  - first app
+  - beginner

@@ -1,0 +1,71 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-02T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Never tell your AI "make it better", it changes things you loved. Say exactly what stays and what changes.
+
+
+  My first Today screen showed only a Resume button when a workout was open. I wanted the normal screen, with just Start turning into Resume. And a query for "the newest 20 notes" hid a friend''s note behind mine, until I asked for the newest from others.
+
+
+  First App with AI, part 3 of 7. The before-and-after prompts are free, link in my bio. Comment if it helped, or DM me your doubts.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Never tell your AI "make it better", it changes things you loved.
+  head: 'Pov: *"make it better"*'
+  tag: FIRST APP 3 OF 7
+  react: shocked
+  react_at: loved
+  card:
+    type: code
+    file: chat.txt
+    code: 'you: [[bad:make it better]]
+
+      AI: [[bad:improved everything 🎉]]
+
+      you: not everything'
+    stamp: VAGUE
+- say: My first version showed only a Resume button. I wanted the normal screen, so I said exactly what stays, and what changes.
+  head: Say what *stays*
+  tag: SPECIFIC
+  card:
+    type: code
+    file: prompt.txt
+    code: '[[good:"While a workout is open, Today looks normal. Only Start turns into Resume."]]'
+    pill: SPECIFIC
+- say: Ask for exactly what you show. The newest twenty notes hid a friend's note behind mine.
+  head: Ask for *exactly* what you show
+  tag: REAL EXAMPLE
+  react: thinking
+  react_at: hid
+  card:
+    type: code
+    file: query.txt
+    code: '[[bad:the newest 20 notes]]
+
+      [[good:the newest from others]]'
+    sub: The first one buried a friend's note.
+- say: One sentence of detail saves you ten rounds of fixing.
+  head: Detail saves *rounds*
+  tag: THE RULE
+  card:
+    type: code
+    file: rule.txt
+    code: '[[good:one sentence of detail]]'
+    big: 1 sentence
+    sub: saves ten rounds of fixing
+- say: The before-and-after prompts are free, link in my bio. Comment if it helped, or DM me your doubts. Follow for part 4 tomorrow.
+  head: Free guide in *bio*
+  tag: FREE
+  react: point_down
+  react_at: bio
+  card:
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
+video:
+  kind: teach
+  tone: story

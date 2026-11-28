@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-12-01T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: I scrapped my 1-week plan and my app got better
+  description: 'First App with AI, part 2 of 7: build in phases, end each with a real-phone test, and test the riskiest part first. The phase plan template is free, link in my bio.
+
+    #Shorts #buildwithai #firstapp'
+  tags:
+  - build with ai
+  - first app
+  - project planning
+  - vibe coding
+  - beginner
+  - app development

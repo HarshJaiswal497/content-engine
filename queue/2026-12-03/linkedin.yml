@@ -1,0 +1,39 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-12-03T09:15:00+05:30'
+app: setalytix
+pillar: build-in-public
+text: 'Cardio went live in Setalytix as two pushes, 30 minutes apart.
+
+
+  Big features are easy to get wrong in one go. I split it so each push was small enough to test on my phone before bed. If something broke, I''d know which push did it.
+
+
+  AI writes a lot of the code. Deciding where to cut the feature in two is the part that keeps shipping calm.
+
+
+  Try Setalytix free:
+
+  https://app.setalytix.in
+
+
+  #buildinpublic #indiedev #aicoding'
+slides:
+- type: cover
+  kicker: Shipping
+  title: Ship in *small pushes*
+- type: point
+  number: 1
+  title: Cut it in *two*
+  body: Cardio went out as two pushes, 30 minutes apart.
+- type: point
+  number: 2
+  title: Test each on a *phone*
+  body: Each push was small enough to try before bed.
+- type: point
+  number: 3
+  title: Know *which one* broke
+  body: If something fails, you know which push did it.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in
