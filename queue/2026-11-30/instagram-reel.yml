@@ -1,0 +1,71 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-11-30T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Don''t open any AI tool until you can answer three questions: who it''s for, what hurts today, and what the one screen is.
+
+
+  Mine for Setalytix: me at the gym, forgetting last session''s weights, and a screen with today''s weights already filled in.
+
+
+  First App with AI, part 1 of 7. Comment IDEA and I''ll send you the one-page idea check.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Don't open any AI tool until you can answer three questions.
+  head: Answer *3 questions* first
+  tag: FIRST APP 1 OF 7
+  react: shocked
+  react_at: three
+  card:
+    type: code
+    file: idea.txt
+    code: '[[good:1. who is it for?]]
+
+      [[good:2. what hurts today?]]
+
+      [[good:3. what is the one screen?]]'
+    pill: BEFORE YOU PROMPT
+- say: Who is it for? Mine was me. I kept forgetting what I lifted last session.
+  head: Who is it *for*?
+  tag: QUESTION 1
+  card:
+    type: code
+    file: my answer.txt
+    code: '[[good:me, at the gym]]'
+    big: Me, at the gym.
+    sub: I kept forgetting last session's weights.
+- say: What hurts today? One good day, one slip, and nothing written down.
+  head: What *hurts* today?
+  tag: QUESTION 2
+  card:
+    type: code
+    file: my answer.txt
+    code: '[[bad:good day → slip → no record]]'
+    sub: That's the problem the app has to solve.
+- say: And the one screen. Open a workout, and today's weights are already filled in.
+  head: The *one screen*
+  tag: QUESTION 3
+  react: cheer
+  react_at: filled
+  card:
+    type: code
+    file: today.txt
+    code: 'Today''s workout
+
+      [[good:weights already filled in]]'
+    pill: ONE SCREEN
+- say: Comment IDEA, and I'll send you the one-page idea check.
+  head: Get the *idea check*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: IDEA
+    reply: Sent ✓ The one-page idea check
+video:
+  kind: teach
+  tone: story

@@ -1,0 +1,56 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-06T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Six steps from an idea to a live app, with AI doing the typing: the idea check, phases with a test each, specific prompts, real bug reports, the edge cases, and a launch you actually measure.
+
+
+  That''s the whole First App with AI series in one page. Got an idea? Comment ROADMAP and I''ll send the map.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Six steps from an idea to a live app, in thirty seconds.
+  head: '*6 steps*, idea to live'
+  tag: FIRST APP 7 OF 7
+  react: excited
+  react_at: Six
+- say: One, check the idea. Two, build in phases, and end each one with a real test.
+  head: Idea check, then *phases*
+  tag: STEPS 1 AND 2
+  card:
+    type: flow
+    file: the map
+    nodes:
+    - title: 1 Idea check
+    - title: 2 Phases
+    note: One screen, one job.
+- say: Three, prompt exactly. Four, report bugs with steps. Five, ask what the AI forgot.
+  head: Prompts, bugs, *edge cases*
+  tag: STEPS 3 TO 5
+  card:
+    type: flow
+    file: the map
+    nodes:
+    - title: 3 Exact prompts
+    - title: 4 Bug steps
+    - title: 5 Edge cases
+    note: Say it exactly.
+- say: Six, let strangers in, and measure what they do. Then go round again.
+  head: '*Launch*, then measure'
+  tag: STEP 6
+  react: cheer
+  react_at: strangers
+- say: Comment ROADMAP, and I'll send you the whole map on one page.
+  head: Get the *roadmap*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: ROADMAP
+    reply: Sent ✓ The six-step roadmap
+video:
+  kind: teach
+  tone: story

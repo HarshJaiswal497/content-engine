@@ -1,0 +1,35 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-12-01T19:30:00+05:30'
+app: setalytix
+pillar: feature-spotlight
+text: 'Push/Pull/Legs, Upper/Lower, Full Body, or build your own. One split is Active, and it''s what Today shows.
+
+
+  Free at app.setalytix.in, link in bio.
+
+
+  #setalytix #gymtracker #workoutapp #pushpulllegs #strengthtraining #gymlife #buildinpublic'
+slides:
+- type: cover
+  kicker: Setalytix splits
+  title: Pick *your split*
+- type: point
+  number: 1
+  title: '*Push / Pull / Legs*'
+  body: Three days, one clear focus each.
+- type: point
+  number: 2
+  title: '*Upper / Lower*'
+  body: Two days that split your body in half.
+- type: point
+  number: 3
+  title: '*Full Body*'
+  body: Everything, every session.
+- type: point
+  number: 4
+  title: Or *build your own*
+  body: One split is Active, and Today shows that one.
+- type: cta
+  title: Try *Setalytix*
+  body: Free at app.setalytix.in

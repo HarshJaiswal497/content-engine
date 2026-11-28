@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-12-06T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Idea to live app in 6 steps (with AI)
+  description: 'First App with AI, part 7 of 7: the whole path on one page. The roadmap is free: ask in the comments of the Instagram Reel.
+
+    #Shorts #buildwithai #firstapp'
+  tags:
+  - build with ai
+  - first app
+  - app roadmap
+  - vibe coding
+  - beginner
+  - idea to app

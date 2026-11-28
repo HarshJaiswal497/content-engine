@@ -1,0 +1,63 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-05T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: '558 visitors in 30 days, almost no signups.
+
+
+  First check: visitors aren''t users. Most of my 10.79k page views were probably repeat opens, bots, link previews and me. Second check: I opened the app like a stranger and hit a sign-in wall. So new visitors now land inside the app. Too early to say if it worked.
+
+
+  First App with AI, part 6 of 7. Comment LAUNCH and I''ll send you the first-week checklist.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Five hundred and fifty-eight visitors, and almost no signups. Here's what I checked.
+  head: '*558* visitors, no signups'
+  tag: FIRST APP 6 OF 7
+  react: shocked
+  react_at: signups
+  card:
+    type: code
+    file: cloudflare, 30 days.txt
+    code: 'visitors: [[good:558]]
+
+      signups: [[bad:almost none]]'
+- say: First, visitors aren't users. Most of my page views were probably repeat opens, bots, link previews and me.
+  head: Visitors aren't *users*
+  tag: CHECK 1
+  react: thinking
+  react_at: probably
+- say: Second, I opened my own app like a stranger. The first thing I saw was a sign-in wall.
+  head: Open it like a *stranger*
+  tag: CHECK 2
+  card:
+    type: code
+    file: first visit.txt
+    code: 'stranger opens the app
+
+      [[bad:→ sign-in wall]]'
+- say: So I removed the wall. A new visitor now lands inside the app, and signs up when they start a workout.
+  head: Let them *in* first
+  tag: THE CHANGE
+  card:
+    type: code
+    file: now.txt
+    code: 'stranger opens the app
+
+      [[good:→ lands inside]]'
+    sub: Too early to say if it worked.
+- say: Comment LAUNCH, and I'll send you the first-week checklist.
+  head: Get the *checklist*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: LAUNCH
+    reply: Sent ✓ The first-week launch checklist
+video:
+  kind: teach
+  tone: story

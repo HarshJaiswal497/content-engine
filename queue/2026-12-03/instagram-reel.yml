@@ -1,0 +1,69 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-03T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Your AI can''t fix a bug unless you give it three things: the steps, what you expected, and what changed.
+
+
+  I deleted an exercise from the middle of a split, then tried to add one, and it failed. I gave my AI the steps, not "adding is broken". The cause: deleting left a gap in the numbering (0, 1, 2, 4), and the new exercise landed on a taken spot. Fixed by numbering after the highest one.
+
+
+  First App with AI, part 4 of 7. Comment BUG and I''ll send you the bug report template.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Your AI can't fix a bug unless you give it three things.
+  head: Give it *3 things*
+  tag: FIRST APP 4 OF 7
+  react: shocked
+  react_at: three
+  card:
+    type: code
+    file: report.txt
+    code: '[[bad:"adding is broken"]]'
+    stamp: USELESS
+- say: One, the steps. I deleted an exercise from the middle of a split, then added a new one.
+  head: 'One: the *steps*'
+  tag: REAL BUG
+  card:
+    type: code
+    file: steps.txt
+    code: '1. delete the middle exercise
+
+      2. add a new one'
+- say: Two, what you expected, and what happened. A new exercise should appear. Mine failed.
+  head: 'Two: *expected* vs actual'
+  tag: REAL BUG
+  card:
+    type: code
+    file: result.txt
+    code: 'expected: [[good:new exercise appears]]
+
+      actual: [[bad:it fails]]'
+- say: 'Three, what changed. That pointed to the cause: deleting left a gap in the numbering, and the new one landed on a taken spot. The fix: number after the highest.'
+  head: 'Three: what *changed*'
+  tag: THE CAUSE
+  react: cheer
+  react_at: fix
+  card:
+    type: code
+    file: numbers.txt
+    code: 'positions: 0, 1, 2, 4
+
+      new one took: [[bad:4]]
+
+      fix: next = [[good:highest + 1]]'
+- say: Comment BUG, and I'll send you the bug report template.
+  head: Get the *template*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: BUG
+    reply: Sent ✓ The bug report template
+video:
+  kind: teach
+  tone: story

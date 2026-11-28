@@ -1,0 +1,39 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-12-05T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: 'I wrote 1 test plan for the wrong brand of phone.
+
+
+  The plan assumed the worst brand for keeping apps alive in the background. Halfway through setup, I mentioned that my test phone was a different one. Same risk category. Different setting names, such as "Allow auto launch" and "Allow background activity". So the plan changed.
+
+
+  Test on the phone your users actually hold. Write the plan for the worst case first.
+
+
+  Slipnote is in development. Waitlist:
+
+  https://harshjaiswal497.github.io/content-engine/slipnote/
+
+
+  #buildinpublic #android #testing'
+slides:
+- type: cover
+  kicker: Testing
+  title: Which *phone* did you test on?
+- type: point
+  number: 1
+  title: Plan for the *worst case*
+  body: I wrote the test plan for a brand known for killing background apps.
+- type: point
+  number: 2
+  title: Check the phone in your *hand*
+  body: Halfway through setup, I noticed mine was a different brand.
+- type: point
+  number: 3
+  title: Same risk, *different names*
+  body: The settings had other names, so the plan changed.
+- type: cta
+  title: Follow the *build*
+  body: Slipnote is in development.

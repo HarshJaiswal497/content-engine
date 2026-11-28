@@ -1,0 +1,46 @@
+platform: linkedin
+format: carousel
+scheduled_at: '2026-12-01T09:15:00+05:30'
+app: slipnote
+pillar: lessons
+text: 'A deadline isn''t a plan.
+
+
+  On 19 October I scrapped my one-week plan for Slipnote. The idea already worked. The job now was to make it better and smooth, not to rush a "version one".
+
+
+  So I cut the build into phases. Every phase ends with a test on a real phone, not a date on a calendar. One exit check: three widgets for three circles must stay current for 24 hours. If they don''t, I don''t move on.
+
+
+  Swipe for how it works.
+
+
+  Slipnote is in development. The waitlist is here:
+
+  https://harshjaiswal497.github.io/content-engine/slipnote/
+
+
+  #buildinpublic #productmanagement #aicoding'
+slides:
+- type: cover
+  kicker: Lesson
+  title: A deadline isn't *a plan*
+- type: point
+  number: 1
+  title: Drop the *deadline*
+  body: I scrapped my one-week plan. The idea already worked; it needed to be better and smooth.
+- type: point
+  number: 2
+  title: Cut it into *phases*
+  body: Each phase ends with a test, not a date.
+- type: point
+  number: 3
+  title: Test on a *real phone*
+  body: 'One exit check I set: three widgets for three circles must stay current for 24 hours.'
+- type: point
+  number: 4
+  title: No *version two*
+  body: The first release is the complete app, so nothing is parked for later.
+- type: cta
+  title: Follow the *build*
+  body: Slipnote is in development.

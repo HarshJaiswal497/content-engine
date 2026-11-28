@@ -1,0 +1,35 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-12-03T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: 'Pen, marker, highlighter, pencil, eraser. 5 tools in all. The eraser takes the ink and never the paper or the photo. A stabiliser tidies your handwriting. And there''s no typed text, on purpose.
+
+
+  Slipnote is in development. Join the waitlist, link in bio.
+
+
+  #slipnote #handwrittennotes #widgets #android #doodle'
+slides:
+- type: cover
+  kicker: Slipnote tools
+  title: '*Real* drawing tools'
+- type: point
+  number: 1
+  title: Pen, marker, *highlighter*
+  body: Draw the way you would on paper.
+- type: point
+  number: 2
+  title: A *pencil*
+  body: For the soft, sketchy notes.
+- type: point
+  number: 3
+  title: An eraser that *knows better*
+  body: It erases ink, never the paper or the photo.
+- type: point
+  number: 4
+  title: A *stabiliser*
+  body: Makes handwriting neat. There's no typed text, on purpose.
+- type: cta
+  title: Join the *waitlist*
+  body: Link in bio

@@ -1,0 +1,61 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-02T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Never tell your AI "make it better". Say exactly what stays and what changes.
+
+
+  My first Today screen showed only a Resume button when a workout was open. I wanted the normal screen, with just Start turning into Resume. And a query for "the newest 20 notes" hid a friend''s note behind mine, until I asked for the newest from others.
+
+
+  First App with AI, part 3 of 7. Comment PROMPTS and I''ll send you the before-and-after prompts.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Never tell your AI "make it better". Do this instead.
+  head: Stop saying *make it better*
+  tag: FIRST APP 3 OF 7
+  react: shocked
+  react_at: guess
+  card:
+    type: code
+    file: prompt.txt
+    code: '[[bad:"fix the home screen"]]'
+    stamp: VAGUE
+- say: My first version showed only a Resume button. I wanted the normal screen, so I said exactly what stays, and what changes.
+  head: Say what *stays*
+  tag: SPECIFIC
+  card:
+    type: code
+    file: prompt.txt
+    code: '[[good:"While a workout is open, Today looks normal. Only Start turns into Resume."]]'
+    pill: SPECIFIC
+- say: Ask for exactly what you show. The newest twenty notes hid a friend's note behind mine.
+  head: Ask for *exactly* what you show
+  tag: REAL EXAMPLE
+  react: thinking
+  react_at: hid
+  card:
+    type: code
+    file: query.txt
+    code: '[[bad:the newest 20 notes]]
+
+      [[good:the newest from others]]'
+    sub: The first one buried a friend's note.
+- say: One sentence of detail saves you ten rounds of fixing.
+  head: Detail saves *rounds*
+  tag: THE RULE
+- say: Comment PROMPTS, and I'll send you the before and after prompts.
+  head: Get the *prompts*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: PROMPTS
+    reply: Sent ✓ Before-and-after prompts
+video:
+  kind: teach
+  tone: story

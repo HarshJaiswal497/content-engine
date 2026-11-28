@@ -1,0 +1,67 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-01T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Never plan your first app in one week. Mine failed, so I scrapped it for Slipnote, and the app got better.
+
+
+  A deadline tells you when to stop, not whether the thing works. So I built in phases, and every phase ended with a test on a real phone. I even started with a throwaway test of the riskiest part, so a dead idea would die on day one.
+
+
+  First App with AI, part 2 of 7. Comment PHASES and I''ll send you the phase plan template.
+
+
+  #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
+slides:
+- say: Never plan your first app in one week, mine failed.
+  head: My one-week plan *failed*
+  tag: FIRST APP 2 OF 7
+  react: shocked
+  react_at: scrapped
+  card:
+    type: code
+    file: plan.txt
+    code: '[[bad:build everything in one week]]'
+    stamp: SCRAPPED
+- say: A deadline tells you when to stop. It doesn't tell you if the thing works.
+  head: Deadlines don't *test*
+  tag: THE PROBLEM
+  react: thinking
+  react_at: works
+- say: So I built in phases, and every phase ended with a test on a real phone.
+  head: Phases with an *exit test*
+  tag: THE FIX
+  card:
+    type: flow
+    file: how I build
+    nodes:
+    - title: Build
+      sub: one phase
+    - title: Test
+      sub: on a real phone
+    - title: Next
+      sub: only if it passes
+    note: No pass, no next phase.
+- say: And I started with the riskiest part, a throwaway test of the widget, so a dead idea would die on day one.
+  head: Riskiest part *first*
+  tag: STEP ONE
+  card:
+    type: code
+    file: spike.txt
+    code: 'day 1: [[good:throwaway test]]
+
+      of the part that could kill it'
+    sub: Test it before you build the rest.
+- say: Comment PHASES, and I'll send you the phase plan template.
+  head: Get the *phase plan*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: PHASES
+    reply: Sent ✓ The phase plan template
+video:
+  kind: teach
+  tone: story

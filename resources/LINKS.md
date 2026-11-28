@@ -11,6 +11,13 @@ Drive folder (owner view only): https://drive.google.com/drive/folders/1uCA1Cz8g
 | SPEED | Fix Your AI-Built Site's Phone Speed: 3 Fixes, With Prompts | https://drive.google.com/file/d/1bal7kyYhNGSL-XDIY-lWqe4xz24FEfiK/view?usp=drivesdk | Thu 26 Nov 2026 |
 | RULES | Spec and Rules Template for AI-Built Projects | https://drive.google.com/file/d/1NuynA2WgG4rRgnn6GOQ-2gAADJGr9eNa/view?usp=drivesdk | Sat 28 Nov 2026 |
 | TOOLS | The Tools Behind My AI-Built Portfolio | https://drive.google.com/file/d/1LuuwSQ95Ns_QSR4p1mt_dnjgXiijenwl/view?usp=drivesdk | Sun 29 Nov 2026 |
+| IDEA | First App with AI 1: The One-Page Idea Check | https://drive.google.com/file/d/13zAeLovBfNCnKvQ-lOXUzo-bAMaOa-6m/view?usp=drivesdk | Mon 30 Nov 2026 |
+| PHASES | First App with AI 2: Phase Plan Template | https://drive.google.com/file/d/13VDgrD4Lsxv1Acdkj0v7-UtaT_EvfBi8/view?usp=drivesdk | Tue 1 Dec 2026 |
+| PROMPTS | First App with AI 3: Before-and-After Prompts | https://drive.google.com/file/d/1KrwUGXMt9h7D0eipSRhUsBrMaZavuEK6/view?usp=drivesdk | Wed 2 Dec 2026 |
+| BUG | First App with AI 4: Bug Report Template | https://drive.google.com/file/d/1Rz93zzUEKtch03eR3I4Huq_ZQr-T44Bs/view?usp=drivesdk | Thu 3 Dec 2026 |
+| EDGE | First App with AI 5: Ten Edge-Case Questions | https://drive.google.com/file/d/1pJAXk4eSqx8hR9Wmo9rOD3rg-j_cVf8V/view?usp=drivesdk | Fri 4 Dec 2026 |
+| LAUNCH | First App with AI 6: First-Week Launch Checklist | https://drive.google.com/file/d/1l00xCGBk3eMqgOER6G4tIJhEVaBMxqJI/view?usp=drivesdk | Sat 5 Dec 2026 |
+| ROADMAP | First App with AI 7: The Six-Step Roadmap | https://drive.google.com/file/d/1Nx9ZufguIou3WsZvSLI82fQJKcPN6XIS/view?usp=drivesdk | Sun 6 Dec 2026 |
 
 ## Reply to send
 

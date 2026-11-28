@@ -1,0 +1,31 @@
+platform: instagram
+format: carousel
+scheduled_at: '2026-12-05T19:30:00+05:30'
+app: slipnote
+pillar: feature-spotlight
+text: 'Join a Slipnote circle with a 6-character code or a link, and see who''s in it before you join.
+
+
+  In development. Join the waitlist, link in bio.
+
+
+  #slipnote #handwrittennotes #widgets #android #friends #buildinpublic #indiedev'
+slides:
+- type: cover
+  kicker: Slipnote circles
+  title: Join a *circle*
+- type: point
+  number: 1
+  title: A *6-character* code
+  body: Type it in, and you're in.
+- type: point
+  number: 2
+  title: Or a *link*
+  body: Tap it in a chat and join.
+- type: point
+  number: 3
+  title: See who's *in*
+  body: The preview shows pair or group, how many, and who.
+- type: cta
+  title: Join the *waitlist*
+  body: Link in bio

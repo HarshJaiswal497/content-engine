@@ -1,0 +1,20 @@
+platform: youtube
+format: short
+scheduled_at: '2026-12-03T17:45:00+05:30'
+app: personal
+pillar: lessons
+video:
+  kind: same_as
+  post: instagram-reel
+youtube:
+  title: Your AI can't fix a bug unless you give it 3 things
+  description: 'First App with AI, part 4 of 7: how to report a bug so AI fixes it, with a real bug from my gym app. The bug report template is free: ask in the comments of the Instagram Reel.
+
+    #Shorts #buildwithai #firstapp'
+  tags:
+  - build with ai
+  - debugging
+  - bug report
+  - vibe coding
+  - first app
+  - beginner

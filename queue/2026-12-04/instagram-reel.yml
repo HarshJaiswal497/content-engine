@@ -1,0 +1,66 @@
+platform: instagram
+format: reel
+scheduled_at: '2026-12-04T12:30:00+05:30'
+app: personal
+pillar: lessons
+text: 'Don''t launch your AI-built app until you test three things it forgot.
+
+
+  No signal at the gym: sets save on the phone first. App closed mid-workout: reopening drops you back in. Back pressed mid-workout: it goes to Today, not out of the app. I hit all 3 myself.
+
+
+  First App with AI, part 5 of 7. Comment EDGE and I''ll send you the ten-question checklist.
+
+
+  #buildwithai #vibecoding #firstapp #aicoding #appdev #buildinpublic'
+slides:
+- say: Don't launch your AI-built app until you test three things it forgot.
+  head: Test *3 things* it forgot
+  tag: FIRST APP 5 OF 7
+  react: shocked
+  react_at: forgets
+- say: What if there's no internet? My gym has no signal, so sets save on the phone first.
+  head: No *internet*
+  tag: FORGOT 1
+  card:
+    type: code
+    file: status.txt
+    code: '[[bad:Offline. 3 waiting to sync]]
+
+      [[good:All saved]]'
+    sub: Sets save on the phone first.
+- say: What if the phone closes the app mid-task? Mine drops you back into your workout.
+  head: App *closed* mid-task
+  tag: FORGOT 2
+  card:
+    type: flow
+    file: what happens
+    nodes:
+    - title: Workout
+    - title: App closed
+    - title: Back in
+      sub: right where you were
+    note: Reopen, and you're back in.
+- say: And what if they press back? Mine closed the whole app, until I made back go to Today.
+  head: The *back* button
+  tag: FORGOT 3
+  react: thinking
+  react_at: back
+  card:
+    type: code
+    file: back.txt
+    code: '[[bad:back → app closes]]
+
+      [[good:back → Today, workout stays]]'
+- say: Comment EDGE, and I'll send you the ten-question checklist.
+  head: Get the *checklist*
+  tag: FREE
+  react: point_down
+  react_at: Comment
+  card:
+    type: comment
+    word: EDGE
+    reply: Sent ✓ The ten-question edge-case checklist
+video:
+  kind: teach
+  tone: story
