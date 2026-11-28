@@ -6,13 +6,13 @@ pillar: lessons
 text: 'Don''t launch your AI-built app until you test three things it forgot.
 
 
-  No signal at the gym: sets save on the phone first. App closed mid-workout: reopening drops you back in. Back pressed mid-workout: it goes to Today, not out of the app. I hit all 3 myself.
+  No signal at the gym. App closed mid-workout. Back pressed mid-workout. I hit all 3 myself, and each one needed its own fix.
 
 
   First App with AI, part 5 of 7. The ten-question checklist is free, link in my bio. Comment if it helped, or DM me your doubts.
 
 
-  #buildwithai #vibecoding #firstapp #aicoding #appdev #buildinpublic'
+  #buildwithai #vibecoding #firstapp #aicoding #appdev'
 slides:
 - say: Don't launch your AI-built app until you test three things it forgot.
   head: Test *3 things* it forgot
