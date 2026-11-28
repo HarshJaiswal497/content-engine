@@ -125,3 +125,8 @@ other private details already cut out.
 
 ### Resource PDFs
 Every resource has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.
+
+### Tool stack and format test (Harsh, 29 Nov 2026)
+- **Tools Harsh really uses** (safe to name in teaching Reels as his own stack, never as endorsements of competitors): Claude Code for coding; Cloudflare, Firebase and Supabase for hosting; ChatGPT for image generation; GitHub for CI/CD. Which tool went with which app is not stated yet; do not assign one to an app until he says.
+- **Format test:** try skit-style (a "pov" chat joke in the first card, then the lesson) and clear explainers with jokes, then settle on whichever works better. Week of 30 Nov: Wed (prompts) and Thu (bug) are skit-style; Mon and Fri are explainers; Tue, Sat and Sun are real stories with numbers. Each Saturday compare 3-second holds, shares and saves per format (project doc `claude/shorts-search-research.md`) and write the verdict in `notes/coverage.md`.
+- **Hooks:** the 29 Nov YouTube research found stances and relatable skits get far more views than plain how-to; a stance still needs a number or the payload in the first sentence to pass the hook scorer. A "pov" joke about AI behaviour must read as a joke, never as a claim that it happened to Harsh unless his notes say so.
