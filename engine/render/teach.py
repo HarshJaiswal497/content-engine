@@ -6,7 +6,7 @@ ripple into a moving three.js gradient. Captions in white, the spoken word lit b
 
 Slide fields (see queue/_template.yml and hf/teach/example.yml):
   say, head ("Stop *leaking* keys"), tag ("THE MISTAKE"), react / react_at (mascot reaction), and `card:`.
-  card.type: code | flow | gauge | video | comment
+  card.type: code | flow | gauge | video | comment | bio
 """
 from __future__ import annotations
 
@@ -136,9 +136,11 @@ def _card(i: int, beat_len: float, card: dict, spec_span: int, starts: list[floa
         if chips:
             js.append(f'tl.to("#ch{i}_0, #ch{i}_{len(chips) - 1}", {{ opacity: 0, duration: .2 }}, B[{i + int(chips[-1].get("beat", 0))}].e - .1);')
         return h, "\n".join(js)
-    if t == "comment":
-        word = str(card.get("word", "GUIDE")).upper()
-        h = (f'<div class="card" id="{cid}"><div class="cf"></div><div class="win"><i></i><i></i><i></i><span>comments</span></div>'
+    if t in ("comment", "bio"):
+        # comment: the comment-word offer. bio: "free guides, link in bio" (no word to type; title is the typed label)
+        word = str(card.get("word", "GUIDE")).upper() if t == "comment" else str(card.get("title", "FREE GUIDES")).upper()
+        label = "comments" if t == "comment" else "my profile"
+        h = (f'<div class="card" id="{cid}"><div class="cf"></div><div class="win"><i></i><i></i><i></i><span>{label}</span></div>'
              f'<div class="bub" id="bb{i}"><span class="ty">{_typed(word)}</span></div><br/>'
              f'<div class="dm" id="dm{i}">{html.escape(str(card.get("reply", "Sent ✓")))}</div></div>')
         js = [f'card("#{cid}", {B}.s + .05, {B}.e + .3);',
@@ -150,7 +152,7 @@ def _card(i: int, beat_len: float, card: dict, spec_span: int, starts: list[floa
 
 def check_slides(slides: list[dict]) -> list[str]:
     e = []
-    kinds = {"code", "flow", "gauge", "video", "comment"}
+    kinds = {"code", "flow", "gauge", "video", "comment", "bio"}
     for n, s in enumerate(slides, 1):
         s = s or {}
         if not s.get("say"):
@@ -165,8 +167,8 @@ def check_slides(slides: list[dict]) -> list[str]:
                 e.append(f"teach slide {n}: video card needs src and cuts")
     if len(slides) > 8:
         e.append("teach: more than 8 slides; keep Reels under about 45 s")
-    if slides and not any(((s or {}).get("card") or {}).get("type") == "comment" for s in slides):
-        e.append("teach: the last slide should be a comment card (word + reply): the resource offer")
+    if slides and not any(((s or {}).get("card") or {}).get("type") in ("comment", "bio") for s in slides):
+        e.append("teach: the last slide should be a bio card (free guide, link in bio) or a comment card (word + reply)")
     return e
 
 

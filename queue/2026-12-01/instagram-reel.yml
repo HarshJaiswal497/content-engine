@@ -9,7 +9,7 @@ text: 'Never plan your first app in one week. Mine failed, so I scrapped it for 
   A deadline tells you when to stop, not whether the thing works. So I built in phases, and every phase ended with a test on a real phone. I even started with a throwaway test of the riskiest part, so a dead idea would die on day one.
 
 
-  First App with AI, part 2 of 7. Comment PHASES and I''ll send you the phase plan template.
+  First App with AI, part 2 of 7. The phase plan template is free, link in my bio. Comment if it helped, or DM me your doubts.
 
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
@@ -53,15 +53,15 @@ slides:
 
       of the part that could kill it'
     sub: Test it before you build the rest.
-- say: Comment PHASES, and I'll send you the phase plan template. Follow for part 3 tomorrow.
-  head: Get the *phase plan*
+- say: The phase plan template is free, link in my bio. Comment if it helped, or DM me your doubts. Follow for part 3 tomorrow.
+  head: Free guide in *bio*
   tag: FREE
   react: point_down
-  react_at: Comment
+  react_at: bio
   card:
-    type: comment
-    word: PHASES
-    reply: Sent ✓ The phase plan template
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
 video:
   kind: teach
   tone: story

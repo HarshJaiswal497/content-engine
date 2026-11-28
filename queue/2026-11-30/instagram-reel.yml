@@ -9,7 +9,7 @@ text: 'Don''t open any AI tool until you can answer three questions: who it''s f
   Mine for Setalytix: me at the gym, forgetting last session''s weights, and a screen with today''s weights already filled in.
 
 
-  First App with AI, part 1 of 7. Comment IDEA and I''ll send you the one-page idea check.
+  First App with AI, part 1 of 7. The one-page idea check is free, link in my bio. Comment if it helped, or DM me your doubts.
 
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
@@ -57,15 +57,15 @@ slides:
 
       [[good:weights already filled in]]'
     pill: ONE SCREEN
-- say: Comment IDEA, and I'll send you the one-page idea check. Follow for part 2 tomorrow.
-  head: Get the *idea check*
+- say: The one-page idea check is free, link in my bio. Comment if it helped, or DM me your doubts. Follow for part 2 tomorrow.
+  head: Free guide in *bio*
   tag: FREE
   react: point_down
-  react_at: Comment
+  react_at: bio
   card:
-    type: comment
-    word: IDEA
-    reply: Sent ✓ The one-page idea check
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
 video:
   kind: teach
   tone: story

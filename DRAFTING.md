@@ -114,14 +114,14 @@ The private repo's `notes/coverage.md` lists every story angle, feature and less
 ## Teaching Reels (cleared 21 Nov 2026; Instagram + YouTube only, LinkedIn stays as before)
 Per week: about 2 Reels are pure app promos (`video.kind: story`, **no CTA at all**), the rest teach (`video.kind: teach`).
 A teaching Reel is faceless, the mascot talks in the lower window in Harsh's voice, one idea per beat, and **always ends with a
-comment-word CTA for a real resource** (a `card: {type: comment}` on the last slide). Hand-reply with the PDF link; never invent a
-resource: it must be made from his real material first. Rules from the 21 Nov swipe-file research (`claude/swipe-file.md`, project docs):
+free-resource line** ("The X is free, link in my bio. Comment if it helped, or DM me your doubts.") and a `card: {type: bio}` on the last slide (changed 29 Nov from comment words). Put the PDF in the public Drive folder in `resources/LINKS.md` (the bio link shows it); never invent a
+resource: it must be made from his real material first. Add "Follow for part N tomorrow." on series Reels. Rules from the 21 Nov swipe-file research (`claude/swipe-file.md`, project docs):
 1. Hook = a mistake, a stake or a number about the viewer's problem, not a topic label. Score it: `python tools/draftcheck.py queue/<date>`.
-2. The comment word names a specific, wanted resource ("WORKFLOW", "KEYS"), backed by one line of proof from real numbers or bugs.
+2. The resource is specific and wanted ("the bug report template"), backed by one line of proof from real numbers or bugs.
 3. Prefer a numbered or named series over one-offs; no diary updates or "thank you" posts.
 4. Before opening the PR run `tools/draftcheck.py` on the week: rewrite every WEAK hook and FLAGGED text (heuristics, not predictions).
 Slide fields for `teach` are documented in `hf/teach/example.yml`; the walkthrough card needs a clip in `inbox/` with phone, email and
 other private details already cut out.
 
 ### Resource PDFs
-Every comment-word has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.
+Every resource has a PDF in Google Drive and a row in `resources/LINKS.md` (word, title, link). Add the row when you write the Reel, so the reply link is ready before it posts.

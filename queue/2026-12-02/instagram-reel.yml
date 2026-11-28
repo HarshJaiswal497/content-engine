@@ -9,7 +9,7 @@ text: 'Never tell your AI "make it better". Say exactly what stays and what chan
   My first Today screen showed only a Resume button when a workout was open. I wanted the normal screen, with just Start turning into Resume. And a query for "the newest 20 notes" hid a friend''s note behind mine, until I asked for the newest from others.
 
 
-  First App with AI, part 3 of 7. Comment PROMPTS and I''ll send you the before-and-after prompts.
+  First App with AI, part 3 of 7. The before-and-after prompts are free, link in my bio. Comment if it helped, or DM me your doubts.
 
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
@@ -47,15 +47,15 @@ slides:
 - say: One sentence of detail saves you ten rounds of fixing.
   head: Detail saves *rounds*
   tag: THE RULE
-- say: Comment PROMPTS, and I'll send you the before and after prompts. Follow for part 4 tomorrow.
-  head: Get the *prompts*
+- say: The before-and-after prompts are free, link in my bio. Comment if it helped, or DM me your doubts. Follow for part 4 tomorrow.
+  head: Free guide in *bio*
   tag: FREE
   react: point_down
-  react_at: Comment
+  react_at: bio
   card:
-    type: comment
-    word: PROMPTS
-    reply: Sent ✓ Before-and-after prompts
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
 video:
   kind: teach
   tone: story

@@ -6,7 +6,7 @@ pillar: lessons
 text: 'Six steps from an idea to a live app, with AI doing the typing: the idea check, phases with a test each, specific prompts, real bug reports, the edge cases, and a launch you actually measure.
 
 
-  That''s the whole First App with AI series in one page. Got an idea? Comment ROADMAP and I''ll send the map.
+  That''s the whole First App with AI series in one page. Got an idea? The whole roadmap is free, link in my bio. Comment if it helped, or DM me your doubts.
 
 
   #buildwithai #vibecoding #aicoding #firstapp #learntocode #appdev #buildinpublic #indiedev'
@@ -42,15 +42,15 @@ slides:
   tag: STEP 6
   react: cheer
   react_at: strangers
-- say: Comment ROADMAP, and I'll send you the whole map on one page. Follow for the next series.
-  head: Get the *roadmap*
+- say: The whole roadmap is free, link in my bio. Comment if it helped, or DM me your doubts. Follow for the next series.
+  head: Free guide in *bio*
   tag: FREE
   react: point_down
-  react_at: Comment
+  react_at: bio
   card:
-    type: comment
-    word: ROADMAP
-    reply: Sent ✓ The six-step roadmap
+    type: bio
+    title: FREE GUIDES
+    reply: Link in my bio ↑
 video:
   kind: teach
   tone: story

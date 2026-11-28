@@ -2,7 +2,9 @@
 
 When someone comments the word on a Reel, reply with the matching link. All files are PDFs in the Google Drive folder "Content resources (PDFs)", set to **anyone with the link can view**.
 
-Drive folder (owner view only): https://drive.google.com/drive/folders/1uCA1Cz8gj4yc4xNifETjsDthHJv7mPc5
+**Public folder for the bio link (anyone with the link can view; every PDF, now and future):** https://drive.google.com/drive/folders/1uCA1Cz8gj4yc4xNifETjsDthHJv7mPc5
+
+Since 29 Nov the Reels say "free guide, link in my bio" (no comment word). The comment words below are only for older Reels. If someone comments or DMs a word or asks about a guide, reply with the file link.
 
 | Comment word | Resource | Link | First used |
 |---|---|---|---|
@@ -13,11 +15,11 @@ Drive folder (owner view only): https://drive.google.com/drive/folders/1uCA1Cz8g
 | TOOLS | The Tools Behind My AI-Built Portfolio | https://drive.google.com/file/d/1LuuwSQ95Ns_QSR4p1mt_dnjgXiijenwl/view?usp=drivesdk | Sun 29 Nov 2026 |
 | IDEA | First App with AI 1: The One-Page Idea Check | https://drive.google.com/file/d/13zAeLovBfNCnKvQ-lOXUzo-bAMaOa-6m/view?usp=drivesdk | Mon 30 Nov 2026 |
 | PHASES | First App with AI 2: Phase Plan Template | https://drive.google.com/file/d/13VDgrD4Lsxv1Acdkj0v7-UtaT_EvfBi8/view?usp=drivesdk | Tue 1 Dec 2026 |
-| PROMPTS | First App with AI 3: Before-and-After Prompts | https://drive.google.com/file/d/1KrwUGXMt9h7D0eipSRhUsBrMaZavuEK6/view?usp=drivesdk | Wed 2 Dec 2026 |
+| PROMPTS | First App with AI 3: Before-and-After Prompts | https://drive.google.com/file/d/17oN6aBq0Z2d-8xPu01zXXmuf_Nq-64zu/view?usp=drivesdk | Wed 2 Dec 2026 |
 | BUG | First App with AI 4: Bug Report Template | https://drive.google.com/file/d/1Rz93zzUEKtch03eR3I4Huq_ZQr-T44Bs/view?usp=drivesdk | Thu 3 Dec 2026 |
 | EDGE | First App with AI 5: Ten Edge-Case Questions | https://drive.google.com/file/d/1HPeS1hSaWYhkIfDiWvEeNw5aj1uHjNZc/view?usp=drivesdk | Fri 4 Dec 2026 |
 | LAUNCH | First App with AI 6: First-Week Launch Checklist | https://drive.google.com/file/d/1l00xCGBk3eMqgOER6G4tIJhEVaBMxqJI/view?usp=drivesdk | Sat 5 Dec 2026 |
-| ROADMAP | First App with AI 7: The Six-Step Roadmap | https://drive.google.com/file/d/1Nx9ZufguIou3WsZvSLI82fQJKcPN6XIS/view?usp=drivesdk | Sun 6 Dec 2026 |
+| ROADMAP | First App with AI 7: The Six-Step Roadmap | https://drive.google.com/file/d/1iRNoHbNtYshqQiQ8FhoE8QHsk6H2XSZS/view?usp=drivesdk | Sun 6 Dec 2026 |
 
 ## Reply to send
 
@@ -28,7 +30,7 @@ Drive folder (owner view only): https://drive.google.com/drive/folders/1uCA1Cz8g
 ## Adding a new resource (every new comment-word)
 
 1. Write the resource from real material only (see `brand/voice.md`).
-2. Make it a PDF and upload it to the Drive folder above.
+2. Make it a PDF and upload it to the public Drive folder above (the bio link then shows it automatically).
 3. Set sharing to **Anyone with the link, Viewer**.
 4. Add a row to the table here: comment word, title, link, the date of the first Reel that uses it.
 5. Use the same word in the Reel's final comment card.
