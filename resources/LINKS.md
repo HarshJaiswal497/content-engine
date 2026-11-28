@@ -15,7 +15,7 @@ Drive folder (owner view only): https://drive.google.com/drive/folders/1uCA1Cz8g
 | PHASES | First App with AI 2: Phase Plan Template | https://drive.google.com/file/d/13VDgrD4Lsxv1Acdkj0v7-UtaT_EvfBi8/view?usp=drivesdk | Tue 1 Dec 2026 |
 | PROMPTS | First App with AI 3: Before-and-After Prompts | https://drive.google.com/file/d/1KrwUGXMt9h7D0eipSRhUsBrMaZavuEK6/view?usp=drivesdk | Wed 2 Dec 2026 |
 | BUG | First App with AI 4: Bug Report Template | https://drive.google.com/file/d/1Rz93zzUEKtch03eR3I4Huq_ZQr-T44Bs/view?usp=drivesdk | Thu 3 Dec 2026 |
-| EDGE | First App with AI 5: Ten Edge-Case Questions | https://drive.google.com/file/d/1pJAXk4eSqx8hR9Wmo9rOD3rg-j_cVf8V/view?usp=drivesdk | Fri 4 Dec 2026 |
+| EDGE | First App with AI 5: Ten Edge-Case Questions | https://drive.google.com/file/d/1HPeS1hSaWYhkIfDiWvEeNw5aj1uHjNZc/view?usp=drivesdk | Fri 4 Dec 2026 |
 | LAUNCH | First App with AI 6: First-Week Launch Checklist | https://drive.google.com/file/d/1l00xCGBk3eMqgOER6G4tIJhEVaBMxqJI/view?usp=drivesdk | Sat 5 Dec 2026 |
 | ROADMAP | First App with AI 7: The Six-Step Roadmap | https://drive.google.com/file/d/1Nx9ZufguIou3WsZvSLI82fQJKcPN6XIS/view?usp=drivesdk | Sun 6 Dec 2026 |
 
